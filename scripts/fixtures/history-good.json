@@ -1,0 +1,45 @@
+{
+  "generated_on": "2026-10-15",
+  "generated_by": "fixture for scripts/test_verify_history.py",
+  "extraction": {"tool": "pdftotext 24.09.0", "modes": ["plain", "layout"]},
+  "sources_read": [
+    {"file": "audit-completed-work-2024-25-annual.pdf", "sha256": "1e86e2d613889a7048f8b0478ddc835f784ad139488112061d5cc64114007247", "pdf_pages": 2},
+    {"file": "audit-completed-work-2025-26-q3.pdf", "sha256": "6681b9a0f93771b0ba7660bdab33bcc605c7f32a06f132f37aa0f4465b48856c", "pdf_pages": 1},
+    {"file": "internal-audit-plan-2025-28.pdf", "sha256": "7e36b4a7aac008018f05eb4d360c02dbe2685e499f75852c2fd6601cb5f28f8c", "pdf_pages": 7},
+    {"file": "risk-management-strategy-2024-27.pdf", "sha256": "a5a881e486a63c5fb848d4d3e7adef2723c07b830a617f423b7d80e8764d72a7", "pdf_pages": 35}
+  ],
+  "audits_completed": [
+    {"id": "AUD-01", "period": "End of March 2025", "audit_title": "Contract Letting", "opinion": "Reasonable Assurance",
+     "sources": [{"file": "audit-completed-work-2024-25-annual.pdf", "pdf_page": 1, "text_mode": "plain", "quote": "Contract Letting"},
+                 {"file": "audit-completed-work-2024-25-annual.pdf", "pdf_page": 1, "text_mode": "layout", "quote": "Contract Letting Reasonable Assurance"}]},
+    {"id": "AUD-02", "period": "End of December 2025", "audit_title": "Accounts Payable", "opinion": "Reasonable Assurance",
+     "sources": [{"file": "audit-completed-work-2025-26-q3.pdf", "pdf_page": 1, "text_mode": "layout", "quote": "Accounts Payable Reasonable Assurance"}]}
+  ],
+  "follow_ups": [
+    {"id": "FUP-01", "audit_title": "Garland (now Burghfield Common Federation)", "opinion_report": "Weak", "implementation_progress": "Unsatisfactory",
+     "sources": [{"file": "audit-completed-work-2024-25-annual.pdf", "pdf_page": 2, "text_mode": "layout", "quote": "Garland (now Burghfield Weak Unsatisfactory"}]}
+  ],
+  "advisory_reviews": [],
+  "agreed_actions": [],
+  "risk_themes": [],
+  "risk_scoring_method": {
+    "status": "extracted",
+    "likelihood_scale": [
+      {"id": "LIK-5", "score": 5, "label": "Certain", "description": "Risk will occur within a 12 month period", "probability": "100%",
+       "sources": [{"file": "risk-management-strategy-2024-27.pdf", "pdf_page": 15, "text_mode": "layout", "quote": "Risk will occur within a 12 month period 100%"}]}
+    ],
+    "matrix": [
+      {"id": "MTX-AXIS", "likelihood_labels": ["Rare", "Unlikely", "Likely", "Almost Certain", "Certain"],
+       "sources": [{"file": "risk-management-strategy-2024-27.pdf", "pdf_page": 18, "text_mode": "layout", "quote": "Rare Unlikely Likely Almost Certain Certain"}]}
+    ]
+  },
+  "discrepancies": [
+    {"id": "DIS-01", "description": "Para 4.3 lists Medium as (2); Table 1 rates Medium as 3.",
+     "sources": [{"file": "risk-management-strategy-2024-27.pdf", "pdf_page": 14, "text_mode": "plain", "quote": "whether a risk would have a Negligible (1), Minor (2), Medium (2), Major (4), or Critical impact(5):"},
+                 {"file": "risk-management-strategy-2024-27.pdf", "pdf_page": 14, "text_mode": "layout", "quote": "Medium £175k -500k"}]}
+  ],
+  "gaps": [
+    {"id": "GAP-01", "item": "Internal Audit Plan Appendix D (the plan itself)", "reason": "internal-audit-plan-2025-28.pdf is the covering report only; it lists Appendices A-F but does not contain them"}
+  ],
+  "notes": []
+}

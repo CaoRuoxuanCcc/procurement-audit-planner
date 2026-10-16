@@ -1,0 +1,3822 @@
+{
+  "generated_on": "2026-10-15",
+  "generated_by": "scripts/run_all.py",
+  "inputs": {
+    "spend_files": [
+      {
+        "file": "Over500_2026_P02_-_published.xlsx",
+        "sha256": "f611346f258825b84924310c2d42edce4a4aec3d3832054b340f4ac2125301a6",
+        "header_excel_row": 1,
+        "rows": 2892,
+        "date_min": "2026-05-01",
+        "date_max": "2026-06-04"
+      },
+      {
+        "file": "Over500_2026_P03_-_published.xlsx",
+        "sha256": "b7359a8e5cb9ea55bf3d47112f185167038b5ee64af8db9be02a7f5ea869ec76",
+        "header_excel_row": 2,
+        "rows": 3547,
+        "date_min": "2026-06-01",
+        "date_max": "2026-06-30"
+      },
+      {
+        "file": "Over500_2026_P04_-_published.xlsx",
+        "sha256": "e465900d00a8e20ac767d6218827a48c01ab6ad911e5051a34c18979b7da0612",
+        "header_excel_row": 2,
+        "rows": 4168,
+        "date_min": "2026-07-01",
+        "date_max": "2026-07-31"
+      }
+    ],
+    "rules_json": {
+      "path": "outputs/rules.json",
+      "sha256": "d0e28d0aceab1ef744f5998575ab95555dbe07b9494c22d536a63b33cfe9d4e4"
+    },
+    "contracts_csv": {
+      "present": true,
+      "sha256": "9d0a53c092a5274f44490b428f9ff400ac8cb889df962165720f8a1d0ed42648",
+      "status": "ran",
+      "reason": null
+    }
+  },
+  "window": {
+    "start": "2026-05-01",
+    "end": "2026-07-31",
+    "months": 3,
+    "annualisation_factor": 4.0
+  },
+  "thresholds": {
+    "tiers": [
+      {
+        "tier": "one_quote",
+        "value": 1000,
+        "lower_edge_inclusive": false,
+        "rule_ids": [
+          "CPR-48"
+        ],
+        "tests": [
+          "threshold_clustering",
+          "split_purchases"
+        ]
+      },
+      {
+        "tier": "three_quotes_and_notice",
+        "value": 25000,
+        "lower_edge_inclusive": true,
+        "rule_ids": [
+          "CPR-49",
+          "CPR-51"
+        ],
+        "tests": [
+          "threshold_clustering",
+          "split_purchases",
+          "high_value_suppliers"
+        ]
+      },
+      {
+        "tier": "notice_publication",
+        "value": 25000,
+        "lower_edge_inclusive": true,
+        "rule_ids": [
+          "CPR-50",
+          "CPR-52"
+        ],
+        "tests": [
+          "threshold_clustering",
+          "split_purchases",
+          "off_contract"
+        ]
+      },
+      {
+        "tier": "works_tender",
+        "value": 500000,
+        "lower_edge_inclusive": false,
+        "rule_ids": [
+          "CPR-51",
+          "CPR-53"
+        ],
+        "tests": [
+          "threshold_clustering",
+          "split_purchases"
+        ]
+      }
+    ],
+    "skipped": [
+      {
+        "tier": "statutory_goods_services",
+        "parameter": "STATUTORY_THRESHOLD_GOODS_SERVICES",
+        "rule_ids": [
+          "CPR-49"
+        ],
+        "reason": "parameter value is null in rules.json; auditor to supply with citation"
+      },
+      {
+        "tier": "statutory_relevant",
+        "parameter": "RELEVANT_THRESHOLD",
+        "rule_ids": [
+          "CPR-53",
+          "CPR-54"
+        ],
+        "reason": "parameter value is null in rules.json; auditor to supply with citation"
+      }
+    ],
+    "testing_thresholds": [
+      {
+        "T": 1000,
+        "roles": [
+          "one_quote"
+        ],
+        "rule_ids": [
+          "CPR-48"
+        ],
+        "lower_edge_inclusive": false
+      },
+      {
+        "T": 25000,
+        "roles": [
+          "three_quotes_and_notice",
+          "notice_publication"
+        ],
+        "rule_ids": [
+          "CPR-49",
+          "CPR-51",
+          "CPR-50",
+          "CPR-52"
+        ],
+        "lower_edge_inclusive": true
+      },
+      {
+        "T": 500000,
+        "roles": [
+          "works_tender"
+        ],
+        "rule_ids": [
+          "CPR-51",
+          "CPR-53"
+        ],
+        "lower_edge_inclusive": false
+      }
+    ]
+  },
+  "method_parameters": {
+    "clustering_band_low_factor": {
+      "value": 0.9,
+      "source": "CLAUDE.md"
+    },
+    "comparison_band_low_factor": {
+      "value": 0.8,
+      "source": "CLAUDE.md"
+    },
+    "split_window_days": {
+      "value": 30,
+      "source": "CLAUDE.md"
+    },
+    "duplicate_window_days": {
+      "value": 7,
+      "source": "CLAUDE.md"
+    },
+    "spend_vs_award_flag_ratio": {
+      "value": 1.25,
+      "source": "CLAUDE.md"
+    },
+    "annualisation_factor": {
+      "value": 4.0,
+      "source": "CLAUDE.md",
+      "derivation": "12 / 3 monthly workbooks",
+      "label": "annualised_estimate"
+    },
+    "contracts_finder_export_row_cap": {
+      "value": 1000,
+      "source": "CLAUDE.md",
+      "note": "row count, not money"
+    },
+    "name_similarity_ratio": {
+      "value": 0.85,
+      "source": "spend-analyst definition"
+    },
+    "name_containment_min_chars": {
+      "value": 6,
+      "source": "spend-analyst definition"
+    }
+  },
+  "cleaning": {
+    "rows_read": 10607,
+    "excluded": {
+      "pension_or_statutory": {
+        "count": 23,
+        "total_gbp": 9257789.94
+      },
+      "public_body": {
+        "count": 46,
+        "total_gbp": 2170425.63
+      },
+      "redacted_supplier": {
+        "count": 2015,
+        "total_gbp": 2746746.71
+      }
+    },
+    "rows_tested": 8523,
+    "total_tested_gbp": 66252291.98,
+    "by_tag": {
+      "agency_staff": {
+        "count": 24,
+        "total_gbp": 1285541.24
+      },
+      "care_or_education_placement": {
+        "count": 5889,
+        "total_gbp": 30730174.66
+      },
+      "general_procurement": {
+        "count": 1745,
+        "total_gbp": 27076449.38
+      },
+      "grant": {
+        "count": 339,
+        "total_gbp": 6033599.82
+      },
+      "premises": {
+        "count": 526,
+        "total_gbp": 1126526.88
+      }
+    },
+    "per_file": [
+      {
+        "file": "Over500_2026_P02_-_published.xlsx",
+        "rows": 2892,
+        "kept_rows": 2280,
+        "excluded_rows": 612,
+        "raw_gbp": 21785916.06,
+        "kept_gbp": 17391219.16,
+        "excluded_gbp": 4394696.9,
+        "excluded_by_reason": {
+          "pension_or_statutory": 7,
+          "redacted_supplier": 597,
+          "public_body": 8
+        }
+      },
+      {
+        "file": "Over500_2026_P03_-_published.xlsx",
+        "rows": 3547,
+        "kept_rows": 2711,
+        "excluded_rows": 836,
+        "raw_gbp": 31295535.61,
+        "kept_gbp": 25517512.49,
+        "excluded_gbp": 5778023.12,
+        "excluded_by_reason": {
+          "pension_or_statutory": 7,
+          "redacted_supplier": 809,
+          "public_body": 20
+        }
+      },
+      {
+        "file": "Over500_2026_P04_-_published.xlsx",
+        "rows": 4168,
+        "kept_rows": 3532,
+        "excluded_rows": 636,
+        "raw_gbp": 27345802.59,
+        "kept_gbp": 23343560.33,
+        "excluded_gbp": 4002242.26,
+        "excluded_by_reason": {
+          "pension_or_statutory": 9,
+          "redacted_supplier": 609,
+          "public_body": 18
+        }
+      }
+    ],
+    "cross_file_duplicate_rows": 0,
+    "same_timestamp_dup_rows_within_file": 2710,
+    "blank_category_rows_read": 87,
+    "distinct_supplier_strings": 1104,
+    "distinct_supplier_norm_tested": 1082,
+    "unseen_values": {
+      "service": [],
+      "narrative": []
+    },
+    "logs": [
+      "outputs/analytics-full/exclusions.csv",
+      "outputs/analytics-full/tag_mapping.csv"
+    ]
+  },
+  "contracts": {
+    "present": true,
+    "kept": 141,
+    "dropped": 9,
+    "organisation_names_kept": {
+      "West Berkshire": 20,
+      "West Berkshire Council": 115,
+      "WEST BERKSHIRE COUNCIL": 6
+    },
+    "organisation_names_dropped": {
+      "Westworks Procurement Ltd": 1,
+      "SOUTHAMPTON CITY COUNCIL": 1,
+      "CITY OF BRADFORD METROPOLITAN DISTRICT COUNCIL": 1,
+      "Ministry of Defence": 5,
+      "Health Education England": 1
+    },
+    "per_publication_year": {
+      "2021": 7,
+      "2022": 10,
+      "2023": 39,
+      "2024": 52,
+      "2025": 28,
+      "2026": 5
+    },
+    "live_in_window": 62,
+    "distinct_supplier_norm": 144,
+    "distinct_supplier_norm_live": 94,
+    "supplier_blocks": 210,
+    "notices_with_multiple_suppliers": 9,
+    "companies_house_join": "not available: spend data has no Companies House number",
+    "data_quality": {
+      "awarded_date_after_today": 1,
+      "contract_end_more_than_20_years_ahead": 1,
+      "date_parse_failures": {
+        "Published Date": 0,
+        "Start Date": 0,
+        "End Date": 0,
+        "Awarded Date": 0,
+        "Contract start date": 0,
+        "Contract end date": 0
+      },
+      "awarded_value_parse_failures": 0,
+      "awarded_value_zero": 7,
+      "note": "Counted and recorded; not corrected."
+    },
+    "warnings": [
+      "coverage_warning: 5 council notices published in 2026 against 28 in 2025 (under 25% of the previous full year)"
+    ],
+    "caveats": [
+      "Notices may be missing for recent contracts: late publication, a partial current year, or publication on the Central Digital Platform / Find a Tender rather than Contracts Finder after the Procurement Act 2023 went live (24 Feb 2025). Auditor to confirm. Results that rely on notices must not be read as evidence that no contract exists."
+    ]
+  },
+  "tests": {
+    "threshold_clustering": {
+      "status": "ran",
+      "reason": null,
+      "description": "Payments in the band just under each testing threshold, a risk indicator to investigate for threshold-hugging.",
+      "rule_ids": [
+        "CPR-07",
+        "CPR-48",
+        "CPR-49",
+        "CPR-50",
+        "CPR-51",
+        "CPR-52",
+        "CPR-53"
+      ],
+      "parameters": {
+        "clustering_band_low_factor": 0.9,
+        "comparison_band_low_factor": 0.8,
+        "testing_thresholds": [
+          1000,
+          25000,
+          500000
+        ],
+        "data_floor_gbp": 500.5
+      },
+      "counts": {
+        "flagged_payments": 367,
+        "per_threshold": {
+          "1000": {
+            "status": "ran",
+            "roles": [
+              "one_quote"
+            ],
+            "rule_ids": [
+              "CPR-48"
+            ],
+            "lower_edge_inclusive": false,
+            "band": "[900, 1000]",
+            "comparison_band": "[800, 900)",
+            "band_count": 322,
+            "band_gbp": 306289.52,
+            "comparison_count": 274,
+            "comparison_gbp": 231198.55,
+            "ratio_band_to_comparison": 1.18,
+            "by_tag": {
+              "care_or_education_placement": {
+                "band_count": 220,
+                "band_gbp": 208257.98,
+                "comparison_count": 174,
+                "comparison_gbp": 147029.95,
+                "ratio_band_to_comparison": 1.26
+              },
+              "grant": {
+                "band_count": 12,
+                "band_gbp": 12000.0,
+                "comparison_count": 9,
+                "comparison_gbp": 7430.78,
+                "ratio_band_to_comparison": 1.33
+              },
+              "agency_staff": {
+                "band_count": 3,
+                "band_gbp": 2878.24,
+                "comparison_count": 0,
+                "comparison_gbp": 0.0,
+                "ratio_band_to_comparison": null
+              },
+              "premises": {
+                "band_count": 32,
+                "band_gbp": 30282.13,
+                "comparison_count": 36,
+                "comparison_gbp": 30411.73,
+                "ratio_band_to_comparison": 0.89
+              },
+              "general_procurement": {
+                "band_count": 55,
+                "band_gbp": 52871.17,
+                "comparison_count": 55,
+                "comparison_gbp": 46326.09,
+                "ratio_band_to_comparison": 1.0
+              }
+            }
+          },
+          "25000": {
+            "status": "ran",
+            "roles": [
+              "three_quotes_and_notice",
+              "notice_publication"
+            ],
+            "rule_ids": [
+              "CPR-49",
+              "CPR-51",
+              "CPR-50",
+              "CPR-52"
+            ],
+            "lower_edge_inclusive": true,
+            "band": "[22500, 25000)",
+            "comparison_band": "[20000, 22500)",
+            "band_count": 45,
+            "band_gbp": 1075395.94,
+            "comparison_count": 99,
+            "comparison_gbp": 2068155.8,
+            "ratio_band_to_comparison": 0.45,
+            "by_tag": {
+              "care_or_education_placement": {
+                "band_count": 30,
+                "band_gbp": 718249.61,
+                "comparison_count": 83,
+                "comparison_gbp": 1731688.16,
+                "ratio_band_to_comparison": 0.36
+              },
+              "grant": {
+                "band_count": 5,
+                "band_gbp": 118475.24,
+                "comparison_count": 5,
+                "comparison_gbp": 104307.67,
+                "ratio_band_to_comparison": 1.0
+              },
+              "agency_staff": {
+                "band_count": 0,
+                "band_gbp": 0.0,
+                "comparison_count": 0,
+                "comparison_gbp": 0.0,
+                "ratio_band_to_comparison": null
+              },
+              "premises": {
+                "band_count": 1,
+                "band_gbp": 23660.0,
+                "comparison_count": 1,
+                "comparison_gbp": 20956.0,
+                "ratio_band_to_comparison": 1.0
+              },
+              "general_procurement": {
+                "band_count": 9,
+                "band_gbp": 215011.09,
+                "comparison_count": 10,
+                "comparison_gbp": 211203.97,
+                "ratio_band_to_comparison": 0.9
+              }
+            }
+          },
+          "500000": {
+            "status": "ran",
+            "roles": [
+              "works_tender"
+            ],
+            "rule_ids": [
+              "CPR-51",
+              "CPR-53"
+            ],
+            "lower_edge_inclusive": false,
+            "band": "[450000, 500000]",
+            "comparison_band": "[400000, 450000)",
+            "band_count": 0,
+            "band_gbp": 0.0,
+            "comparison_count": 1,
+            "comparison_gbp": 400824.68,
+            "ratio_band_to_comparison": 0.0,
+            "by_tag": {
+              "care_or_education_placement": {
+                "band_count": 0,
+                "band_gbp": 0.0,
+                "comparison_count": 0,
+                "comparison_gbp": 0.0,
+                "ratio_band_to_comparison": null
+              },
+              "grant": {
+                "band_count": 0,
+                "band_gbp": 0.0,
+                "comparison_count": 1,
+                "comparison_gbp": 400824.68,
+                "ratio_band_to_comparison": 0.0
+              },
+              "agency_staff": {
+                "band_count": 0,
+                "band_gbp": 0.0,
+                "comparison_count": 0,
+                "comparison_gbp": 0.0,
+                "ratio_band_to_comparison": null
+              },
+              "premises": {
+                "band_count": 0,
+                "band_gbp": 0.0,
+                "comparison_count": 0,
+                "comparison_gbp": 0.0,
+                "ratio_band_to_comparison": null
+              },
+              "general_procurement": {
+                "band_count": 0,
+                "band_gbp": 0.0,
+                "comparison_count": 0,
+                "comparison_gbp": 0.0,
+                "ratio_band_to_comparison": null
+              }
+            }
+          }
+        }
+      },
+      "totals_gbp": {
+        "flagged": 1381685.46
+      },
+      "by_tag": {
+        "care_or_education_placement": {
+          "count": 250,
+          "total_gbp": 926507.59
+        },
+        "grant": {
+          "count": 17,
+          "total_gbp": 130475.24
+        },
+        "agency_staff": {
+          "count": 3,
+          "total_gbp": 2878.24
+        },
+        "premises": {
+          "count": 33,
+          "total_gbp": 53942.13
+        },
+        "general_procurement": {
+          "count": 64,
+          "total_gbp": 267882.26
+        }
+      },
+      "top_20": [
+        {
+          "row_id": "Over500_2026_P04_-_published.xlsx|Data to publish|R2239",
+          "amount": 24926.0,
+          "T": 25000,
+          "roles": "three_quotes_and_notice,notice_publication",
+          "band": "[22500, 25000)",
+          "date": "2026-07-01",
+          "supplier_norm": "AFFINITY TRUST SUPPORT",
+          "tag": "care_or_education_placement"
+        },
+        {
+          "row_id": "Over500_2026_P03_-_published.xlsx|Data to publish|R2056",
+          "amount": 24850.39,
+          "T": 25000,
+          "roles": "three_quotes_and_notice,notice_publication",
+          "band": "[22500, 25000)",
+          "date": "2026-06-17",
+          "supplier_norm": "CHARMAINE CAULFIELD",
+          "tag": "grant"
+        },
+        {
+          "row_id": "Over500_2026_P03_-_published.xlsx|Data to publish|R2307",
+          "amount": 24788.75,
+          "T": 25000,
+          "roles": "three_quotes_and_notice,notice_publication",
+          "band": "[22500, 25000)",
+          "date": "2026-06-03",
+          "supplier_norm": "SUKHBIR SINGH AND HARVINDER SINGH T A CALCOT SERVICES FOR CHILDREN CSFC",
+          "tag": "care_or_education_placement"
+        },
+        {
+          "row_id": "Over500_2026_P03_-_published.xlsx|Data to publish|R1660",
+          "amount": 24719.02,
+          "T": 25000,
+          "roles": "three_quotes_and_notice,notice_publication",
+          "band": "[22500, 25000)",
+          "date": "2026-06-24",
+          "supplier_norm": "FOCUS SUPPORT",
+          "tag": "care_or_education_placement"
+        },
+        {
+          "row_id": "Over500_2026_P03_-_published.xlsx|Data to publish|R2074",
+          "amount": 24705.36,
+          "T": 25000,
+          "roles": "three_quotes_and_notice,notice_publication",
+          "band": "[22500, 25000)",
+          "date": "2026-06-17",
+          "supplier_norm": "BEANSHEAF COMMUNITY PRE SCHOO",
+          "tag": "grant"
+        },
+        {
+          "row_id": "Over500_2026_P02_-_published.xlsx|Data to publish|R2241",
+          "amount": 24618.75,
+          "T": 25000,
+          "roles": "three_quotes_and_notice,notice_publication",
+          "band": "[22500, 25000)",
+          "date": "2026-05-12",
+          "supplier_norm": "SUKHBIR SINGH AND HARVINDER SINGH T A CALCOT SERVICES FOR CHILDREN CSFC",
+          "tag": "care_or_education_placement"
+        },
+        {
+          "row_id": "Over500_2026_P03_-_published.xlsx|Data to publish|R2106",
+          "amount": 24587.49,
+          "T": 25000,
+          "roles": "three_quotes_and_notice,notice_publication",
+          "band": "[22500, 25000)",
+          "date": "2026-06-30",
+          "supplier_norm": "UNITY RESIDENTIAL CARE SERVICES",
+          "tag": "care_or_education_placement"
+        },
+        {
+          "row_id": "Over500_2026_P02_-_published.xlsx|Data to publish|R2265",
+          "amount": 24578.67,
+          "T": 25000,
+          "roles": "three_quotes_and_notice,notice_publication",
+          "band": "[22500, 25000)",
+          "date": "2026-05-22",
+          "supplier_norm": "ACORN CARE AND EDUCATION",
+          "tag": "care_or_education_placement"
+        },
+        {
+          "row_id": "Over500_2026_P04_-_published.xlsx|Data to publish|R1281",
+          "amount": 24476.02,
+          "T": 25000,
+          "roles": "three_quotes_and_notice,notice_publication",
+          "band": "[22500, 25000)",
+          "date": "2026-07-29",
+          "supplier_norm": "THE BETTER GROUP",
+          "tag": "general_procurement"
+        },
+        {
+          "row_id": "Over500_2026_P02_-_published.xlsx|Data to publish|R2268",
+          "amount": 24453.39,
+          "T": 25000,
+          "roles": "three_quotes_and_notice,notice_publication",
+          "band": "[22500, 25000)",
+          "date": "2026-05-26",
+          "supplier_norm": "HUCKLEBERRY HOUSE",
+          "tag": "care_or_education_placement"
+        },
+        {
+          "row_id": "Over500_2026_P04_-_published.xlsx|Data to publish|R3059",
+          "amount": 24383.88,
+          "T": 25000,
+          "roles": "three_quotes_and_notice,notice_publication",
+          "band": "[22500, 25000)",
+          "date": "2026-07-09",
+          "supplier_norm": "UTOPIA SUPPORTED HOUSING",
+          "tag": "care_or_education_placement"
+        },
+        {
+          "row_id": "Over500_2026_P03_-_published.xlsx|Data to publish|R649",
+          "amount": 24244.0,
+          "T": 25000,
+          "roles": "three_quotes_and_notice,notice_publication",
+          "band": "[22500, 25000)",
+          "date": "2026-06-18",
+          "supplier_norm": "TRIPLE VALUE IMPACT",
+          "tag": "general_procurement"
+        },
+        {
+          "row_id": "Over500_2026_P02_-_published.xlsx|Data to publish|R560",
+          "amount": 24227.07,
+          "T": 25000,
+          "roles": "three_quotes_and_notice,notice_publication",
+          "band": "[22500, 25000)",
+          "date": "2026-05-12",
+          "supplier_norm": "DEVCOMMS SOUTH EAST",
+          "tag": "general_procurement"
+        },
+        {
+          "row_id": "Over500_2026_P02_-_published.xlsx|Data to publish|R2271",
+          "amount": 24110.58,
+          "T": 25000,
+          "roles": "three_quotes_and_notice,notice_publication",
+          "band": "[22500, 25000)",
+          "date": "2026-05-26",
+          "supplier_norm": "ACORN CARE AND EDUCATION",
+          "tag": "care_or_education_placement"
+        },
+        {
+          "row_id": "Over500_2026_P03_-_published.xlsx|Data to publish|R13",
+          "amount": 24088.98,
+          "T": 25000,
+          "roles": "three_quotes_and_notice,notice_publication",
+          "band": "[22500, 25000)",
+          "date": "2026-06-01",
+          "supplier_norm": "THE BETTER GROUP",
+          "tag": "general_procurement"
+        },
+        {
+          "row_id": "Over500_2026_P03_-_published.xlsx|Data to publish|R396",
+          "amount": 24000.0,
+          "T": 25000,
+          "roles": "three_quotes_and_notice,notice_publication",
+          "band": "[22500, 25000)",
+          "date": "2026-06-10",
+          "supplier_norm": "BOOKINGLAB",
+          "tag": "general_procurement"
+        },
+        {
+          "row_id": "Over500_2026_P02_-_published.xlsx|Data to publish|R2021",
+          "amount": 23989.77,
+          "T": 25000,
+          "roles": "three_quotes_and_notice,notice_publication",
+          "band": "[22500, 25000)",
+          "date": "2026-05-01",
+          "supplier_norm": "CARE SERVICES TO YOU",
+          "tag": "care_or_education_placement"
+        },
+        {
+          "row_id": "Over500_2026_P02_-_published.xlsx|Data to publish|R2033",
+          "amount": 23989.77,
+          "T": 25000,
+          "roles": "three_quotes_and_notice,notice_publication",
+          "band": "[22500, 25000)",
+          "date": "2026-05-12",
+          "supplier_norm": "CARE SERVICES TO YOU",
+          "tag": "care_or_education_placement"
+        },
+        {
+          "row_id": "Over500_2026_P02_-_published.xlsx|Data to publish|R2037",
+          "amount": 23989.77,
+          "T": 25000,
+          "roles": "three_quotes_and_notice,notice_publication",
+          "band": "[22500, 25000)",
+          "date": "2026-05-13",
+          "supplier_norm": "CARE SERVICES TO YOU",
+          "tag": "care_or_education_placement"
+        },
+        {
+          "row_id": "Over500_2026_P02_-_published.xlsx|Data to publish|R2096",
+          "amount": 23989.77,
+          "T": 25000,
+          "roles": "three_quotes_and_notice,notice_publication",
+          "band": "[22500, 25000)",
+          "date": "2026-05-26",
+          "supplier_norm": "CARE SERVICES TO YOU",
+          "tag": "care_or_education_placement"
+        }
+      ],
+      "top_5_by_tag": {
+        "care_or_education_placement": [
+          {
+            "row_id": "Over500_2026_P04_-_published.xlsx|Data to publish|R2239",
+            "amount": 24926.0,
+            "T": 25000,
+            "roles": "three_quotes_and_notice,notice_publication",
+            "band": "[22500, 25000)",
+            "date": "2026-07-01",
+            "supplier_norm": "AFFINITY TRUST SUPPORT",
+            "tag": "care_or_education_placement"
+          },
+          {
+            "row_id": "Over500_2026_P03_-_published.xlsx|Data to publish|R2307",
+            "amount": 24788.75,
+            "T": 25000,
+            "roles": "three_quotes_and_notice,notice_publication",
+            "band": "[22500, 25000)",
+            "date": "2026-06-03",
+            "supplier_norm": "SUKHBIR SINGH AND HARVINDER SINGH T A CALCOT SERVICES FOR CHILDREN CSFC",
+            "tag": "care_or_education_placement"
+          },
+          {
+            "row_id": "Over500_2026_P03_-_published.xlsx|Data to publish|R1660",
+            "amount": 24719.02,
+            "T": 25000,
+            "roles": "three_quotes_and_notice,notice_publication",
+            "band": "[22500, 25000)",
+            "date": "2026-06-24",
+            "supplier_norm": "FOCUS SUPPORT",
+            "tag": "care_or_education_placement"
+          },
+          {
+            "row_id": "Over500_2026_P02_-_published.xlsx|Data to publish|R2241",
+            "amount": 24618.75,
+            "T": 25000,
+            "roles": "three_quotes_and_notice,notice_publication",
+            "band": "[22500, 25000)",
+            "date": "2026-05-12",
+            "supplier_norm": "SUKHBIR SINGH AND HARVINDER SINGH T A CALCOT SERVICES FOR CHILDREN CSFC",
+            "tag": "care_or_education_placement"
+          },
+          {
+            "row_id": "Over500_2026_P03_-_published.xlsx|Data to publish|R2106",
+            "amount": 24587.49,
+            "T": 25000,
+            "roles": "three_quotes_and_notice,notice_publication",
+            "band": "[22500, 25000)",
+            "date": "2026-06-30",
+            "supplier_norm": "UNITY RESIDENTIAL CARE SERVICES",
+            "tag": "care_or_education_placement"
+          }
+        ],
+        "grant": [
+          {
+            "row_id": "Over500_2026_P03_-_published.xlsx|Data to publish|R2056",
+            "amount": 24850.39,
+            "T": 25000,
+            "roles": "three_quotes_and_notice,notice_publication",
+            "band": "[22500, 25000)",
+            "date": "2026-06-17",
+            "supplier_norm": "CHARMAINE CAULFIELD",
+            "tag": "grant"
+          },
+          {
+            "row_id": "Over500_2026_P03_-_published.xlsx|Data to publish|R2074",
+            "amount": 24705.36,
+            "T": 25000,
+            "roles": "three_quotes_and_notice,notice_publication",
+            "band": "[22500, 25000)",
+            "date": "2026-06-17",
+            "supplier_norm": "BEANSHEAF COMMUNITY PRE SCHOO",
+            "tag": "grant"
+          },
+          {
+            "row_id": "Over500_2026_P03_-_published.xlsx|Data to publish|R601",
+            "amount": 23073.34,
+            "T": 25000,
+            "roles": "three_quotes_and_notice,notice_publication",
+            "band": "[22500, 25000)",
+            "date": "2026-06-17",
+            "supplier_norm": "PIED PIPER PRE SCHOOL",
+            "tag": "grant"
+          },
+          {
+            "row_id": "Over500_2026_P04_-_published.xlsx|Data to publish|R1271",
+            "amount": 22963.98,
+            "T": 25000,
+            "roles": "three_quotes_and_notice,notice_publication",
+            "band": "[22500, 25000)",
+            "date": "2026-07-06",
+            "supplier_norm": "WEST BERKSHIRE TRAINING CONSORTIUM",
+            "tag": "grant"
+          },
+          {
+            "row_id": "Over500_2026_P03_-_published.xlsx|Data to publish|R506",
+            "amount": 22882.17,
+            "T": 25000,
+            "roles": "three_quotes_and_notice,notice_publication",
+            "band": "[22500, 25000)",
+            "date": "2026-06-17",
+            "supplier_norm": "MINI OAKS PRESCHOOL",
+            "tag": "grant"
+          }
+        ],
+        "agency_staff": [
+          {
+            "row_id": "Over500_2026_P04_-_published.xlsx|Data to publish|R18",
+            "amount": 1000.0,
+            "T": 1000,
+            "roles": "one_quote",
+            "band": "[900, 1000]",
+            "date": "2026-07-28",
+            "supplier_norm": "THE A PROJECT",
+            "tag": "agency_staff"
+          },
+          {
+            "row_id": "Over500_2026_P04_-_published.xlsx|Data to publish|R4",
+            "amount": 945.0,
+            "T": 1000,
+            "roles": "one_quote",
+            "band": "[900, 1000]",
+            "date": "2026-07-31",
+            "supplier_norm": "CHANCES GIVES CHOICES",
+            "tag": "agency_staff"
+          },
+          {
+            "row_id": "Over500_2026_P03_-_published.xlsx|Data to publish|R4",
+            "amount": 933.24,
+            "T": 1000,
+            "roles": "one_quote",
+            "band": "[900, 1000]",
+            "date": "2026-06-10",
+            "supplier_norm": "AMBITION 24 HOURS",
+            "tag": "agency_staff"
+          }
+        ],
+        "premises": [
+          {
+            "row_id": "Over500_2026_P03_-_published.xlsx|Data to publish|R105",
+            "amount": 23660.0,
+            "T": 25000,
+            "roles": "three_quotes_and_notice,notice_publication",
+            "band": "[22500, 25000)",
+            "date": "2026-06-09",
+            "supplier_norm": "READING WEST APARTHOTEL",
+            "tag": "premises"
+          },
+          {
+            "row_id": "Over500_2026_P02_-_published.xlsx|Data to publish|R34",
+            "amount": 1000.0,
+            "T": 1000,
+            "roles": "one_quote",
+            "band": "[900, 1000]",
+            "date": "2026-05-08",
+            "supplier_norm": "BERKSHIRE MECHANICAL SERVICES",
+            "tag": "premises"
+          },
+          {
+            "row_id": "Over500_2026_P03_-_published.xlsx|Data to publish|R280",
+            "amount": 1000.0,
+            "T": 1000,
+            "roles": "one_quote",
+            "band": "[900, 1000]",
+            "date": "2026-06-25",
+            "supplier_norm": "BERKSHIRE MECHANICAL SERVICES",
+            "tag": "premises"
+          },
+          {
+            "row_id": "Over500_2026_P03_-_published.xlsx|Data to publish|R50",
+            "amount": 1000.0,
+            "T": 1000,
+            "roles": "one_quote",
+            "band": "[900, 1000]",
+            "date": "2026-06-03",
+            "supplier_norm": "BERKSHIRE MECHANICAL SERVICES",
+            "tag": "premises"
+          },
+          {
+            "row_id": "Over500_2026_P04_-_published.xlsx|Data to publish|R50",
+            "amount": 1000.0,
+            "T": 1000,
+            "roles": "one_quote",
+            "band": "[900, 1000]",
+            "date": "2026-07-09",
+            "supplier_norm": "BERKSHIRE MECHANICAL SERVICES",
+            "tag": "premises"
+          }
+        ],
+        "general_procurement": [
+          {
+            "row_id": "Over500_2026_P04_-_published.xlsx|Data to publish|R1281",
+            "amount": 24476.02,
+            "T": 25000,
+            "roles": "three_quotes_and_notice,notice_publication",
+            "band": "[22500, 25000)",
+            "date": "2026-07-29",
+            "supplier_norm": "THE BETTER GROUP",
+            "tag": "general_procurement"
+          },
+          {
+            "row_id": "Over500_2026_P03_-_published.xlsx|Data to publish|R649",
+            "amount": 24244.0,
+            "T": 25000,
+            "roles": "three_quotes_and_notice,notice_publication",
+            "band": "[22500, 25000)",
+            "date": "2026-06-18",
+            "supplier_norm": "TRIPLE VALUE IMPACT",
+            "tag": "general_procurement"
+          },
+          {
+            "row_id": "Over500_2026_P02_-_published.xlsx|Data to publish|R560",
+            "amount": 24227.07,
+            "T": 25000,
+            "roles": "three_quotes_and_notice,notice_publication",
+            "band": "[22500, 25000)",
+            "date": "2026-05-12",
+            "supplier_norm": "DEVCOMMS SOUTH EAST",
+            "tag": "general_procurement"
+          },
+          {
+            "row_id": "Over500_2026_P03_-_published.xlsx|Data to publish|R13",
+            "amount": 24088.98,
+            "T": 25000,
+            "roles": "three_quotes_and_notice,notice_publication",
+            "band": "[22500, 25000)",
+            "date": "2026-06-01",
+            "supplier_norm": "THE BETTER GROUP",
+            "tag": "general_procurement"
+          },
+          {
+            "row_id": "Over500_2026_P03_-_published.xlsx|Data to publish|R396",
+            "amount": 24000.0,
+            "T": 25000,
+            "roles": "three_quotes_and_notice,notice_publication",
+            "band": "[22500, 25000)",
+            "date": "2026-06-10",
+            "supplier_norm": "BOOKINGLAB",
+            "tag": "general_procurement"
+          }
+        ]
+      },
+      "full_list": "outputs/analytics-full/threshold_clustering.csv",
+      "caveats": [
+        "A payment near a threshold is a risk indicator to investigate; the comparison band gives context for whether the band is unusually full."
+      ]
+    },
+    "split_purchases": {
+      "status": "ran",
+      "reason": null,
+      "description": "Groups of two or more payments to one supplier within a 30-day window, each under a threshold but together entering it; a risk indicator to investigate for split purchases.",
+      "rule_ids": [
+        "CPR-07",
+        "CPR-48",
+        "CPR-49",
+        "CPR-50",
+        "CPR-51",
+        "CPR-52",
+        "CPR-53"
+      ],
+      "parameters": {
+        "split_window_days": 30,
+        "window_rule": "[anchor date, anchor date + 29 days]",
+        "testing_thresholds": [
+          1000,
+          25000,
+          500000
+        ]
+      },
+      "counts": {
+        "groups": 405,
+        "payments_in_groups": 8327,
+        "groups_spanning_more_than_one_window": 175,
+        "per_threshold": {
+          "1000": 197,
+          "25000": 200,
+          "500000": 8
+        }
+      },
+      "totals_gbp": {
+        "groups_total": 37223627.26,
+        "per_threshold": {
+          "1000": 1324202.0,
+          "25000": 24050789.95,
+          "500000": 11848635.31
+        }
+      },
+      "by_tag": {
+        "care_or_education_placement": {
+          "count": 233,
+          "total_gbp": 26176871.7
+        },
+        "grant": {
+          "count": 9,
+          "total_gbp": 218605.6
+        },
+        "agency_staff": {
+          "count": 3,
+          "total_gbp": 719915.81
+        },
+        "premises": {
+          "count": 41,
+          "total_gbp": 622803.64
+        },
+        "general_procurement": {
+          "count": 119,
+          "total_gbp": 9485430.51
+        }
+      },
+      "top_20": [
+        {
+          "supplier_norm": "VOLKERHIGHWAYS",
+          "T": 500000,
+          "n_payments": 124,
+          "group_total": 5523184.32,
+          "first_date": "2026-05-01",
+          "last_date": "2026-07-31",
+          "span_days": 91,
+          "main_tag": "general_procurement",
+          "tag_mix": "general_procurement:5523184.32"
+        },
+        {
+          "supplier_norm": "BUPA CARE SERVICES",
+          "T": 25000,
+          "n_payments": 370,
+          "group_total": 1874166.5,
+          "first_date": "2026-05-06",
+          "last_date": "2026-07-29",
+          "span_days": 84,
+          "main_tag": "care_or_education_placement",
+          "tag_mix": "care_or_education_placement:1874166.50"
+        },
+        {
+          "supplier_norm": "BUPA CARE SERVICES",
+          "T": 500000,
+          "n_payments": 370,
+          "group_total": 1874166.5,
+          "first_date": "2026-05-06",
+          "last_date": "2026-07-29",
+          "span_days": 84,
+          "main_tag": "care_or_education_placement",
+          "tag_mix": "care_or_education_placement:1874166.50"
+        },
+        {
+          "supplier_norm": "AFFINITY TRUST SUPPORT",
+          "T": 500000,
+          "n_payments": 253,
+          "group_total": 1068364.45,
+          "first_date": "2026-06-03",
+          "last_date": "2026-07-29",
+          "span_days": 56,
+          "main_tag": "care_or_education_placement",
+          "tag_mix": "care_or_education_placement:1068364.45"
+        },
+        {
+          "supplier_norm": "AFFINITY TRUST SUPPORT",
+          "T": 25000,
+          "n_payments": 261,
+          "group_total": 1043430.1,
+          "first_date": "2026-05-13",
+          "last_date": "2026-07-29",
+          "span_days": 77,
+          "main_tag": "care_or_education_placement",
+          "tag_mix": "care_or_education_placement:1043430.10"
+        },
+        {
+          "supplier_norm": "OAKLANDS SEN SCHOOL BERKSHIRE",
+          "T": 25000,
+          "n_payments": 54,
+          "group_total": 1026661.89,
+          "first_date": "2026-06-17",
+          "last_date": "2026-06-17",
+          "span_days": 0,
+          "main_tag": "care_or_education_placement",
+          "tag_mix": "care_or_education_placement:1026661.89"
+        },
+        {
+          "supplier_norm": "OAKLANDS SEN SCHOOL BERKSHIRE",
+          "T": 500000,
+          "n_payments": 54,
+          "group_total": 1026661.89,
+          "first_date": "2026-06-17",
+          "last_date": "2026-06-17",
+          "span_days": 0,
+          "main_tag": "care_or_education_placement",
+          "tag_mix": "care_or_education_placement:1026661.89"
+        },
+        {
+          "supplier_norm": "COMENSURA",
+          "T": 500000,
+          "n_payments": 8,
+          "group_total": 717093.5,
+          "first_date": "2026-05-19",
+          "last_date": "2026-07-01",
+          "span_days": 43,
+          "main_tag": "agency_staff",
+          "tag_mix": "agency_staff:717093.50"
+        },
+        {
+          "supplier_norm": "WE ARE THE CARE COMPANY",
+          "T": 25000,
+          "n_payments": 349,
+          "group_total": 589012.31,
+          "first_date": "2026-05-06",
+          "last_date": "2026-07-29",
+          "span_days": 84,
+          "main_tag": "care_or_education_placement",
+          "tag_mix": "care_or_education_placement:589012.31"
+        },
+        {
+          "supplier_norm": "VOLKERHIGHWAYS",
+          "T": 25000,
+          "n_payments": 79,
+          "group_total": 569857.27,
+          "first_date": "2026-05-05",
+          "last_date": "2026-07-31",
+          "span_days": 87,
+          "main_tag": "general_procurement",
+          "tag_mix": "general_procurement:569857.27"
+        },
+        {
+          "supplier_norm": "PHOENIX CHILD CARE THE GRANGE SCHOOL",
+          "T": 500000,
+          "n_payments": 23,
+          "group_total": 566088.82,
+          "first_date": "2026-05-19",
+          "last_date": "2026-06-17",
+          "span_days": 29,
+          "main_tag": "care_or_education_placement",
+          "tag_mix": "care_or_education_placement:566088.82"
+        },
+        {
+          "supplier_norm": "VOYAGE CARE",
+          "T": 25000,
+          "n_payments": 80,
+          "group_total": 554678.88,
+          "first_date": "2026-05-13",
+          "last_date": "2026-07-29",
+          "span_days": 77,
+          "main_tag": "care_or_education_placement",
+          "tag_mix": "care_or_education_placement:554678.88"
+        },
+        {
+          "supplier_norm": "RUSKIN MILL TRUST",
+          "T": 500000,
+          "n_payments": 5,
+          "group_total": 550097.21,
+          "first_date": "2026-05-13",
+          "last_date": "2026-06-02",
+          "span_days": 20,
+          "main_tag": "care_or_education_placement",
+          "tag_mix": "care_or_education_placement:550097.21"
+        },
+        {
+          "supplier_norm": "GCH ALDER T A HUNGERFORD CARE HOME",
+          "T": 25000,
+          "n_payments": 104,
+          "group_total": 545531.64,
+          "first_date": "2026-05-01",
+          "last_date": "2026-07-29",
+          "span_days": 89,
+          "main_tag": "care_or_education_placement",
+          "tag_mix": "care_or_education_placement:545531.64"
+        },
+        {
+          "supplier_norm": "SOFTWAREONE UK",
+          "T": 500000,
+          "n_payments": 4,
+          "group_total": 522978.62,
+          "first_date": "2026-05-27",
+          "last_date": "2026-05-27",
+          "span_days": 0,
+          "main_tag": "general_procurement",
+          "tag_mix": "general_procurement:522978.62"
+        },
+        {
+          "supplier_norm": "WEST BERKSHIRE MENCAP",
+          "T": 25000,
+          "n_payments": 115,
+          "group_total": 505286.21,
+          "first_date": "2026-05-06",
+          "last_date": "2026-07-30",
+          "span_days": 85,
+          "main_tag": "care_or_education_placement",
+          "tag_mix": "care_or_education_placement:504168.91;grant:1117.30"
+        },
+        {
+          "supplier_norm": "PURLEY PARK TRUST",
+          "T": 25000,
+          "n_payments": 94,
+          "group_total": 471283.82,
+          "first_date": "2026-05-13",
+          "last_date": "2026-07-29",
+          "span_days": 77,
+          "main_tag": "care_or_education_placement",
+          "tag_mix": "care_or_education_placement:471283.82"
+        },
+        {
+          "supplier_norm": "BRIGHTER LIVING CARE",
+          "T": 25000,
+          "n_payments": 65,
+          "group_total": 455388.91,
+          "first_date": "2026-05-01",
+          "last_date": "2026-07-29",
+          "span_days": 89,
+          "main_tag": "care_or_education_placement",
+          "tag_mix": "care_or_education_placement:455388.91"
+        },
+        {
+          "supplier_norm": "PHOENIX CHILD CARE THE GRANGE SCHOOL",
+          "T": 25000,
+          "n_payments": 18,
+          "group_total": 401210.46,
+          "first_date": "2026-05-19",
+          "last_date": "2026-06-17",
+          "span_days": 29,
+          "main_tag": "care_or_education_placement",
+          "tag_mix": "care_or_education_placement:401210.46"
+        },
+        {
+          "supplier_norm": "ABI SUPPORT",
+          "T": 25000,
+          "n_payments": 147,
+          "group_total": 343415.59,
+          "first_date": "2026-05-01",
+          "last_date": "2026-07-29",
+          "span_days": 89,
+          "main_tag": "care_or_education_placement",
+          "tag_mix": "care_or_education_placement:343415.59"
+        }
+      ],
+      "top_5_by_tag": {
+        "care_or_education_placement": [
+          {
+            "supplier_norm": "BUPA CARE SERVICES",
+            "T": 25000,
+            "n_payments": 370,
+            "group_total": 1874166.5,
+            "first_date": "2026-05-06",
+            "last_date": "2026-07-29",
+            "span_days": 84,
+            "main_tag": "care_or_education_placement",
+            "tag_mix": "care_or_education_placement:1874166.50"
+          },
+          {
+            "supplier_norm": "BUPA CARE SERVICES",
+            "T": 500000,
+            "n_payments": 370,
+            "group_total": 1874166.5,
+            "first_date": "2026-05-06",
+            "last_date": "2026-07-29",
+            "span_days": 84,
+            "main_tag": "care_or_education_placement",
+            "tag_mix": "care_or_education_placement:1874166.50"
+          },
+          {
+            "supplier_norm": "AFFINITY TRUST SUPPORT",
+            "T": 500000,
+            "n_payments": 253,
+            "group_total": 1068364.45,
+            "first_date": "2026-06-03",
+            "last_date": "2026-07-29",
+            "span_days": 56,
+            "main_tag": "care_or_education_placement",
+            "tag_mix": "care_or_education_placement:1068364.45"
+          },
+          {
+            "supplier_norm": "AFFINITY TRUST SUPPORT",
+            "T": 25000,
+            "n_payments": 261,
+            "group_total": 1043430.1,
+            "first_date": "2026-05-13",
+            "last_date": "2026-07-29",
+            "span_days": 77,
+            "main_tag": "care_or_education_placement",
+            "tag_mix": "care_or_education_placement:1043430.10"
+          },
+          {
+            "supplier_norm": "OAKLANDS SEN SCHOOL BERKSHIRE",
+            "T": 25000,
+            "n_payments": 54,
+            "group_total": 1026661.89,
+            "first_date": "2026-06-17",
+            "last_date": "2026-06-17",
+            "span_days": 0,
+            "main_tag": "care_or_education_placement",
+            "tag_mix": "care_or_education_placement:1026661.89"
+          }
+        ],
+        "grant": [
+          {
+            "supplier_norm": "THE NEWBURY COMMUNITY RESOURCE CENTRE",
+            "T": 25000,
+            "n_payments": 30,
+            "group_total": 63247.65,
+            "first_date": "2026-05-20",
+            "last_date": "2026-07-22",
+            "span_days": 63,
+            "main_tag": "grant",
+            "tag_mix": "care_or_education_placement:21956.30;general_procurement:7027.35;grant:34264.00"
+          },
+          {
+            "supplier_norm": "PANGBOURNE DAY NURSERY",
+            "T": 25000,
+            "n_payments": 2,
+            "group_total": 43869.87,
+            "first_date": "2026-06-30",
+            "last_date": "2026-07-27",
+            "span_days": 27,
+            "main_tag": "grant",
+            "tag_mix": "grant:43869.87"
+          },
+          {
+            "supplier_norm": "MRS M ALSBURY",
+            "T": 25000,
+            "n_payments": 3,
+            "group_total": 29269.35,
+            "first_date": "2026-06-30",
+            "last_date": "2026-07-27",
+            "span_days": 27,
+            "main_tag": "grant",
+            "tag_mix": "grant:29269.35"
+          },
+          {
+            "supplier_norm": "PIED PIPER PRE SCHOOL",
+            "T": 25000,
+            "n_payments": 4,
+            "group_total": 26108.44,
+            "first_date": "2026-06-17",
+            "last_date": "2026-07-03",
+            "span_days": 16,
+            "main_tag": "grant",
+            "tag_mix": "grant:26108.44"
+          },
+          {
+            "supplier_norm": "BEANSHEAF COMMUNITY PRE SCHOO",
+            "T": 25000,
+            "n_payments": 2,
+            "group_total": 25705.36,
+            "first_date": "2026-06-17",
+            "last_date": "2026-07-02",
+            "span_days": 15,
+            "main_tag": "grant",
+            "tag_mix": "grant:25705.36"
+          }
+        ],
+        "agency_staff": [
+          {
+            "supplier_norm": "COMENSURA",
+            "T": 500000,
+            "n_payments": 8,
+            "group_total": 717093.5,
+            "first_date": "2026-05-19",
+            "last_date": "2026-07-01",
+            "span_days": 43,
+            "main_tag": "agency_staff",
+            "tag_mix": "agency_staff:717093.50"
+          },
+          {
+            "supplier_norm": "AMBITION 24 HOURS",
+            "T": 1000,
+            "n_payments": 2,
+            "group_total": 1572.31,
+            "first_date": "2026-06-10",
+            "last_date": "2026-06-10",
+            "span_days": 0,
+            "main_tag": "agency_staff",
+            "tag_mix": "agency_staff:1572.31"
+          },
+          {
+            "supplier_norm": "THE A PROJECT",
+            "T": 1000,
+            "n_payments": 2,
+            "group_total": 1250.0,
+            "first_date": "2026-06-11",
+            "last_date": "2026-06-11",
+            "span_days": 0,
+            "main_tag": "agency_staff",
+            "tag_mix": "agency_staff:1250.00"
+          }
+        ],
+        "premises": [
+          {
+            "supplier_norm": "GLEN CLEANING COMPANY",
+            "T": 25000,
+            "n_payments": 68,
+            "group_total": 92393.12,
+            "first_date": "2026-05-05",
+            "last_date": "2026-07-30",
+            "span_days": 86,
+            "main_tag": "premises",
+            "tag_mix": "premises:92393.12"
+          },
+          {
+            "supplier_norm": "KB REAL ESTATE MANAGEMENT",
+            "T": 25000,
+            "n_payments": 46,
+            "group_total": 71105.0,
+            "first_date": "2026-05-19",
+            "last_date": "2026-06-17",
+            "span_days": 29,
+            "main_tag": "premises",
+            "tag_mix": "premises:71105.00"
+          },
+          {
+            "supplier_norm": "BERKSHIRE MECHANICAL SERVICES",
+            "T": 25000,
+            "n_payments": 45,
+            "group_total": 68040.0,
+            "first_date": "2026-05-06",
+            "last_date": "2026-07-10",
+            "span_days": 65,
+            "main_tag": "premises",
+            "tag_mix": "general_procurement:1700.00;premises:66340.00"
+          },
+          {
+            "supplier_norm": "CONTINENTAL LANDSCAPES",
+            "T": 25000,
+            "n_payments": 7,
+            "group_total": 40818.65,
+            "first_date": "2026-05-21",
+            "last_date": "2026-05-27",
+            "span_days": 6,
+            "main_tag": "premises",
+            "tag_mix": "premises:40818.65"
+          },
+          {
+            "supplier_norm": "CONNICK TREE CARE",
+            "T": 25000,
+            "n_payments": 21,
+            "group_total": 39830.19,
+            "first_date": "2026-05-08",
+            "last_date": "2026-06-16",
+            "span_days": 39,
+            "main_tag": "premises",
+            "tag_mix": "premises:39830.19"
+          }
+        ],
+        "general_procurement": [
+          {
+            "supplier_norm": "VOLKERHIGHWAYS",
+            "T": 500000,
+            "n_payments": 124,
+            "group_total": 5523184.32,
+            "first_date": "2026-05-01",
+            "last_date": "2026-07-31",
+            "span_days": 91,
+            "main_tag": "general_procurement",
+            "tag_mix": "general_procurement:5523184.32"
+          },
+          {
+            "supplier_norm": "VOLKERHIGHWAYS",
+            "T": 25000,
+            "n_payments": 79,
+            "group_total": 569857.27,
+            "first_date": "2026-05-05",
+            "last_date": "2026-07-31",
+            "span_days": 87,
+            "main_tag": "general_procurement",
+            "tag_mix": "general_procurement:569857.27"
+          },
+          {
+            "supplier_norm": "SOFTWAREONE UK",
+            "T": 500000,
+            "n_payments": 4,
+            "group_total": 522978.62,
+            "first_date": "2026-05-27",
+            "last_date": "2026-05-27",
+            "span_days": 0,
+            "main_tag": "general_procurement",
+            "tag_mix": "general_procurement:522978.62"
+          },
+          {
+            "supplier_norm": "THE BETTER GROUP",
+            "T": 25000,
+            "n_payments": 19,
+            "group_total": 264585.42,
+            "first_date": "2026-05-28",
+            "last_date": "2026-07-29",
+            "span_days": 62,
+            "main_tag": "general_procurement",
+            "tag_mix": "general_procurement:264585.42"
+          },
+          {
+            "supplier_norm": "ELIOR UK",
+            "T": 25000,
+            "n_payments": 9,
+            "group_total": 161415.59,
+            "first_date": "2026-05-13",
+            "last_date": "2026-07-28",
+            "span_days": 76,
+            "main_tag": "general_procurement",
+            "tag_mix": "general_procurement:161415.59"
+          }
+        ]
+      },
+      "full_list": "outputs/analytics-full/split_purchases.csv",
+      "caveats": [
+        "Recurring care placements produce many groups; general_procurement is reported separately. Overlapping windows are merged, so a group can span more than 30 days; each constituent window spans at most 29 days.",
+        "Groups are indicators to investigate whether payments relate to one requirement, not findings."
+      ],
+      "general_procurement": {
+        "groups": 119,
+        "payments": 1038,
+        "total_gbp": 9485430.51,
+        "per_threshold": {
+          "1000": {
+            "groups": 72,
+            "total_gbp": 194539.02
+          },
+          "25000": {
+            "groups": 45,
+            "total_gbp": 3244728.55
+          },
+          "500000": {
+            "groups": 2,
+            "total_gbp": 6046162.94
+          }
+        },
+        "top_20": [
+          {
+            "supplier_norm": "VOLKERHIGHWAYS",
+            "T": 500000,
+            "n_payments": 124,
+            "group_total": 5523184.32,
+            "first_date": "2026-05-01",
+            "last_date": "2026-07-31",
+            "span_days": 91,
+            "main_tag": "general_procurement",
+            "tag_mix": "general_procurement:5523184.32"
+          },
+          {
+            "supplier_norm": "VOLKERHIGHWAYS",
+            "T": 25000,
+            "n_payments": 79,
+            "group_total": 569857.27,
+            "first_date": "2026-05-05",
+            "last_date": "2026-07-31",
+            "span_days": 87,
+            "main_tag": "general_procurement",
+            "tag_mix": "general_procurement:569857.27"
+          },
+          {
+            "supplier_norm": "SOFTWAREONE UK",
+            "T": 500000,
+            "n_payments": 4,
+            "group_total": 522978.62,
+            "first_date": "2026-05-27",
+            "last_date": "2026-05-27",
+            "span_days": 0,
+            "main_tag": "general_procurement",
+            "tag_mix": "general_procurement:522978.62"
+          },
+          {
+            "supplier_norm": "THE BETTER GROUP",
+            "T": 25000,
+            "n_payments": 19,
+            "group_total": 264585.42,
+            "first_date": "2026-05-28",
+            "last_date": "2026-07-29",
+            "span_days": 62,
+            "main_tag": "general_procurement",
+            "tag_mix": "general_procurement:264585.42"
+          },
+          {
+            "supplier_norm": "ELIOR UK",
+            "T": 25000,
+            "n_payments": 9,
+            "group_total": 161415.59,
+            "first_date": "2026-05-13",
+            "last_date": "2026-07-28",
+            "span_days": 76,
+            "main_tag": "general_procurement",
+            "tag_mix": "general_procurement:161415.59"
+          },
+          {
+            "supplier_norm": "NEWBURY AND DISTRICT",
+            "T": 25000,
+            "n_payments": 19,
+            "group_total": 150589.44,
+            "first_date": "2026-05-13",
+            "last_date": "2026-07-29",
+            "span_days": 77,
+            "main_tag": "general_procurement",
+            "tag_mix": "general_procurement:150589.44"
+          },
+          {
+            "supplier_norm": "COMPASS EXECUTIVE CARS UK",
+            "T": 25000,
+            "n_payments": 55,
+            "group_total": 101156.5,
+            "first_date": "2026-05-08",
+            "last_date": "2026-07-30",
+            "span_days": 83,
+            "main_tag": "general_procurement",
+            "tag_mix": "care_or_education_placement:570.00;general_procurement:100586.50"
+          },
+          {
+            "supplier_norm": "E W BEARD",
+            "T": 25000,
+            "n_payments": 14,
+            "group_total": 99158.98,
+            "first_date": "2026-05-05",
+            "last_date": "2026-07-29",
+            "span_days": 85,
+            "main_tag": "general_procurement",
+            "tag_mix": "general_procurement:92863.23;premises:6295.75"
+          },
+          {
+            "supplier_norm": "WEAVAWAY TRAVEL",
+            "T": 25000,
+            "n_payments": 25,
+            "group_total": 94891.38,
+            "first_date": "2026-07-08",
+            "last_date": "2026-07-24",
+            "span_days": 16,
+            "main_tag": "general_procurement",
+            "tag_mix": "general_procurement:94891.38"
+          },
+          {
+            "supplier_norm": "R AND A HAINES BUILDING CONTRACTORS",
+            "T": 25000,
+            "n_payments": 9,
+            "group_total": 90357.78,
+            "first_date": "2026-05-12",
+            "last_date": "2026-07-22",
+            "span_days": 71,
+            "main_tag": "general_procurement",
+            "tag_mix": "general_procurement:90357.78"
+          },
+          {
+            "supplier_norm": "SIKANDAR HAYAT T A PROMPT CARS",
+            "T": 25000,
+            "n_payments": 38,
+            "group_total": 87869.0,
+            "first_date": "2026-05-06",
+            "last_date": "2026-07-29",
+            "span_days": 84,
+            "main_tag": "general_procurement",
+            "tag_mix": "general_procurement:87869.00"
+          },
+          {
+            "supplier_norm": "FD TRAVELS T A SCHOOL EXPRESS",
+            "T": 25000,
+            "n_payments": 40,
+            "group_total": 87493.83,
+            "first_date": "2026-05-06",
+            "last_date": "2026-06-05",
+            "span_days": 30,
+            "main_tag": "general_procurement",
+            "tag_mix": "general_procurement:87493.83"
+          },
+          {
+            "supplier_norm": "ROADSIDE TECHNOLOGIES",
+            "T": 25000,
+            "n_payments": 10,
+            "group_total": 84070.16,
+            "first_date": "2026-07-13",
+            "last_date": "2026-07-30",
+            "span_days": 17,
+            "main_tag": "general_procurement",
+            "tag_mix": "general_procurement:84070.16"
+          },
+          {
+            "supplier_norm": "FD TRAVELS T A SCHOOL EXPRESS",
+            "T": 25000,
+            "n_payments": 30,
+            "group_total": 77830.64,
+            "first_date": "2026-07-09",
+            "last_date": "2026-07-27",
+            "span_days": 18,
+            "main_tag": "general_procurement",
+            "tag_mix": "general_procurement:77830.64"
+          },
+          {
+            "supplier_norm": "BROADWAY CARS",
+            "T": 25000,
+            "n_payments": 30,
+            "group_total": 76612.74,
+            "first_date": "2026-05-12",
+            "last_date": "2026-05-27",
+            "span_days": 15,
+            "main_tag": "general_procurement",
+            "tag_mix": "general_procurement:76612.74"
+          },
+          {
+            "supplier_norm": "WEAVAWAY TRAVEL",
+            "T": 25000,
+            "n_payments": 20,
+            "group_total": 74460.22,
+            "first_date": "2026-05-06",
+            "last_date": "2026-06-02",
+            "span_days": 27,
+            "main_tag": "general_procurement",
+            "tag_mix": "general_procurement:74460.22"
+          },
+          {
+            "supplier_norm": "WSP UK",
+            "T": 25000,
+            "n_payments": 24,
+            "group_total": 73901.03,
+            "first_date": "2026-05-05",
+            "last_date": "2026-07-22",
+            "span_days": 78,
+            "main_tag": "general_procurement",
+            "tag_mix": "general_procurement:67564.02;premises:6337.01"
+          },
+          {
+            "supplier_norm": "TRIPLE VALUE IMPACT",
+            "T": 25000,
+            "n_payments": 5,
+            "group_total": 68028.0,
+            "first_date": "2026-06-17",
+            "last_date": "2026-06-18",
+            "span_days": 1,
+            "main_tag": "general_procurement",
+            "tag_mix": "general_procurement:68028.00"
+          },
+          {
+            "supplier_norm": "PAYPOINT MOBILE AND ONLINE",
+            "T": 25000,
+            "n_payments": 5,
+            "group_total": 58398.66,
+            "first_date": "2026-06-09",
+            "last_date": "2026-06-09",
+            "span_days": 0,
+            "main_tag": "general_procurement",
+            "tag_mix": "general_procurement:58398.66"
+          },
+          {
+            "supplier_norm": "SOUTHERN COACH LINES",
+            "T": 25000,
+            "n_payments": 16,
+            "group_total": 55531.89,
+            "first_date": "2026-06-16",
+            "last_date": "2026-06-17",
+            "span_days": 1,
+            "main_tag": "general_procurement",
+            "tag_mix": "general_procurement:55531.89"
+          }
+        ]
+      }
+    },
+    "off_contract": {
+      "status": "ran",
+      "reason": null,
+      "description": "Suppliers whose annualised_estimate enters the notice-publication tier with no exact-match published notice found; a risk indicator to investigate, not evidence that no contract exists.",
+      "rule_ids": [
+        "CPR-50",
+        "CPR-52",
+        "CPR-05"
+      ],
+      "parameters": {
+        "T": 25000,
+        "lower_edge_inclusive": true,
+        "annualisation_factor": 4.0,
+        "similarity_ratio": 0.85,
+        "containment_min_chars": 6,
+        "matched_means": "exact_match on normalised name only"
+      },
+      "counts": {
+        "overall": {
+          "population": {
+            "count": 673,
+            "annualised_estimate_gbp": 260923277.4,
+            "window_total_gbp": 65230819.35,
+            "share_of_population_annualised_estimate": 1.0
+          },
+          "exact_match_any_notice": {
+            "count": 40,
+            "annualised_estimate_gbp": 11260432.28,
+            "window_total_gbp": 2815108.07,
+            "share_of_population_annualised_estimate": 0.04
+          },
+          "exact_match_live_notice": {
+            "count": 35,
+            "annualised_estimate_gbp": 10297310.36,
+            "window_total_gbp": 2574327.59,
+            "share_of_population_annualised_estimate": 0.04
+          },
+          "candidates": {
+            "count": 17,
+            "annualised_estimate_gbp": 3755960.92,
+            "window_total_gbp": 938990.23,
+            "share_of_population_annualised_estimate": 0.01
+          },
+          "no_notice_found": {
+            "count": 616,
+            "annualised_estimate_gbp": 245906884.2,
+            "window_total_gbp": 61476721.05,
+            "share_of_population_annualised_estimate": 0.94
+          }
+        },
+        "key_tags": {
+          "care_or_education_placement": {
+            "population": {
+              "count": 313,
+              "annualised_estimate_gbp": 122351126.92,
+              "window_total_gbp": 30587781.73,
+              "share_of_population_annualised_estimate": 1.0
+            },
+            "exact_match_any_notice": {
+              "count": 2,
+              "annualised_estimate_gbp": 678730.84,
+              "window_total_gbp": 169682.71,
+              "share_of_population_annualised_estimate": 0.01
+            },
+            "exact_match_live_notice": {
+              "count": 2,
+              "annualised_estimate_gbp": 678730.84,
+              "window_total_gbp": 169682.71,
+              "share_of_population_annualised_estimate": 0.01
+            },
+            "candidates": {
+              "count": 2,
+              "annualised_estimate_gbp": 331476.92,
+              "window_total_gbp": 82869.23,
+              "share_of_population_annualised_estimate": 0.0
+            },
+            "no_notice_found": {
+              "count": 309,
+              "annualised_estimate_gbp": 121340919.16,
+              "window_total_gbp": 30335229.79,
+              "share_of_population_annualised_estimate": 0.99
+            }
+          },
+          "general_procurement": {
+            "population": {
+              "count": 208,
+              "annualised_estimate_gbp": 106132111.68,
+              "window_total_gbp": 26533027.92,
+              "share_of_population_annualised_estimate": 1.0
+            },
+            "exact_match_any_notice": {
+              "count": 36,
+              "annualised_estimate_gbp": 10278505.8,
+              "window_total_gbp": 2569626.45,
+              "share_of_population_annualised_estimate": 0.1
+            },
+            "exact_match_live_notice": {
+              "count": 32,
+              "annualised_estimate_gbp": 9587543.88,
+              "window_total_gbp": 2396885.97,
+              "share_of_population_annualised_estimate": 0.09
+            },
+            "candidates": {
+              "count": 13,
+              "annualised_estimate_gbp": 3014198.52,
+              "window_total_gbp": 753549.63,
+              "share_of_population_annualised_estimate": 0.03
+            },
+            "no_notice_found": {
+              "count": 159,
+              "annualised_estimate_gbp": 92839407.36,
+              "window_total_gbp": 23209851.84,
+              "share_of_population_annualised_estimate": 0.87
+            }
+          }
+        },
+        "matched": 40,
+        "candidates": 17,
+        "flagged_no_notice_found": 616
+      },
+      "totals_gbp": {
+        "flagged_window_total": 61476721.05,
+        "flagged_annualised_estimate": 245906884.2,
+        "population_annualised_estimate": 260923277.4
+      },
+      "by_tag": {
+        "care_or_education_placement": {
+          "population": {
+            "count": 313,
+            "annualised_estimate_gbp": 122351126.92,
+            "window_total_gbp": 30587781.73,
+            "share_of_population_annualised_estimate": 1.0
+          },
+          "exact_match_any_notice": {
+            "count": 2,
+            "annualised_estimate_gbp": 678730.84,
+            "window_total_gbp": 169682.71,
+            "share_of_population_annualised_estimate": 0.01
+          },
+          "exact_match_live_notice": {
+            "count": 2,
+            "annualised_estimate_gbp": 678730.84,
+            "window_total_gbp": 169682.71,
+            "share_of_population_annualised_estimate": 0.01
+          },
+          "candidates": {
+            "count": 2,
+            "annualised_estimate_gbp": 331476.92,
+            "window_total_gbp": 82869.23,
+            "share_of_population_annualised_estimate": 0.0
+          },
+          "no_notice_found": {
+            "count": 309,
+            "annualised_estimate_gbp": 121340919.16,
+            "window_total_gbp": 30335229.79,
+            "share_of_population_annualised_estimate": 0.99
+          },
+          "count": 309,
+          "total_gbp": 30335229.79
+        },
+        "grant": {
+          "population": {
+            "count": 123,
+            "annualised_estimate_gbp": 23474958.04,
+            "window_total_gbp": 5868739.51,
+            "share_of_population_annualised_estimate": 1.0
+          },
+          "exact_match_any_notice": {
+            "count": 0,
+            "annualised_estimate_gbp": 0.0,
+            "window_total_gbp": 0.0,
+            "share_of_population_annualised_estimate": 0.0
+          },
+          "exact_match_live_notice": {
+            "count": 0,
+            "annualised_estimate_gbp": 0.0,
+            "window_total_gbp": 0.0,
+            "share_of_population_annualised_estimate": 0.0
+          },
+          "candidates": {
+            "count": 0,
+            "annualised_estimate_gbp": 0.0,
+            "window_total_gbp": 0.0,
+            "share_of_population_annualised_estimate": 0.0
+          },
+          "no_notice_found": {
+            "count": 123,
+            "annualised_estimate_gbp": 23474958.04,
+            "window_total_gbp": 5868739.51,
+            "share_of_population_annualised_estimate": 1.0
+          },
+          "count": 123,
+          "total_gbp": 5868739.51
+        },
+        "agency_staff": {
+          "population": {
+            "count": 1,
+            "annualised_estimate_gbp": 5102208.6,
+            "window_total_gbp": 1275552.15,
+            "share_of_population_annualised_estimate": 1.0
+          },
+          "exact_match_any_notice": {
+            "count": 0,
+            "annualised_estimate_gbp": 0.0,
+            "window_total_gbp": 0.0,
+            "share_of_population_annualised_estimate": 0.0
+          },
+          "exact_match_live_notice": {
+            "count": 0,
+            "annualised_estimate_gbp": 0.0,
+            "window_total_gbp": 0.0,
+            "share_of_population_annualised_estimate": 0.0
+          },
+          "candidates": {
+            "count": 0,
+            "annualised_estimate_gbp": 0.0,
+            "window_total_gbp": 0.0,
+            "share_of_population_annualised_estimate": 0.0
+          },
+          "no_notice_found": {
+            "count": 1,
+            "annualised_estimate_gbp": 5102208.6,
+            "window_total_gbp": 1275552.15,
+            "share_of_population_annualised_estimate": 1.0
+          },
+          "count": 1,
+          "total_gbp": 1275552.15
+        },
+        "premises": {
+          "population": {
+            "count": 28,
+            "annualised_estimate_gbp": 3862872.16,
+            "window_total_gbp": 965718.04,
+            "share_of_population_annualised_estimate": 1.0
+          },
+          "exact_match_any_notice": {
+            "count": 2,
+            "annualised_estimate_gbp": 303195.64,
+            "window_total_gbp": 75798.91,
+            "share_of_population_annualised_estimate": 0.08
+          },
+          "exact_match_live_notice": {
+            "count": 1,
+            "annualised_estimate_gbp": 31035.64,
+            "window_total_gbp": 7758.91,
+            "share_of_population_annualised_estimate": 0.01
+          },
+          "candidates": {
+            "count": 2,
+            "annualised_estimate_gbp": 410285.48,
+            "window_total_gbp": 102571.37,
+            "share_of_population_annualised_estimate": 0.11
+          },
+          "no_notice_found": {
+            "count": 24,
+            "annualised_estimate_gbp": 3149391.04,
+            "window_total_gbp": 787347.76,
+            "share_of_population_annualised_estimate": 0.82
+          },
+          "count": 24,
+          "total_gbp": 787347.76
+        },
+        "general_procurement": {
+          "population": {
+            "count": 208,
+            "annualised_estimate_gbp": 106132111.68,
+            "window_total_gbp": 26533027.92,
+            "share_of_population_annualised_estimate": 1.0
+          },
+          "exact_match_any_notice": {
+            "count": 36,
+            "annualised_estimate_gbp": 10278505.8,
+            "window_total_gbp": 2569626.45,
+            "share_of_population_annualised_estimate": 0.1
+          },
+          "exact_match_live_notice": {
+            "count": 32,
+            "annualised_estimate_gbp": 9587543.88,
+            "window_total_gbp": 2396885.97,
+            "share_of_population_annualised_estimate": 0.09
+          },
+          "candidates": {
+            "count": 13,
+            "annualised_estimate_gbp": 3014198.52,
+            "window_total_gbp": 753549.63,
+            "share_of_population_annualised_estimate": 0.03
+          },
+          "no_notice_found": {
+            "count": 159,
+            "annualised_estimate_gbp": 92839407.36,
+            "window_total_gbp": 23209851.84,
+            "share_of_population_annualised_estimate": 0.87
+          },
+          "count": 159,
+          "total_gbp": 23209851.84
+        }
+      },
+      "top_20": [
+        {
+          "supplier_norm": "VOLKERHIGHWAYS",
+          "main_tag": "general_procurement",
+          "window_total": 7377922.21,
+          "annualised_estimate": 29511688.84,
+          "n_payments": 126,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "VEOLIA ES WEST BERKSHIRE CHAPS ONLY",
+          "main_tag": "general_procurement",
+          "window_total": 6186065.04,
+          "annualised_estimate": 24744260.16,
+          "n_payments": 3,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "MILLBROOK HEALTHCARE",
+          "main_tag": "general_procurement",
+          "window_total": 3459365.35,
+          "annualised_estimate": 13837461.4,
+          "n_payments": 4,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "BUPA CARE SERVICES",
+          "main_tag": "care_or_education_placement",
+          "window_total": 1874166.5,
+          "annualised_estimate": 7496666.0,
+          "n_payments": 370,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "COMENSURA",
+          "main_tag": "agency_staff",
+          "window_total": 1275552.15,
+          "annualised_estimate": 5102208.6,
+          "n_payments": 14,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "AFFINITY TRUST SUPPORT",
+          "main_tag": "care_or_education_placement",
+          "window_total": 1098336.76,
+          "annualised_estimate": 4393347.04,
+          "n_payments": 263,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "OAKLANDS SEN SCHOOL BERKSHIRE",
+          "main_tag": "care_or_education_placement",
+          "window_total": 1026661.89,
+          "annualised_estimate": 4106647.56,
+          "n_payments": 54,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "RUSKIN MILL TRUST",
+          "main_tag": "care_or_education_placement",
+          "window_total": 795197.64,
+          "annualised_estimate": 3180790.56,
+          "n_payments": 9,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "AMEGREEN CHILDRENS SERVICES",
+          "main_tag": "care_or_education_placement",
+          "window_total": 750437.33,
+          "annualised_estimate": 3001749.32,
+          "n_payments": 27,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "BRIGHTER LIVING CARE",
+          "main_tag": "care_or_education_placement",
+          "window_total": 747183.47,
+          "annualised_estimate": 2988733.88,
+          "n_payments": 74,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "SUKHBIR SINGH AND HARVINDER SINGH T A CALCOT SERVICES FOR CHILDREN CSFC",
+          "main_tag": "care_or_education_placement",
+          "window_total": 639381.6,
+          "annualised_estimate": 2557526.4,
+          "n_payments": 26,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "WE ARE THE CARE COMPANY",
+          "main_tag": "care_or_education_placement",
+          "window_total": 589012.31,
+          "annualised_estimate": 2356049.24,
+          "n_payments": 349,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "THE BETTER GROUP",
+          "main_tag": "general_procurement",
+          "window_total": 588490.08,
+          "annualised_estimate": 2353960.32,
+          "n_payments": 26,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "PHOENIX CHILD CARE THE GRANGE SCHOOL",
+          "main_tag": "care_or_education_placement",
+          "window_total": 567708.85,
+          "annualised_estimate": 2270835.4,
+          "n_payments": 25,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "VOYAGE CARE",
+          "main_tag": "care_or_education_placement",
+          "window_total": 554678.88,
+          "annualised_estimate": 2218715.52,
+          "n_payments": 80,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "GCH ALDER T A HUNGERFORD CARE HOME",
+          "main_tag": "care_or_education_placement",
+          "window_total": 545531.64,
+          "annualised_estimate": 2182126.56,
+          "n_payments": 104,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "SOFTWAREONE UK",
+          "main_tag": "general_procurement",
+          "window_total": 522978.62,
+          "annualised_estimate": 2091914.48,
+          "n_payments": 4,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "LIVITY LIFE",
+          "main_tag": "general_procurement",
+          "window_total": 513074.85,
+          "annualised_estimate": 2052299.4,
+          "n_payments": 9,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "WEST BERKSHIRE MENCAP",
+          "main_tag": "care_or_education_placement",
+          "window_total": 505286.21,
+          "annualised_estimate": 2021144.84,
+          "n_payments": 115,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "PURLEY PARK TRUST",
+          "main_tag": "care_or_education_placement",
+          "window_total": 471283.82,
+          "annualised_estimate": 1885135.28,
+          "n_payments": 94,
+          "match_status": "no_notice_found"
+        }
+      ],
+      "top_5_by_tag": {
+        "care_or_education_placement": [
+          {
+            "supplier_norm": "BUPA CARE SERVICES",
+            "main_tag": "care_or_education_placement",
+            "window_total": 1874166.5,
+            "annualised_estimate": 7496666.0,
+            "n_payments": 370,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "AFFINITY TRUST SUPPORT",
+            "main_tag": "care_or_education_placement",
+            "window_total": 1098336.76,
+            "annualised_estimate": 4393347.04,
+            "n_payments": 263,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "OAKLANDS SEN SCHOOL BERKSHIRE",
+            "main_tag": "care_or_education_placement",
+            "window_total": 1026661.89,
+            "annualised_estimate": 4106647.56,
+            "n_payments": 54,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "RUSKIN MILL TRUST",
+            "main_tag": "care_or_education_placement",
+            "window_total": 795197.64,
+            "annualised_estimate": 3180790.56,
+            "n_payments": 9,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "AMEGREEN CHILDRENS SERVICES",
+            "main_tag": "care_or_education_placement",
+            "window_total": 750437.33,
+            "annualised_estimate": 3001749.32,
+            "n_payments": 27,
+            "match_status": "no_notice_found"
+          }
+        ],
+        "grant": [
+          {
+            "supplier_norm": "JUBILEE DAY NURSERY",
+            "main_tag": "grant",
+            "window_total": 408594.55,
+            "annualised_estimate": 1634378.2,
+            "n_payments": 3,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "ACRES OF FUN DAY NURSERY AND PRE SCHOOL",
+            "main_tag": "grant",
+            "window_total": 323872.96,
+            "annualised_estimate": 1295491.84,
+            "n_payments": 1,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "ROCKING HORSE DAY NURSERY NEWBURY RACECOURSE",
+            "main_tag": "grant",
+            "window_total": 320463.5,
+            "annualised_estimate": 1281854.0,
+            "n_payments": 2,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "TIGERS DAY NURSERY",
+            "main_tag": "grant",
+            "window_total": 244339.25,
+            "annualised_estimate": 977357.0,
+            "n_payments": 4,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "TIGERS AT THEALE DAY NURSERY",
+            "main_tag": "grant",
+            "window_total": 240745.51,
+            "annualised_estimate": 962982.04,
+            "n_payments": 2,
+            "match_status": "no_notice_found"
+          }
+        ],
+        "agency_staff": [
+          {
+            "supplier_norm": "COMENSURA",
+            "main_tag": "agency_staff",
+            "window_total": 1275552.15,
+            "annualised_estimate": 5102208.6,
+            "n_payments": 14,
+            "match_status": "no_notice_found"
+          }
+        ],
+        "premises": [
+          {
+            "supplier_norm": "A2 DOMINION",
+            "main_tag": "premises",
+            "window_total": 136612.06,
+            "annualised_estimate": 546448.24,
+            "n_payments": 2,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "CONTINENTAL LANDSCAPES",
+            "main_tag": "premises",
+            "window_total": 108423.39,
+            "annualised_estimate": 433693.56,
+            "n_payments": 8,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "KB REAL ESTATE MANAGEMENT",
+            "main_tag": "premises",
+            "window_total": 105375.0,
+            "annualised_estimate": 421500.0,
+            "n_payments": 67,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "READING WEST APARTHOTEL",
+            "main_tag": "premises",
+            "window_total": 74308.0,
+            "annualised_estimate": 297232.0,
+            "n_payments": 3,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "CONNICK TREE CARE",
+            "main_tag": "premises",
+            "window_total": 73404.42,
+            "annualised_estimate": 293617.68,
+            "n_payments": 38,
+            "match_status": "no_notice_found"
+          }
+        ],
+        "general_procurement": [
+          {
+            "supplier_norm": "VOLKERHIGHWAYS",
+            "main_tag": "general_procurement",
+            "window_total": 7377922.21,
+            "annualised_estimate": 29511688.84,
+            "n_payments": 126,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "VEOLIA ES WEST BERKSHIRE CHAPS ONLY",
+            "main_tag": "general_procurement",
+            "window_total": 6186065.04,
+            "annualised_estimate": 24744260.16,
+            "n_payments": 3,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "MILLBROOK HEALTHCARE",
+            "main_tag": "general_procurement",
+            "window_total": 3459365.35,
+            "annualised_estimate": 13837461.4,
+            "n_payments": 4,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "THE BETTER GROUP",
+            "main_tag": "general_procurement",
+            "window_total": 588490.08,
+            "annualised_estimate": 2353960.32,
+            "n_payments": 26,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "SOFTWAREONE UK",
+            "main_tag": "general_procurement",
+            "window_total": 522978.62,
+            "annualised_estimate": 2091914.48,
+            "n_payments": 4,
+            "match_status": "no_notice_found"
+          }
+        ]
+      },
+      "full_list": "outputs/analytics-full/off_contract.csv",
+      "caveats": [
+        "Notices may be missing for recent contracts: late publication, a partial current year, or publication on the Central Digital Platform / Find a Tender rather than Contracts Finder after the Procurement Act 2023 went live (24 Feb 2025). Auditor to confirm. Results that rely on notices must not be read as evidence that no contract exists.",
+        "Placements and individual care packages are often arranged under App C exclusions (CPR-56, CPR-61) or frameworks and may have no notice of their own.",
+        "Candidates (trading-name or similar-name) are for the auditor to confirm or reject and are never counted as matched.",
+        "annualised_estimate = window total x annualisation_factor; an estimate, not a contract value."
+      ],
+      "candidates_list": "outputs/analytics-full/off_contract_candidates.csv"
+    },
+    "duplicates": {
+      "status": "ran",
+      "reason": null,
+      "description": "Pairs of payments to one supplier for the same amount within 7 days; a payment-accuracy risk indicator to investigate.",
+      "rule_ids": [],
+      "parameters": {
+        "duplicate_window_days": 7
+      },
+      "counts": {
+        "pairs": 4245,
+        "clusters": 689,
+        "clusters_only_same_timestamp": 433,
+        "clusters_with_different_timestamp": 256,
+        "by_class": {
+          "same_timestamp": {
+            "pairs": 2743,
+            "pairs_amount_gbp": 11853679.34,
+            "distinct_rows": 1529,
+            "clusters_containing_class": 498
+          },
+          "different_timestamp": {
+            "pairs": 1502,
+            "pairs_amount_gbp": 15485593.92,
+            "distinct_rows": 801,
+            "clusters_containing_class": 256
+          }
+        }
+      },
+      "totals_gbp": {
+        "different_timestamp_pairs_amount": 15485593.92,
+        "same_timestamp_pairs_amount": 11853679.34,
+        "repeat_value_beyond_first_clusters_with_different_timestamp": 3254020.77,
+        "repeat_value_beyond_first_all_clusters": 5819446.96
+      },
+      "by_tag": {
+        "care_or_education_placement": {
+          "count": 1283,
+          "total_gbp": 14936959.85
+        },
+        "grant": {
+          "count": 1,
+          "total_gbp": 800.0
+        },
+        "agency_staff": {
+          "count": 0,
+          "total_gbp": 0.0
+        },
+        "premises": {
+          "count": 178,
+          "total_gbp": 243618.34
+        },
+        "general_procurement": {
+          "count": 40,
+          "total_gbp": 304215.73
+        }
+      },
+      "top_20": [
+        {
+          "row_id_a": "Over500_2026_P04_-_published.xlsx|Data to publish|R3308",
+          "row_id_b": "Over500_2026_P04_-_published.xlsx|Data to publish|R618",
+          "supplier_norm": "VOLKERHIGHWAYS",
+          "amount": 101925.86,
+          "date_a": "2026-07-15",
+          "date_b": "2026-07-17",
+          "days_apart": 2,
+          "class": "different_timestamp",
+          "tag": "general_procurement",
+          "cluster_id": "C00671"
+        },
+        {
+          "row_id_a": "Over500_2026_P04_-_published.xlsx|Data to publish|R3210",
+          "row_id_b": "Over500_2026_P04_-_published.xlsx|Data to publish|R3302",
+          "supplier_norm": "VOLKERHIGHWAYS",
+          "amount": 54241.36,
+          "date_a": "2026-07-13",
+          "date_b": "2026-07-16",
+          "days_apart": 3,
+          "class": "different_timestamp",
+          "tag": "general_procurement",
+          "cluster_id": "C00664"
+        },
+        {
+          "row_id_a": "Over500_2026_P02_-_published.xlsx|Data to publish|R2092",
+          "row_id_b": "Over500_2026_P02_-_published.xlsx|Data to publish|R2105",
+          "supplier_norm": "AMEGREEN CHILDRENS SERVICES",
+          "amount": 34431.08,
+          "date_a": "2026-05-26",
+          "date_b": "2026-05-27",
+          "days_apart": 1,
+          "class": "different_timestamp",
+          "tag": "care_or_education_placement",
+          "cluster_id": "C00105"
+        },
+        {
+          "row_id_a": "Over500_2026_P04_-_published.xlsx|Data to publish|R3081",
+          "row_id_b": "Over500_2026_P04_-_published.xlsx|Data to publish|R3752",
+          "supplier_norm": "AMEGREEN CHILDRENS SERVICES",
+          "amount": 34431.08,
+          "date_a": "2026-07-20",
+          "date_b": "2026-07-20",
+          "days_apart": 0,
+          "class": "different_timestamp",
+          "tag": "care_or_education_placement",
+          "cluster_id": "C00644"
+        },
+        {
+          "row_id_a": "Over500_2026_P02_-_published.xlsx|Data to publish|R2091",
+          "row_id_b": "Over500_2026_P02_-_published.xlsx|Data to publish|R2108",
+          "supplier_norm": "AMEGREEN CHILDRENS SERVICES",
+          "amount": 33320.4,
+          "date_a": "2026-05-26",
+          "date_b": "2026-05-28",
+          "days_apart": 2,
+          "class": "different_timestamp",
+          "tag": "care_or_education_placement",
+          "cluster_id": "C00104"
+        },
+        {
+          "row_id_a": "Over500_2026_P03_-_published.xlsx|Data to publish|R2032",
+          "row_id_b": "Over500_2026_P03_-_published.xlsx|Data to publish|R2033",
+          "supplier_norm": "AMEGREEN CHILDRENS SERVICES",
+          "amount": 33320.4,
+          "date_a": "2026-06-17",
+          "date_b": "2026-06-17",
+          "days_apart": 0,
+          "class": "different_timestamp",
+          "tag": "care_or_education_placement",
+          "cluster_id": "C00330"
+        },
+        {
+          "row_id_a": "Over500_2026_P02_-_published.xlsx|Data to publish|R2246",
+          "row_id_b": "Over500_2026_P02_-_published.xlsx|Data to publish|R2251",
+          "supplier_norm": "PHOENIX CHILD CARE THE GRANGE SCHOOL",
+          "amount": 32711.33,
+          "date_a": "2026-05-19",
+          "date_b": "2026-05-19",
+          "days_apart": 0,
+          "class": "different_timestamp",
+          "tag": "care_or_education_placement",
+          "cluster_id": "C00123"
+        },
+        {
+          "row_id_a": "Over500_2026_P02_-_published.xlsx|Data to publish|R2248",
+          "row_id_b": "Over500_2026_P02_-_published.xlsx|Data to publish|R2251",
+          "supplier_norm": "PHOENIX CHILD CARE THE GRANGE SCHOOL",
+          "amount": 32711.33,
+          "date_a": "2026-05-19",
+          "date_b": "2026-05-19",
+          "days_apart": 0,
+          "class": "different_timestamp",
+          "tag": "care_or_education_placement",
+          "cluster_id": "C00123"
+        },
+        {
+          "row_id_a": "Over500_2026_P02_-_published.xlsx|Data to publish|R2266",
+          "row_id_b": "Over500_2026_P02_-_published.xlsx|Data to publish|R2267",
+          "supplier_norm": "HUCKLEBERRY HOUSE",
+          "amount": 30918.75,
+          "date_a": "2026-05-26",
+          "date_b": "2026-05-26",
+          "days_apart": 0,
+          "class": "different_timestamp",
+          "tag": "care_or_education_placement",
+          "cluster_id": "C00125"
+        },
+        {
+          "row_id_a": "Over500_2026_P02_-_published.xlsx|Data to publish|R2266",
+          "row_id_b": "Over500_2026_P02_-_published.xlsx|Data to publish|R2269",
+          "supplier_norm": "HUCKLEBERRY HOUSE",
+          "amount": 30918.75,
+          "date_a": "2026-05-26",
+          "date_b": "2026-05-26",
+          "days_apart": 0,
+          "class": "different_timestamp",
+          "tag": "care_or_education_placement",
+          "cluster_id": "C00125"
+        },
+        {
+          "row_id_a": "Over500_2026_P02_-_published.xlsx|Data to publish|R2267",
+          "row_id_b": "Over500_2026_P02_-_published.xlsx|Data to publish|R2269",
+          "supplier_norm": "HUCKLEBERRY HOUSE",
+          "amount": 30918.75,
+          "date_a": "2026-05-26",
+          "date_b": "2026-05-26",
+          "days_apart": 0,
+          "class": "different_timestamp",
+          "tag": "care_or_education_placement",
+          "cluster_id": "C00125"
+        },
+        {
+          "row_id_a": "Over500_2026_P02_-_published.xlsx|Data to publish|R2160",
+          "row_id_b": "Over500_2026_P02_-_published.xlsx|Data to publish|R2161",
+          "supplier_norm": "TWO SAINTS",
+          "amount": 27147.69,
+          "date_a": "2026-05-12",
+          "date_b": "2026-05-13",
+          "days_apart": 1,
+          "class": "different_timestamp",
+          "tag": "general_procurement",
+          "cluster_id": "C00114"
+        },
+        {
+          "row_id_a": "Over500_2026_P03_-_published.xlsx|Data to publish|R1708",
+          "row_id_b": "Over500_2026_P04_-_published.xlsx|Data to publish|R2250",
+          "supplier_norm": "BRIGHTER LIVING CARE",
+          "amount": 26734.96,
+          "date_a": "2026-06-24",
+          "date_b": "2026-07-01",
+          "days_apart": 7,
+          "class": "different_timestamp",
+          "tag": "care_or_education_placement",
+          "cluster_id": "C00292"
+        },
+        {
+          "row_id_a": "Over500_2026_P03_-_published.xlsx|Data to publish|R1656",
+          "row_id_b": "Over500_2026_P04_-_published.xlsx|Data to publish|R2249",
+          "supplier_norm": "BRIGHTER LIVING CARE",
+          "amount": 26596.08,
+          "date_a": "2026-06-24",
+          "date_b": "2026-07-01",
+          "days_apart": 7,
+          "class": "different_timestamp",
+          "tag": "care_or_education_placement",
+          "cluster_id": "C00268"
+        },
+        {
+          "row_id_a": "Over500_2026_P02_-_published.xlsx|Data to publish|R2272",
+          "row_id_b": "Over500_2026_P02_-_published.xlsx|Data to publish|R2276",
+          "supplier_norm": "ACORN CARE AND EDUCATION",
+          "amount": 25533.7,
+          "date_a": "2026-05-26",
+          "date_b": "2026-05-26",
+          "days_apart": 0,
+          "class": "different_timestamp",
+          "tag": "care_or_education_placement",
+          "cluster_id": "C00126"
+        },
+        {
+          "row_id_a": "Over500_2026_P02_-_published.xlsx|Data to publish|R2033",
+          "row_id_b": "Over500_2026_P02_-_published.xlsx|Data to publish|R2037",
+          "supplier_norm": "CARE SERVICES TO YOU",
+          "amount": 23989.77,
+          "date_a": "2026-05-12",
+          "date_b": "2026-05-13",
+          "days_apart": 1,
+          "class": "different_timestamp",
+          "tag": "care_or_education_placement",
+          "cluster_id": "C00097"
+        },
+        {
+          "row_id_a": "Over500_2026_P03_-_published.xlsx|Data to publish|R1931",
+          "row_id_b": "Over500_2026_P03_-_published.xlsx|Data to publish|R3044",
+          "supplier_norm": "CARE SERVICES TO YOU",
+          "amount": 23989.77,
+          "date_a": "2026-06-16",
+          "date_b": "2026-06-22",
+          "days_apart": 6,
+          "class": "different_timestamp",
+          "tag": "care_or_education_placement",
+          "cluster_id": "C00319"
+        },
+        {
+          "row_id_a": "Over500_2026_P03_-_published.xlsx|Data to publish|R2008",
+          "row_id_b": "Over500_2026_P03_-_published.xlsx|Data to publish|R1931",
+          "supplier_norm": "CARE SERVICES TO YOU",
+          "amount": 23989.77,
+          "date_a": "2026-06-16",
+          "date_b": "2026-06-16",
+          "days_apart": 0,
+          "class": "different_timestamp",
+          "tag": "care_or_education_placement",
+          "cluster_id": "C00319"
+        },
+        {
+          "row_id_a": "Over500_2026_P03_-_published.xlsx|Data to publish|R2008",
+          "row_id_b": "Over500_2026_P03_-_published.xlsx|Data to publish|R3044",
+          "supplier_norm": "CARE SERVICES TO YOU",
+          "amount": 23989.77,
+          "date_a": "2026-06-16",
+          "date_b": "2026-06-22",
+          "days_apart": 6,
+          "class": "different_timestamp",
+          "tag": "care_or_education_placement",
+          "cluster_id": "C00319"
+        },
+        {
+          "row_id_a": "Over500_2026_P04_-_published.xlsx|Data to publish|R3092",
+          "row_id_b": "Over500_2026_P04_-_published.xlsx|Data to publish|R3161",
+          "supplier_norm": "CARE SERVICES TO YOU",
+          "amount": 23989.77,
+          "date_a": "2026-07-23",
+          "date_b": "2026-07-23",
+          "days_apart": 0,
+          "class": "different_timestamp",
+          "tag": "care_or_education_placement",
+          "cluster_id": "C00645"
+        }
+      ],
+      "top_5_by_tag": {
+        "care_or_education_placement": [
+          {
+            "row_id_a": "Over500_2026_P02_-_published.xlsx|Data to publish|R2092",
+            "row_id_b": "Over500_2026_P02_-_published.xlsx|Data to publish|R2105",
+            "supplier_norm": "AMEGREEN CHILDRENS SERVICES",
+            "amount": 34431.08,
+            "date_a": "2026-05-26",
+            "date_b": "2026-05-27",
+            "days_apart": 1,
+            "class": "different_timestamp",
+            "tag": "care_or_education_placement",
+            "cluster_id": "C00105"
+          },
+          {
+            "row_id_a": "Over500_2026_P04_-_published.xlsx|Data to publish|R3081",
+            "row_id_b": "Over500_2026_P04_-_published.xlsx|Data to publish|R3752",
+            "supplier_norm": "AMEGREEN CHILDRENS SERVICES",
+            "amount": 34431.08,
+            "date_a": "2026-07-20",
+            "date_b": "2026-07-20",
+            "days_apart": 0,
+            "class": "different_timestamp",
+            "tag": "care_or_education_placement",
+            "cluster_id": "C00644"
+          },
+          {
+            "row_id_a": "Over500_2026_P02_-_published.xlsx|Data to publish|R2091",
+            "row_id_b": "Over500_2026_P02_-_published.xlsx|Data to publish|R2108",
+            "supplier_norm": "AMEGREEN CHILDRENS SERVICES",
+            "amount": 33320.4,
+            "date_a": "2026-05-26",
+            "date_b": "2026-05-28",
+            "days_apart": 2,
+            "class": "different_timestamp",
+            "tag": "care_or_education_placement",
+            "cluster_id": "C00104"
+          },
+          {
+            "row_id_a": "Over500_2026_P03_-_published.xlsx|Data to publish|R2032",
+            "row_id_b": "Over500_2026_P03_-_published.xlsx|Data to publish|R2033",
+            "supplier_norm": "AMEGREEN CHILDRENS SERVICES",
+            "amount": 33320.4,
+            "date_a": "2026-06-17",
+            "date_b": "2026-06-17",
+            "days_apart": 0,
+            "class": "different_timestamp",
+            "tag": "care_or_education_placement",
+            "cluster_id": "C00330"
+          },
+          {
+            "row_id_a": "Over500_2026_P02_-_published.xlsx|Data to publish|R2246",
+            "row_id_b": "Over500_2026_P02_-_published.xlsx|Data to publish|R2251",
+            "supplier_norm": "PHOENIX CHILD CARE THE GRANGE SCHOOL",
+            "amount": 32711.33,
+            "date_a": "2026-05-19",
+            "date_b": "2026-05-19",
+            "days_apart": 0,
+            "class": "different_timestamp",
+            "tag": "care_or_education_placement",
+            "cluster_id": "C00123"
+          }
+        ],
+        "grant": [
+          {
+            "row_id_a": "Over500_2026_P04_-_published.xlsx|Data to publish|R763",
+            "row_id_b": "Over500_2026_P04_-_published.xlsx|Data to publish|R702",
+            "supplier_norm": "PIED PIPER PRE SCHOOL",
+            "amount": 800.0,
+            "date_a": "2026-07-02",
+            "date_b": "2026-07-03",
+            "days_apart": 1,
+            "class": "different_timestamp",
+            "tag": "grant",
+            "cluster_id": "C00684"
+          }
+        ],
+        "agency_staff": [],
+        "premises": [
+          {
+            "row_id_a": "Over500_2026_P03_-_published.xlsx|Data to publish|R68",
+            "row_id_b": "Over500_2026_P03_-_published.xlsx|Data to publish|R85",
+            "supplier_norm": "DIMENSIONS NSO",
+            "amount": 2948.54,
+            "date_a": "2026-06-03",
+            "date_b": "2026-06-04",
+            "days_apart": 1,
+            "class": "different_timestamp",
+            "tag": "premises",
+            "cluster_id": "C00396"
+          },
+          {
+            "row_id_a": "Over500_2026_P04_-_published.xlsx|Data to publish|R113",
+            "row_id_b": "Over500_2026_P04_-_published.xlsx|Data to publish|R98",
+            "supplier_norm": "KB REAL ESTATE MANAGEMENT",
+            "amount": 2850.0,
+            "date_a": "2026-07-23",
+            "date_b": "2026-07-23",
+            "days_apart": 0,
+            "class": "different_timestamp",
+            "tag": "premises",
+            "cluster_id": "C00428"
+          },
+          {
+            "row_id_a": "Over500_2026_P03_-_published.xlsx|Data to publish|R109",
+            "row_id_b": "Over500_2026_P03_-_published.xlsx|Data to publish|R127",
+            "supplier_norm": "KB REAL ESTATE MANAGEMENT",
+            "amount": 1860.0,
+            "date_a": "2026-06-16",
+            "date_b": "2026-06-16",
+            "days_apart": 0,
+            "class": "different_timestamp",
+            "tag": "premises",
+            "cluster_id": "C00183"
+          },
+          {
+            "row_id_a": "Over500_2026_P03_-_published.xlsx|Data to publish|R109",
+            "row_id_b": "Over500_2026_P03_-_published.xlsx|Data to publish|R113",
+            "supplier_norm": "KB REAL ESTATE MANAGEMENT",
+            "amount": 1860.0,
+            "date_a": "2026-06-16",
+            "date_b": "2026-06-16",
+            "days_apart": 0,
+            "class": "different_timestamp",
+            "tag": "premises",
+            "cluster_id": "C00183"
+          },
+          {
+            "row_id_a": "Over500_2026_P03_-_published.xlsx|Data to publish|R109",
+            "row_id_b": "Over500_2026_P03_-_published.xlsx|Data to publish|R301",
+            "supplier_norm": "KB REAL ESTATE MANAGEMENT",
+            "amount": 1860.0,
+            "date_a": "2026-06-16",
+            "date_b": "2026-06-16",
+            "days_apart": 0,
+            "class": "different_timestamp",
+            "tag": "premises",
+            "cluster_id": "C00183"
+          }
+        ],
+        "general_procurement": [
+          {
+            "row_id_a": "Over500_2026_P04_-_published.xlsx|Data to publish|R3308",
+            "row_id_b": "Over500_2026_P04_-_published.xlsx|Data to publish|R618",
+            "supplier_norm": "VOLKERHIGHWAYS",
+            "amount": 101925.86,
+            "date_a": "2026-07-15",
+            "date_b": "2026-07-17",
+            "days_apart": 2,
+            "class": "different_timestamp",
+            "tag": "general_procurement",
+            "cluster_id": "C00671"
+          },
+          {
+            "row_id_a": "Over500_2026_P04_-_published.xlsx|Data to publish|R3210",
+            "row_id_b": "Over500_2026_P04_-_published.xlsx|Data to publish|R3302",
+            "supplier_norm": "VOLKERHIGHWAYS",
+            "amount": 54241.36,
+            "date_a": "2026-07-13",
+            "date_b": "2026-07-16",
+            "days_apart": 3,
+            "class": "different_timestamp",
+            "tag": "general_procurement",
+            "cluster_id": "C00664"
+          },
+          {
+            "row_id_a": "Over500_2026_P02_-_published.xlsx|Data to publish|R2160",
+            "row_id_b": "Over500_2026_P02_-_published.xlsx|Data to publish|R2161",
+            "supplier_norm": "TWO SAINTS",
+            "amount": 27147.69,
+            "date_a": "2026-05-12",
+            "date_b": "2026-05-13",
+            "days_apart": 1,
+            "class": "different_timestamp",
+            "tag": "general_procurement",
+            "cluster_id": "C00114"
+          },
+          {
+            "row_id_a": "Over500_2026_P04_-_published.xlsx|Data to publish|R3184",
+            "row_id_b": "Over500_2026_P04_-_published.xlsx|Data to publish|R3185",
+            "supplier_norm": "VOLKERHIGHWAYS",
+            "amount": 17882.35,
+            "date_a": "2026-07-13",
+            "date_b": "2026-07-16",
+            "days_apart": 3,
+            "class": "different_timestamp",
+            "tag": "general_procurement",
+            "cluster_id": "C00661"
+          },
+          {
+            "row_id_a": "Over500_2026_P02_-_published.xlsx|Data to publish|R8",
+            "row_id_b": "Over500_2026_P02_-_published.xlsx|Data to publish|R643",
+            "supplier_norm": "PAVILLION PUBLISHING AND MEDIA",
+            "amount": 9084.6,
+            "date_a": "2026-05-13",
+            "date_b": "2026-05-14",
+            "days_apart": 1,
+            "class": "different_timestamp",
+            "tag": "general_procurement",
+            "cluster_id": "C00139"
+          }
+        ]
+      },
+      "full_list": "outputs/analytics-full/duplicates.csv",
+      "caveats": [
+        "same_timestamp pairs are probably lines of one payment run and are reported separately; top_20 uses different_timestamp pairs only.",
+        "Recurring fixed-rate payments (e.g. weekly care) can repeat legitimately; pairs are indicators to investigate."
+      ],
+      "rule_note": "no specific rule; payment accuracy indicator",
+      "by_tag_same_timestamp": {
+        "care_or_education_placement": {
+          "count": 2680,
+          "total_gbp": 11755783.78
+        },
+        "grant": {
+          "count": 3,
+          "total_gbp": 15238.77
+        },
+        "agency_staff": {
+          "count": 1,
+          "total_gbp": 625.0
+        },
+        "premises": {
+          "count": 14,
+          "total_gbp": 15341.77
+        },
+        "general_procurement": {
+          "count": 45,
+          "total_gbp": 66690.02
+        }
+      },
+      "clusters_list": "outputs/analytics-full/duplicates_clusters.csv"
+    },
+    "expired_notice_spend": {
+      "status": "ran",
+      "reason": null,
+      "description": "Suppliers paid in the window whose every exact-matched notice ended before the window start; a risk indicator to investigate for spend after expiry without a recorded extension.",
+      "rule_ids": [
+        "CPR-58"
+      ],
+      "parameters": {
+        "window_start": "2026-05-01",
+        "matching": "exact_match only"
+      },
+      "counts": {
+        "exact_matched_suppliers_paid": 46,
+        "flagged": 8
+      },
+      "totals_gbp": {
+        "flagged_window_total": 243364.42
+      },
+      "by_tag": {
+        "care_or_education_placement": {
+          "count": 0,
+          "total_gbp": 0.0
+        },
+        "grant": {
+          "count": 0,
+          "total_gbp": 0.0
+        },
+        "agency_staff": {
+          "count": 0,
+          "total_gbp": 0.0
+        },
+        "premises": {
+          "count": 2,
+          "total_gbp": 68721.94
+        },
+        "general_procurement": {
+          "count": 6,
+          "total_gbp": 174642.48
+        }
+      },
+      "top_20": [
+        {
+          "supplier_norm": "HOPE AND CLAY CONSTRUCTION",
+          "main_tag": "general_procurement",
+          "last_notice_id": "IT-402-1300-P00001300 - AWARD",
+          "last_notice_end": "2024-10-11",
+          "window_total": 91306.75,
+          "n_payments": 1
+        },
+        {
+          "supplier_norm": "BERKSHIRE MECHANICAL SERVICES",
+          "main_tag": "premises",
+          "last_notice_id": "IT-402-1083-P00001083 - AWARD",
+          "last_notice_end": "2024-03-31",
+          "window_total": 68040.0,
+          "n_payments": 45
+        },
+        {
+          "supplier_norm": "BERKSHIRE WOMENS AID",
+          "main_tag": "general_procurement",
+          "last_notice_id": "P00000926",
+          "last_notice_end": "2026-03-31",
+          "window_total": 52997.5,
+          "n_payments": 2
+        },
+        {
+          "supplier_norm": "G7 BUSINESS SOLUTIONS",
+          "main_tag": "general_procurement",
+          "last_notice_id": "G-Cloud 12 Framework",
+          "last_notice_end": "2023-01-18",
+          "window_total": 16364.56,
+          "n_payments": 8
+        },
+        {
+          "supplier_norm": "CACI",
+          "main_tag": "general_procurement",
+          "last_notice_id": "Youth Justice - ChildView",
+          "last_notice_end": "2025-04-30",
+          "window_total": 12071.67,
+          "n_payments": 1
+        },
+        {
+          "supplier_norm": "MORTON PATTISON",
+          "main_tag": "general_procurement",
+          "last_notice_id": "IT-402-1354-P00001354 - AWARD",
+          "last_notice_end": "2024-10-18",
+          "window_total": 1102.0,
+          "n_payments": 1
+        },
+        {
+          "supplier_norm": "DAVIS AND ASSOCIATES CONSULTANCY",
+          "main_tag": "general_procurement",
+          "last_notice_id": "P00000986",
+          "last_notice_end": "2023-09-30",
+          "window_total": 800.0,
+          "n_payments": 1
+        },
+        {
+          "supplier_norm": "TACTICAL FACILITIES MANAGEMENT",
+          "main_tag": "premises",
+          "last_notice_id": "P00001043",
+          "last_notice_end": "2023-09-30",
+          "window_total": 681.94,
+          "n_payments": 1
+        }
+      ],
+      "top_5_by_tag": {
+        "care_or_education_placement": [],
+        "grant": [],
+        "agency_staff": [],
+        "premises": [
+          {
+            "supplier_norm": "BERKSHIRE MECHANICAL SERVICES",
+            "main_tag": "premises",
+            "last_notice_id": "IT-402-1083-P00001083 - AWARD",
+            "last_notice_end": "2024-03-31",
+            "window_total": 68040.0,
+            "n_payments": 45
+          },
+          {
+            "supplier_norm": "TACTICAL FACILITIES MANAGEMENT",
+            "main_tag": "premises",
+            "last_notice_id": "P00001043",
+            "last_notice_end": "2023-09-30",
+            "window_total": 681.94,
+            "n_payments": 1
+          }
+        ],
+        "general_procurement": [
+          {
+            "supplier_norm": "HOPE AND CLAY CONSTRUCTION",
+            "main_tag": "general_procurement",
+            "last_notice_id": "IT-402-1300-P00001300 - AWARD",
+            "last_notice_end": "2024-10-11",
+            "window_total": 91306.75,
+            "n_payments": 1
+          },
+          {
+            "supplier_norm": "BERKSHIRE WOMENS AID",
+            "main_tag": "general_procurement",
+            "last_notice_id": "P00000926",
+            "last_notice_end": "2026-03-31",
+            "window_total": 52997.5,
+            "n_payments": 2
+          },
+          {
+            "supplier_norm": "G7 BUSINESS SOLUTIONS",
+            "main_tag": "general_procurement",
+            "last_notice_id": "G-Cloud 12 Framework",
+            "last_notice_end": "2023-01-18",
+            "window_total": 16364.56,
+            "n_payments": 8
+          },
+          {
+            "supplier_norm": "CACI",
+            "main_tag": "general_procurement",
+            "last_notice_id": "Youth Justice - ChildView",
+            "last_notice_end": "2025-04-30",
+            "window_total": 12071.67,
+            "n_payments": 1
+          },
+          {
+            "supplier_norm": "MORTON PATTISON",
+            "main_tag": "general_procurement",
+            "last_notice_id": "IT-402-1354-P00001354 - AWARD",
+            "last_notice_end": "2024-10-18",
+            "window_total": 1102.0,
+            "n_payments": 1
+          }
+        ]
+      },
+      "full_list": "outputs/analytics-full/expired_notice_spend.csv",
+      "caveats": [
+        "A newer contract or an approved extension may exist with no notice.",
+        "Notices may be missing for recent contracts: late publication, a partial current year, or publication on the Central Digital Platform / Find a Tender rather than Contracts Finder after the Procurement Act 2023 went live (24 Feb 2025). Auditor to confirm. Results that rely on notices must not be read as evidence that no contract exists."
+      ]
+    },
+    "spend_vs_award": {
+      "status": "ran",
+      "reason": null,
+      "description": "Suppliers matched to one live single-supplier notice whose annualised_estimate is at least the flag ratio times the award per year; a risk indicator to request variation approvals.",
+      "rule_ids": [
+        "CPR-59",
+        "CPR-60"
+      ],
+      "parameters": {
+        "spend_vs_award_flag_ratio": 1.25,
+        "annualisation_factor": 4.0,
+        "contract_years": "(contract_end - contract_start).days / 365.25"
+      },
+      "counts": {
+        "eligibility_steps": {
+          "exact_matched_suppliers": 46,
+          "excluded_no_live_notice": 8,
+          "excluded_more_than_one_live_notice": 9,
+          "excluded_multi_supplier_notice": 10,
+          "excluded_awarded_value_zero_or_blank": 1,
+          "excluded_invalid_contract_dates": 0,
+          "eligible": 18
+        },
+        "population": 18,
+        "flagged": 7
+      },
+      "totals_gbp": {
+        "flagged_window_total": 633768.19,
+        "flagged_annualised_estimate": 2535072.76
+      },
+      "by_tag": {
+        "care_or_education_placement": {
+          "count": 0,
+          "total_gbp": 0.0
+        },
+        "grant": {
+          "count": 0,
+          "total_gbp": 0.0
+        },
+        "agency_staff": {
+          "count": 0,
+          "total_gbp": 0.0
+        },
+        "premises": {
+          "count": 1,
+          "total_gbp": 7758.91
+        },
+        "general_procurement": {
+          "count": 6,
+          "total_gbp": 626009.28
+        }
+      },
+      "top_20": [
+        {
+          "supplier_norm": "NEC SOFTWARE SOLUTIONS UK",
+          "main_tag": "general_procurement",
+          "notice_id": "RM6259/CL766",
+          "awarded_value": 615540.0,
+          "contract_years": 3.0,
+          "award_per_year": 205320.53,
+          "annualised_estimate": 1257534.28,
+          "ratio": 6.12
+        },
+        {
+          "supplier_norm": "TWO SAINTS",
+          "main_tag": "general_procurement",
+          "notice_id": "IT-402-1432-P00001432 - AWARD",
+          "awarded_value": 2500000.0,
+          "contract_years": 5.0,
+          "award_per_year": 500068.46,
+          "annualised_estimate": 853153.8,
+          "ratio": 1.71
+        },
+        {
+          "supplier_norm": "IDOX SOFTWARE",
+          "main_tag": "general_procurement",
+          "notice_id": "P00000844",
+          "awarded_value": 714533.0,
+          "contract_years": 7.0,
+          "award_per_year": 102106.09,
+          "annualised_estimate": 204905.64,
+          "ratio": 2.01
+        },
+        {
+          "supplier_norm": "BOOKINGLAB",
+          "main_tag": "general_procurement",
+          "notice_id": "IT-402-1498-P00001498 - AWARD",
+          "awarded_value": 173000.0,
+          "contract_years": 7.0,
+          "award_per_year": 24721.54,
+          "annualised_estimate": 96000.0,
+          "ratio": 3.88
+        },
+        {
+          "supplier_norm": "EXACOM SYSTEMS",
+          "main_tag": "general_procurement",
+          "notice_id": "G-Cloud 14 RM1557.14",
+          "awarded_value": 50358.0,
+          "contract_years": 4.0,
+          "award_per_year": 12598.12,
+          "annualised_estimate": 48423.4,
+          "ratio": 3.84
+        },
+        {
+          "supplier_norm": "SOFTCAT",
+          "main_tag": "general_procurement",
+          "notice_id": "IT-402-1666-P00001666 - AWARD",
+          "awarded_value": 57907.0,
+          "contract_years": 3.0,
+          "award_per_year": 19315.55,
+          "annualised_estimate": 44020.0,
+          "ratio": 2.28
+        },
+        {
+          "supplier_norm": "SMS ENVIRONMENTAL",
+          "main_tag": "premises",
+          "notice_id": "IT-402-1599-P00001599 - AWARD",
+          "awarded_value": 26021.66,
+          "contract_years": 2.0,
+          "award_per_year": 13037.6,
+          "annualised_estimate": 31035.64,
+          "ratio": 2.38
+        }
+      ],
+      "top_5_by_tag": {
+        "care_or_education_placement": [],
+        "grant": [],
+        "agency_staff": [],
+        "premises": [
+          {
+            "supplier_norm": "SMS ENVIRONMENTAL",
+            "main_tag": "premises",
+            "notice_id": "IT-402-1599-P00001599 - AWARD",
+            "awarded_value": 26021.66,
+            "contract_years": 2.0,
+            "award_per_year": 13037.6,
+            "annualised_estimate": 31035.64,
+            "ratio": 2.38
+          }
+        ],
+        "general_procurement": [
+          {
+            "supplier_norm": "NEC SOFTWARE SOLUTIONS UK",
+            "main_tag": "general_procurement",
+            "notice_id": "RM6259/CL766",
+            "awarded_value": 615540.0,
+            "contract_years": 3.0,
+            "award_per_year": 205320.53,
+            "annualised_estimate": 1257534.28,
+            "ratio": 6.12
+          },
+          {
+            "supplier_norm": "TWO SAINTS",
+            "main_tag": "general_procurement",
+            "notice_id": "IT-402-1432-P00001432 - AWARD",
+            "awarded_value": 2500000.0,
+            "contract_years": 5.0,
+            "award_per_year": 500068.46,
+            "annualised_estimate": 853153.8,
+            "ratio": 1.71
+          },
+          {
+            "supplier_norm": "IDOX SOFTWARE",
+            "main_tag": "general_procurement",
+            "notice_id": "P00000844",
+            "awarded_value": 714533.0,
+            "contract_years": 7.0,
+            "award_per_year": 102106.09,
+            "annualised_estimate": 204905.64,
+            "ratio": 2.01
+          },
+          {
+            "supplier_norm": "BOOKINGLAB",
+            "main_tag": "general_procurement",
+            "notice_id": "IT-402-1498-P00001498 - AWARD",
+            "awarded_value": 173000.0,
+            "contract_years": 7.0,
+            "award_per_year": 24721.54,
+            "annualised_estimate": 96000.0,
+            "ratio": 3.88
+          },
+          {
+            "supplier_norm": "EXACOM SYSTEMS",
+            "main_tag": "general_procurement",
+            "notice_id": "G-Cloud 14 RM1557.14",
+            "awarded_value": 50358.0,
+            "contract_years": 4.0,
+            "award_per_year": 12598.12,
+            "annualised_estimate": 48423.4,
+            "ratio": 3.84
+          }
+        ]
+      },
+      "full_list": "outputs/analytics-full/spend_vs_award.csv",
+      "caveats": [
+        "Awarded values may be estimates or maxima; a ratio above 1.25 is an indicator to request variation approvals, not a finding."
+      ]
+    },
+    "high_value_suppliers": {
+      "status": "ran",
+      "reason": null,
+      "description": "Suppliers whose annualised_estimate enters the three-quotes tier: the population to request contract evidence for (contract, quotes, award approval), not a list of exceptions.",
+      "rule_ids": [
+        "CPR-49",
+        "CPR-51",
+        "CPR-50",
+        "CPR-52",
+        "CPR-44",
+        "CPR-45",
+        "CPR-46",
+        "CPR-47"
+      ],
+      "parameters": {
+        "T": 25000,
+        "lower_edge_inclusive": true,
+        "annualisation_factor": 4.0
+      },
+      "counts": {
+        "suppliers": 673,
+        "window_total_enters_tier": 325,
+        "by_match_status": {
+          "no_notice_found": 616,
+          "exact_match": 40,
+          "candidate_trading_name": 11,
+          "candidate_similar_name": 6
+        }
+      },
+      "totals_gbp": {
+        "window_total": 65230819.35,
+        "annualised_estimate": 260923277.4
+      },
+      "by_tag": {
+        "care_or_education_placement": {
+          "count": 313,
+          "total_gbp": 30587781.73
+        },
+        "grant": {
+          "count": 123,
+          "total_gbp": 5868739.51
+        },
+        "agency_staff": {
+          "count": 1,
+          "total_gbp": 1275552.15
+        },
+        "premises": {
+          "count": 28,
+          "total_gbp": 965718.04
+        },
+        "general_procurement": {
+          "count": 208,
+          "total_gbp": 26533027.92
+        }
+      },
+      "top_20": [
+        {
+          "supplier_norm": "VOLKERHIGHWAYS",
+          "main_tag": "general_procurement",
+          "window_total": 7377922.21,
+          "annualised_estimate": 29511688.84,
+          "window_total_enters_tier": true,
+          "n_payments": 126,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "VEOLIA ES WEST BERKSHIRE CHAPS ONLY",
+          "main_tag": "general_procurement",
+          "window_total": 6186065.04,
+          "annualised_estimate": 24744260.16,
+          "window_total_enters_tier": true,
+          "n_payments": 3,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "MILLBROOK HEALTHCARE",
+          "main_tag": "general_procurement",
+          "window_total": 3459365.35,
+          "annualised_estimate": 13837461.4,
+          "window_total_enters_tier": true,
+          "n_payments": 4,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "BUPA CARE SERVICES",
+          "main_tag": "care_or_education_placement",
+          "window_total": 1874166.5,
+          "annualised_estimate": 7496666.0,
+          "window_total_enters_tier": true,
+          "n_payments": 370,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "COMENSURA",
+          "main_tag": "agency_staff",
+          "window_total": 1275552.15,
+          "annualised_estimate": 5102208.6,
+          "window_total_enters_tier": true,
+          "n_payments": 14,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "AFFINITY TRUST SUPPORT",
+          "main_tag": "care_or_education_placement",
+          "window_total": 1098336.76,
+          "annualised_estimate": 4393347.04,
+          "window_total_enters_tier": true,
+          "n_payments": 263,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "OAKLANDS SEN SCHOOL BERKSHIRE",
+          "main_tag": "care_or_education_placement",
+          "window_total": 1026661.89,
+          "annualised_estimate": 4106647.56,
+          "window_total_enters_tier": true,
+          "n_payments": 54,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "RUSKIN MILL TRUST",
+          "main_tag": "care_or_education_placement",
+          "window_total": 795197.64,
+          "annualised_estimate": 3180790.56,
+          "window_total_enters_tier": true,
+          "n_payments": 9,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "AMEGREEN CHILDRENS SERVICES",
+          "main_tag": "care_or_education_placement",
+          "window_total": 750437.33,
+          "annualised_estimate": 3001749.32,
+          "window_total_enters_tier": true,
+          "n_payments": 27,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "BRIGHTER LIVING CARE",
+          "main_tag": "care_or_education_placement",
+          "window_total": 747183.47,
+          "annualised_estimate": 2988733.88,
+          "window_total_enters_tier": true,
+          "n_payments": 74,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "SUKHBIR SINGH AND HARVINDER SINGH T A CALCOT SERVICES FOR CHILDREN CSFC",
+          "main_tag": "care_or_education_placement",
+          "window_total": 639381.6,
+          "annualised_estimate": 2557526.4,
+          "window_total_enters_tier": true,
+          "n_payments": 26,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "WE ARE THE CARE COMPANY",
+          "main_tag": "care_or_education_placement",
+          "window_total": 589012.31,
+          "annualised_estimate": 2356049.24,
+          "window_total_enters_tier": true,
+          "n_payments": 349,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "THE BETTER GROUP",
+          "main_tag": "general_procurement",
+          "window_total": 588490.08,
+          "annualised_estimate": 2353960.32,
+          "window_total_enters_tier": true,
+          "n_payments": 26,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "PHOENIX CHILD CARE THE GRANGE SCHOOL",
+          "main_tag": "care_or_education_placement",
+          "window_total": 567708.85,
+          "annualised_estimate": 2270835.4,
+          "window_total_enters_tier": true,
+          "n_payments": 25,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "VOYAGE CARE",
+          "main_tag": "care_or_education_placement",
+          "window_total": 554678.88,
+          "annualised_estimate": 2218715.52,
+          "window_total_enters_tier": true,
+          "n_payments": 80,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "GCH ALDER T A HUNGERFORD CARE HOME",
+          "main_tag": "care_or_education_placement",
+          "window_total": 545531.64,
+          "annualised_estimate": 2182126.56,
+          "window_total_enters_tier": true,
+          "n_payments": 104,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "SOFTWAREONE UK",
+          "main_tag": "general_procurement",
+          "window_total": 522978.62,
+          "annualised_estimate": 2091914.48,
+          "window_total_enters_tier": true,
+          "n_payments": 4,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "LIVITY LIFE",
+          "main_tag": "general_procurement",
+          "window_total": 513074.85,
+          "annualised_estimate": 2052299.4,
+          "window_total_enters_tier": true,
+          "n_payments": 9,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "WEST BERKSHIRE MENCAP",
+          "main_tag": "care_or_education_placement",
+          "window_total": 505286.21,
+          "annualised_estimate": 2021144.84,
+          "window_total_enters_tier": true,
+          "n_payments": 115,
+          "match_status": "no_notice_found"
+        },
+        {
+          "supplier_norm": "PURLEY PARK TRUST",
+          "main_tag": "care_or_education_placement",
+          "window_total": 471283.82,
+          "annualised_estimate": 1885135.28,
+          "window_total_enters_tier": true,
+          "n_payments": 94,
+          "match_status": "no_notice_found"
+        }
+      ],
+      "top_5_by_tag": {
+        "care_or_education_placement": [
+          {
+            "supplier_norm": "BUPA CARE SERVICES",
+            "main_tag": "care_or_education_placement",
+            "window_total": 1874166.5,
+            "annualised_estimate": 7496666.0,
+            "window_total_enters_tier": true,
+            "n_payments": 370,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "AFFINITY TRUST SUPPORT",
+            "main_tag": "care_or_education_placement",
+            "window_total": 1098336.76,
+            "annualised_estimate": 4393347.04,
+            "window_total_enters_tier": true,
+            "n_payments": 263,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "OAKLANDS SEN SCHOOL BERKSHIRE",
+            "main_tag": "care_or_education_placement",
+            "window_total": 1026661.89,
+            "annualised_estimate": 4106647.56,
+            "window_total_enters_tier": true,
+            "n_payments": 54,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "RUSKIN MILL TRUST",
+            "main_tag": "care_or_education_placement",
+            "window_total": 795197.64,
+            "annualised_estimate": 3180790.56,
+            "window_total_enters_tier": true,
+            "n_payments": 9,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "AMEGREEN CHILDRENS SERVICES",
+            "main_tag": "care_or_education_placement",
+            "window_total": 750437.33,
+            "annualised_estimate": 3001749.32,
+            "window_total_enters_tier": true,
+            "n_payments": 27,
+            "match_status": "no_notice_found"
+          }
+        ],
+        "grant": [
+          {
+            "supplier_norm": "JUBILEE DAY NURSERY",
+            "main_tag": "grant",
+            "window_total": 408594.55,
+            "annualised_estimate": 1634378.2,
+            "window_total_enters_tier": true,
+            "n_payments": 3,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "ACRES OF FUN DAY NURSERY AND PRE SCHOOL",
+            "main_tag": "grant",
+            "window_total": 323872.96,
+            "annualised_estimate": 1295491.84,
+            "window_total_enters_tier": true,
+            "n_payments": 1,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "ROCKING HORSE DAY NURSERY NEWBURY RACECOURSE",
+            "main_tag": "grant",
+            "window_total": 320463.5,
+            "annualised_estimate": 1281854.0,
+            "window_total_enters_tier": true,
+            "n_payments": 2,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "TIGERS DAY NURSERY",
+            "main_tag": "grant",
+            "window_total": 244339.25,
+            "annualised_estimate": 977357.0,
+            "window_total_enters_tier": true,
+            "n_payments": 4,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "TIGERS AT THEALE DAY NURSERY",
+            "main_tag": "grant",
+            "window_total": 240745.51,
+            "annualised_estimate": 962982.04,
+            "window_total_enters_tier": true,
+            "n_payments": 2,
+            "match_status": "no_notice_found"
+          }
+        ],
+        "agency_staff": [
+          {
+            "supplier_norm": "COMENSURA",
+            "main_tag": "agency_staff",
+            "window_total": 1275552.15,
+            "annualised_estimate": 5102208.6,
+            "window_total_enters_tier": true,
+            "n_payments": 14,
+            "match_status": "no_notice_found"
+          }
+        ],
+        "premises": [
+          {
+            "supplier_norm": "A2 DOMINION",
+            "main_tag": "premises",
+            "window_total": 136612.06,
+            "annualised_estimate": 546448.24,
+            "window_total_enters_tier": true,
+            "n_payments": 2,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "CONTINENTAL LANDSCAPES",
+            "main_tag": "premises",
+            "window_total": 108423.39,
+            "annualised_estimate": 433693.56,
+            "window_total_enters_tier": true,
+            "n_payments": 8,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "KB REAL ESTATE MANAGEMENT",
+            "main_tag": "premises",
+            "window_total": 105375.0,
+            "annualised_estimate": 421500.0,
+            "window_total_enters_tier": true,
+            "n_payments": 67,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "GLEN CLEANING COMPANY",
+            "main_tag": "premises",
+            "window_total": 92393.12,
+            "annualised_estimate": 369572.48,
+            "window_total_enters_tier": true,
+            "n_payments": 68,
+            "match_status": "candidate_similar_name"
+          },
+          {
+            "supplier_norm": "READING WEST APARTHOTEL",
+            "main_tag": "premises",
+            "window_total": 74308.0,
+            "annualised_estimate": 297232.0,
+            "window_total_enters_tier": true,
+            "n_payments": 3,
+            "match_status": "no_notice_found"
+          }
+        ],
+        "general_procurement": [
+          {
+            "supplier_norm": "VOLKERHIGHWAYS",
+            "main_tag": "general_procurement",
+            "window_total": 7377922.21,
+            "annualised_estimate": 29511688.84,
+            "window_total_enters_tier": true,
+            "n_payments": 126,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "VEOLIA ES WEST BERKSHIRE CHAPS ONLY",
+            "main_tag": "general_procurement",
+            "window_total": 6186065.04,
+            "annualised_estimate": 24744260.16,
+            "window_total_enters_tier": true,
+            "n_payments": 3,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "MILLBROOK HEALTHCARE",
+            "main_tag": "general_procurement",
+            "window_total": 3459365.35,
+            "annualised_estimate": 13837461.4,
+            "window_total_enters_tier": true,
+            "n_payments": 4,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "THE BETTER GROUP",
+            "main_tag": "general_procurement",
+            "window_total": 588490.08,
+            "annualised_estimate": 2353960.32,
+            "window_total_enters_tier": true,
+            "n_payments": 26,
+            "match_status": "no_notice_found"
+          },
+          {
+            "supplier_norm": "SOFTWAREONE UK",
+            "main_tag": "general_procurement",
+            "window_total": 522978.62,
+            "annualised_estimate": 2091914.48,
+            "window_total_enters_tier": true,
+            "n_payments": 4,
+            "match_status": "no_notice_found"
+          }
+        ]
+      },
+      "full_list": "outputs/analytics-full/high_value_suppliers.csv",
+      "caveats": [
+        "annualised_estimate = window total x annualisation_factor; an estimate, not a contract value.",
+        "This is a sampling population, not a list of exceptions."
+      ]
+    }
+  },
+  "self_check": {
+    "status": "PASS",
+    "path": "outputs/analytics-full/self_check.json"
+  },
+  "language": "All results are risk indicators to investigate, not findings about the council, any department or any supplier."
+}

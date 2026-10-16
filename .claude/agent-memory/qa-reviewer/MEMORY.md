@@ -1,0 +1,1 @@
+- [CHALLENGER DONE via lead relay](challenger-done-not-copied.md) — challenger does not copy qa-reviewer; lead relays it

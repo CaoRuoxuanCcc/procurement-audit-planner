@@ -1,0 +1,357 @@
+{
+ "generated_on": "2026-10-16",
+ "generated_by": ".claude/skills/audit-program/build_pack.py",
+ "register_revision": 1,
+ "inputs": {
+  "audit-plan.json": "c47f466e14fa47e903fed1195aefc5bb6018d75ed1a54285c84e14626c3576f9",
+  "risk-ratings.json": "47ca53c692c672cd3e40565eaffc4e38a71854950eaef1fbe43e27641ae1fc86",
+  "analytics.json": "e3c5d87f4befd47b1507ec88675e5224f7cf2d03a4d81a36e0f628094f2cec4d",
+  "rules.json": "d0e28d0aceab1ef744f5998575ab95555dbe07b9494c22d536a63b33cfe9d4e4",
+  "history.json": "60b5b7052c3c12520ae791e1c67ea1cc0223b3ca87de0d55521c2db0caa16cfd",
+  "spend_clean.csv": "38da0f34ac944f47d267c4e86dfb2c005d2baebbfbaededba5cf9a9d273e7545",
+  "sampling.json": "a629b0033a7be26f02cae01be2fdb701a384530758ff972d75104c0870411647"
+ },
+ "sampling": {
+  "source": "build_pack default (auditor to confirm or change)",
+  "size_by_score": [
+   {
+    "scores": "1-3",
+    "band": "Low",
+    "units": 5
+   },
+   {
+    "scores": "4-7",
+    "band": "Moderate",
+    "units": 10
+   },
+   {
+    "scores": "8-12",
+    "band": "Medium - High",
+    "units": 15
+   },
+   {
+    "scores": "13-25",
+    "band": "Extreme",
+    "units": 25
+   }
+  ]
+ },
+ "pack": {
+  "scope": {
+   "register_revision": 1,
+   "risks_in_register": 9,
+   "in_scope": 8,
+   "out_of_scope": 1,
+   "amended": 1,
+   "controls": 22,
+   "tests": 20,
+   "samples_drawn": 14,
+   "sample_units": 206,
+   "transactions_sampled": 1078,
+   "sampled_value_gbp": 19675846.65,
+   "pbc_items": 16,
+   "rules_total": 62,
+   "highest_score_in_scope": 12,
+   "rules_cited": 36,
+   "rules_not_tested": 26
+  },
+  "risks": {
+   "R-01": {
+    "likelihood": 3,
+    "impact": 3,
+    "score": 9,
+    "band": "Medium - High",
+    "sample_size": 15,
+    "sample_size_range": "8-12"
+   },
+   "R-02": {
+    "likelihood": 2,
+    "impact": 2,
+    "score": 4,
+    "band": "Moderate",
+    "sample_size": 10,
+    "sample_size_range": "4-7"
+   },
+   "R-03": {
+    "likelihood": 3,
+    "impact": 3,
+    "score": 9,
+    "band": "Medium - High",
+    "sample_size": 15,
+    "sample_size_range": "8-12"
+   },
+   "R-04": {
+    "likelihood": 3,
+    "impact": 2,
+    "score": 6,
+    "band": "Moderate",
+    "sample_size": 10,
+    "sample_size_range": "4-7"
+   },
+   "R-05": {
+    "likelihood": 3,
+    "impact": 3,
+    "score": 9,
+    "band": "Medium - High",
+    "sample_size": 15,
+    "sample_size_range": "8-12"
+   },
+   "R-06": {
+    "likelihood": 3,
+    "impact": 4,
+    "score": 12,
+    "band": "Medium - High",
+    "sample_size": 15,
+    "sample_size_range": "8-12"
+   },
+   "R-07": {
+    "likelihood": 2,
+    "impact": 2,
+    "score": 4,
+    "band": "Moderate",
+    "sample_size": 10,
+    "sample_size_range": "4-7"
+   },
+   "R-09": {
+    "likelihood": 2,
+    "impact": 3,
+    "score": 6,
+    "band": "Moderate",
+    "sample_size": 10,
+    "sample_size_range": "4-7"
+   },
+   "R-08": {
+    "likelihood": 3,
+    "impact": 2,
+    "score": 6,
+    "band": "Moderate",
+    "sample_size": 10,
+    "sample_size_range": "4-7"
+   }
+  },
+  "tests": {
+   "T-01.1": {
+    "population_units": 55,
+    "eligible_units": 43,
+    "sample_units": 15,
+    "transactions": 485,
+    "sampled_value_gbp": 2105457.24,
+    "size_by_score": 15,
+    "takes_all": false
+   },
+   "T-01.2": {
+    "population_units": 3,
+    "eligible_units": 3,
+    "sample_units": 3,
+    "transactions": 136,
+    "sampled_value_gbp": 6763256.44,
+    "size_by_score": 15,
+    "takes_all": true
+   },
+   "T-01.3": {
+    "population_units": 103,
+    "eligible_units": 86,
+    "sample_units": 15,
+    "transactions": 94,
+    "sampled_value_gbp": 68078.28,
+    "size_by_score": 15,
+    "takes_all": false
+   },
+   "T-02.2": {
+    "population_units": 10,
+    "eligible_units": 10,
+    "sample_units": 10,
+    "transactions": 10,
+    "sampled_value_gbp": 238671.09,
+    "size_by_score": 10,
+    "takes_all": true
+   },
+   "T-03.1": {
+    "population_units": 31,
+    "eligible_units": 17,
+    "sample_units": 17,
+    "transactions": 17,
+    "sampled_value_gbp": 278840.66,
+    "size_by_score": 15,
+    "takes_all": true
+   },
+   "T-03.2": {
+    "population_units": 157,
+    "eligible_units": 157,
+    "sample_units": 15,
+    "transactions": 15,
+    "sampled_value_gbp": 5590368.62,
+    "size_by_score": 15,
+    "takes_all": false
+   },
+   "T-03.3": {
+    "population_units": 24,
+    "eligible_units": 24,
+    "sample_units": 15,
+    "transactions": 15,
+    "sampled_value_gbp": 427262.65,
+    "size_by_score": 15,
+    "takes_all": false
+   },
+   "T-03.4": {
+    "population_units": 38,
+    "eligible_units": 38,
+    "sample_units": 15,
+    "transactions": 15,
+    "sampled_value_gbp": 425430.3,
+    "size_by_score": 15,
+    "takes_all": false
+   },
+   "T-04.1": {
+    "population_units": 8,
+    "eligible_units": 8,
+    "sample_units": 8,
+    "transactions": 8,
+    "sampled_value_gbp": 159251.89,
+    "size_by_score": 10,
+    "takes_all": true
+   },
+   "T-05.1": {
+    "population_units": 7,
+    "eligible_units": 7,
+    "sample_units": 7,
+    "transactions": 7,
+    "sampled_value_gbp": 263634.07,
+    "size_by_score": 15,
+    "takes_all": true
+   },
+   "T-06.1": {
+    "population_units": 51,
+    "eligible_units": 51,
+    "sample_units": 51,
+    "transactions": 155,
+    "sampled_value_gbp": 660909.69,
+    "size_by_score": 15,
+    "takes_all": true
+   },
+   "T-06.2": {
+    "population_units": 204,
+    "eligible_units": 204,
+    "sample_units": 15,
+    "transactions": 101,
+    "sampled_value_gbp": 2110700.78,
+    "size_by_score": 15,
+    "takes_all": false
+   },
+   "T-07.1": {
+    "population_units": 309,
+    "eligible_units": 309,
+    "sample_units": 10,
+    "transactions": 10,
+    "sampled_value_gbp": 115151.94,
+    "size_by_score": 10,
+    "takes_all": false
+   },
+   "T-07.2": {
+    "population_units": 309,
+    "eligible_units": 309,
+    "sample_units": 10,
+    "transactions": 10,
+    "sampled_value_gbp": 468833.0,
+    "size_by_score": 10,
+    "takes_all": false
+   },
+   "T-09.1": {
+    "sample_units_required": 10
+   }
+  }
+ },
+ "placeholders": [
+  {
+   "field": "memo.sections[0].text",
+   "path": "$.cleaning.rows_tested",
+   "value": 8523,
+   "text": "8,523"
+  },
+  {
+   "field": "memo.sections[0].text",
+   "path": "$.cleaning.total_tested_gbp",
+   "value": 66252291.98,
+   "text": "£66,252,292"
+  },
+  {
+   "field": "memo.sections[0].text",
+   "path": "$.window.start",
+   "value": "2026-05-01",
+   "text": "2026-05-01"
+  },
+  {
+   "field": "memo.sections[0].text",
+   "path": "$.window.end",
+   "value": "2026-07-31",
+   "text": "2026-07-31"
+  },
+  {
+   "field": "memo.sections[0].text",
+   "path": "$.tests.split_purchases.general_procurement.groups",
+   "value": 119,
+   "text": "119"
+  },
+  {
+   "field": "memo.sections[0].text",
+   "path": "$.tests.off_contract.by_tag.general_procurement.no_notice_found.count",
+   "value": 159,
+   "text": "159"
+  },
+  {
+   "field": "memo.sections[0].text",
+   "path": "$.tests.spend_vs_award.counts.flagged",
+   "value": 7,
+   "text": "7"
+  },
+  {
+   "field": "memo.sections[0].text",
+   "path": "$.tests.expired_notice_spend.counts.flagged",
+   "value": 8,
+   "text": "8"
+  },
+  {
+   "field": "memo.sections[0].text",
+   "path": "$.tests.duplicates.counts.by_class.different_timestamp.pairs",
+   "value": 1502,
+   "text": "1,502"
+  },
+  {
+   "field": "memo.sections[2].text",
+   "path": "$.pack.scope.in_scope",
+   "value": 8,
+   "text": "8"
+  },
+  {
+   "field": "memo.sections[2].text",
+   "path": "$.pack.scope.controls",
+   "value": 22,
+   "text": "22"
+  },
+  {
+   "field": "memo.sections[2].text",
+   "path": "$.pack.scope.tests",
+   "value": 20,
+   "text": "20"
+  },
+  {
+   "field": "memo.sections[2].text",
+   "path": "$.pack.scope.sample_units",
+   "value": 206,
+   "text": "206"
+  },
+  {
+   "field": "memo.sections[2].text",
+   "path": "$.pack.scope.transactions_sampled",
+   "value": 1078,
+   "text": "1,078"
+  },
+  {
+   "field": "memo.sections[2].text",
+   "path": "$.pack.scope.sampled_value_gbp",
+   "value": 19675846.65,
+   "text": "£19,675,847"
+  }
+ ],
+ "about": "pack: every figure build_pack.py computed itself (ratings re-read from the council matrix, sample sizes, populations, sample counts and values, scope counts). placeholders: every {{$.path}} filled in the planner's text, with its value; paths under $.pack come from pack, all others from analytics.json."
+}

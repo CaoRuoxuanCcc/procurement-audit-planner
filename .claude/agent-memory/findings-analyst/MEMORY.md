@@ -1,0 +1,1 @@
+- [Committee PDF extraction how-to](extraction-howto.md) — quote whole layout lines via a generator; Table 1/Figure 4 quirks

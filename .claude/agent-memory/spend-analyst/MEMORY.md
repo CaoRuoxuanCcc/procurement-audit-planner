@@ -1,0 +1,1 @@
+- [Pipeline how-to lessons](howto_pipeline_lessons.md): threshold-literal scan pitfalls, split span check, JSON size, blank-category reality

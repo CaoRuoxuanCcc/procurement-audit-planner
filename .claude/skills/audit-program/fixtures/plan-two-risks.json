@@ -1,0 +1,262 @@
+{
+  "about": "Test fixture for build_pack.py: a well-formed plan for the two fixture risks. The test breaks copies of it.",
+  "title": "Procurement compliance (fixture)",
+  "register_revision": 1,
+  "memo": {
+    "sections": [
+      {
+        "heading": "Background",
+        "text": "The spend analytics found {{$.tests.split_purchases.general_procurement.groups}} general procurement supplier groups whose combined payments cross a tier that each payment stays under [metric:$.tests.split_purchases.general_procurement.groups], and {{$.tests.expired_notice_spend.counts.flagged}} suppliers paid after their only notices ended [metric:$.tests.expired_notice_spend.counts.flagged]. These are risk indicators to investigate."
+      },
+      {
+        "heading": "Objective",
+        "text": "To assess whether the controls over aggregation of requirements [rule:CPR-07] and contract extensions [rule:CPR-58] operate as the Contract Procedure Rules require."
+      },
+      {
+        "heading": "Approach",
+        "text": "{{$.pack.scope.in_scope}} approved risks, {{$.pack.scope.controls}} expected controls and {{$.pack.scope.tests}} tests; {{$.pack.scope.sample_units}} sample units with {{$.pack.scope.transactions_sampled}} transactions worth {{$.pack.scope.sampled_value_gbp}} are drawn from the analytics. The largest test, T-01.1, takes {{$.pack.tests[\"T-01.1\"].sample_units}} of {{$.pack.tests[\"T-01.1\"].population_units}} groups."
+      }
+    ]
+  },
+  "risks": [
+    {
+      "risk_id": "R-01",
+      "controls": [
+        {
+          "control_id": "C-01.1",
+          "description": "Requisitioners aggregate the value of one requirement across orders before choosing the procedure, and do not divide a requirement to avoid the Rules [rule:CPR-07].",
+          "owner": "Service managers; Procurement"
+        },
+        {
+          "control_id": "C-01.2",
+          "description": "At the aggregated value, quotations are invited through the Procurement Portal at the three-quotes tier [rule:CPR-49] and a contract notice is published [rule:CPR-50]; above the App B row C boundary a full tender is run [rule:CPR-53].",
+          "owner": "Procurement"
+        }
+      ],
+      "tests": [
+        {
+          "test_id": "T-01.1",
+          "title": "Groups crossing the three-quotes tier",
+          "controls": [
+            "C-01.1",
+            "C-01.2"
+          ],
+          "step": "For each sampled group, establish from the invoices and orders whether the payments meet one requirement; if they do, obtain the quotations and contract notice for the aggregated value [rule:CPR-49] [rule:CPR-50].",
+          "sample": {
+            "kind": "draw",
+            "source": "split_purchases.csv",
+            "filter": [
+              {
+                "column": "main_tag",
+                "op": "in",
+                "value": [
+                  "general_procurement",
+                  "premises"
+                ]
+              },
+              {
+                "column": "T",
+                "op": "eq",
+                "value": {
+                  "rule": "CPR-49",
+                  "field": "threshold_low"
+                }
+              }
+            ],
+            "sort": [
+              {
+                "column": "group_total",
+                "descending": true
+              }
+            ],
+            "method": "top",
+            "size": "by_score",
+            "transactions": "all",
+            "rationale": "Largest groups first: the value at stake is highest and the placement caveat does not apply to these tags."
+          },
+          "pbc": [
+            "PBC-01",
+            "PBC-02"
+          ]
+        },
+        {
+          "test_id": "T-01.2",
+          "title": "Groups at the one-quote tier",
+          "controls": [
+            "C-01.1"
+          ],
+          "step": "For each sampled group, confirm whether the payments are one requirement and, if so, that at least one quote was sought for the combined value [rule:CPR-48] [metric:$.tests.split_purchases.general_procurement.groups].",
+          "sample": {
+            "kind": "draw",
+            "source": "split_purchases.csv",
+            "filter": [
+              {
+                "column": "main_tag",
+                "op": "eq",
+                "value": "general_procurement"
+              },
+              {
+                "column": "T",
+                "op": "eq",
+                "value": {
+                  "rule": "CPR-48",
+                  "field": "threshold_low"
+                }
+              }
+            ],
+            "sort": [
+              {
+                "column": "group_total",
+                "descending": true
+              }
+            ],
+            "method": "systematic",
+            "size": "by_score",
+            "one_per": "supplier_norm",
+            "transactions": "largest",
+            "rationale": "Evenly spread across the value range, one group per supplier."
+          },
+          "pbc": [
+            "PBC-01"
+          ]
+        },
+        {
+          "test_id": "T-01.3",
+          "title": "Walkthrough of how requirements are aggregated",
+          "controls": [
+            "C-01.1"
+          ],
+          "step": "Walk through how a service estimates the total value of a requirement before ordering [rule:CPR-07].",
+          "sample": {
+            "kind": "none",
+            "reason": "Walkthrough with the Procurement team; no transactions are pulled."
+          },
+          "pbc": [
+            "PBC-03"
+          ]
+        }
+      ]
+    },
+    {
+      "risk_id": "R-04",
+      "controls": [
+        {
+          "control_id": "C-04.1",
+          "description": "An extension provided for in the contract is approved by the S151 Officer before spend continues past the original end date [rule:CPR-58].",
+          "owner": "Contract managers"
+        }
+      ],
+      "tests": [
+        {
+          "test_id": "T-04.1",
+          "title": "Spend after the last notice ended",
+          "controls": [
+            "C-04.1"
+          ],
+          "step": "For every flagged supplier, obtain the extension and its S151 Officer approval, or a newer contract and its notice [rule:CPR-58] [metric:$.tests.expired_notice_spend.counts.flagged].",
+          "sample": {
+            "kind": "draw",
+            "source": "expired_notice_spend.csv",
+            "sort": [
+              {
+                "column": "window_total",
+                "descending": true
+              }
+            ],
+            "size": "all",
+            "transactions": "largest",
+            "rationale": "The population is small, so every supplier is tested."
+          },
+          "pbc": [
+            "PBC-04"
+          ]
+        }
+      ]
+    }
+  ],
+  "pbc": [
+    {
+      "pbc_id": "PBC-01",
+      "item": "Purchase orders and invoices for each sampled payment",
+      "owner": "Finance"
+    },
+    {
+      "pbc_id": "PBC-02",
+      "item": "Quotation records and contract notice for each sampled group, or the waiver relied on",
+      "owner": "Procurement"
+    },
+    {
+      "pbc_id": "PBC-03",
+      "item": "Procedure notes or guidance on estimating the value of a requirement",
+      "owner": "Procurement"
+    },
+    {
+      "pbc_id": "PBC-04",
+      "item": "Contract, extension and S151 Officer approval, or the newer contract and notice, for each flagged supplier",
+      "owner": "Contract managers"
+    }
+  ],
+  "rules_not_tested": [
+    {
+      "rule_ids": [
+        "CPR-01",
+        "CPR-02",
+        "CPR-03",
+        "CPR-04",
+        "CPR-05",
+        "CPR-06",
+        "CPR-08",
+        "CPR-09",
+        "CPR-10",
+        "CPR-11",
+        "CPR-12",
+        "CPR-13",
+        "CPR-14",
+        "CPR-15",
+        "CPR-16",
+        "CPR-17",
+        "CPR-18",
+        "CPR-19",
+        "CPR-20",
+        "CPR-21",
+        "CPR-22",
+        "CPR-23",
+        "CPR-24",
+        "CPR-25",
+        "CPR-26",
+        "CPR-27",
+        "CPR-28",
+        "CPR-29",
+        "CPR-30",
+        "CPR-31",
+        "CPR-32",
+        "CPR-33",
+        "CPR-34",
+        "CPR-35",
+        "CPR-36",
+        "CPR-37",
+        "CPR-38",
+        "CPR-39",
+        "CPR-40",
+        "CPR-41",
+        "CPR-42",
+        "CPR-43",
+        "CPR-44",
+        "CPR-45",
+        "CPR-46",
+        "CPR-47",
+        "CPR-51",
+        "CPR-52",
+        "CPR-54",
+        "CPR-55",
+        "CPR-56",
+        "CPR-57",
+        "CPR-59",
+        "CPR-60",
+        "CPR-61",
+        "CPR-62"
+      ],
+      "reason": "Outside the two risks in this fixture."
+    }
+  ]
+}

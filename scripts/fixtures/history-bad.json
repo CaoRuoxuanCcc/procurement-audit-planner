@@ -1,0 +1,71 @@
+{
+  "generated_on": "2026-10-15",
+  "generated_by": "fixture with planted errors for scripts/test_verify_history.py (each `_planted` names the error the verifier must report)",
+  "extraction": {"tool": "pdftotext 24.09.0", "modes": ["plain", "layout"]},
+  "sources_read": [
+    {"file": "audit-completed-work-2024-25-annual.pdf", "sha256": "1e86e2d613889a7048f8b0478ddc835f784ad139488112061d5cc64114007247", "pdf_pages": 2},
+    {"_planted": "P11 wrong sha256", "file": "audit-completed-work-2025-26-q3.pdf", "sha256": "0000000000000000000000000000000000000000000000000000000000000000", "pdf_pages": 1},
+    {"_planted": "P12 wrong page count", "file": "risk-management-strategy-2024-27.pdf", "sha256": "a5a881e486a63c5fb848d4d3e7adef2723c07b830a617f423b7d80e8764d72a7", "pdf_pages": 34},
+    {"_planted": "P14 listed file that is not in the committee dir", "file": "strategic-risk-register.pdf", "sha256": "x", "pdf_pages": 1}
+  ],
+  "_planted_P13": "internal-audit-plan-2025-28.pdf left out of sources_read but quoted below",
+  "audits_completed": [
+    {"_planted": "P1 quote altered (Reasonable -> Limited): not in the PDF at all",
+     "id": "AUD-01", "audit_title": "Contract Letting", "opinion": "Limited Assurance",
+     "sources": [{"file": "audit-completed-work-2024-25-annual.pdf", "pdf_page": 1, "text_mode": "layout", "quote": "Contract Letting Limited Assurance"}]},
+    {"_planted": "P9 scoring key on an audit record",
+     "id": "AUD-02", "audit_title": "Accounts Payable", "opinion": "Reasonable Assurance", "likelihood": 3,
+     "sources": [{"file": "audit-completed-work-2025-26-q3.pdf", "pdf_page": 1, "text_mode": "layout", "quote": "Accounts Payable Reasonable Assurance"}]},
+    {"_planted": "P6 record with no sources",
+     "id": "AUD-03", "audit_title": "Bank Reconciliation", "opinion": "Substantial Assurance", "sources": []},
+    {"_planted": "P7 duplicate id",
+     "id": "AUD-01", "audit_title": "St Paul's", "opinion": "Reasonable Assurance",
+     "_control": "straight apostrophe and doubled spaces against the PDF's curly apostrophe: the quote itself must PASS",
+     "sources": [{"file": "audit-completed-work-2024-25-annual.pdf", "pdf_page": 1, "text_mode": "layout", "quote": "St Paul's   Reasonable Assurance"}]}
+  ],
+  "follow_ups": [
+    {"_planted": "P4 page outside the file",
+     "id": "FUP-01", "audit_title": "Garland", "opinion_report": "Weak", "implementation_progress": "Unsatisfactory",
+     "sources": [{"file": "audit-completed-work-2024-25-annual.pdf", "pdf_page": 3, "text_mode": "layout", "quote": "Garland (now Burghfield Weak Unsatisfactory"}]}
+  ],
+  "advisory_reviews": [
+    {"_planted": "P5 quote from a file that is not a committee PDF",
+     "id": "ADV-01", "review_title": "Strategic risk register extract",
+     "sources": [{"file": "strategic-risk-register.pdf", "pdf_page": 1, "text_mode": "plain", "quote": "anything"}]}
+  ],
+  "agreed_actions": [],
+  "risk_themes": [
+    {"_planted": "P15 bad text_mode",
+     "id": "THM-01", "theme": "Contracts & Partnerships",
+     "sources": [{"file": "risk-management-strategy-2024-27.pdf", "pdf_page": 33, "text_mode": "ocr", "quote": "Contracts &"}]}
+  ],
+  "risk_scoring_method": {
+    "status": "extracted",
+    "likelihood_scale": [
+      {"_planted": "P2 right quote, wrong page (it is on p15)",
+       "id": "LIK-5", "score": 5, "label": "Certain",
+       "sources": [{"file": "risk-management-strategy-2024-27.pdf", "pdf_page": 14, "text_mode": "layout", "quote": "Risk will occur within a 12 month period 100%"}]}
+    ],
+    "matrix": [
+      {"_planted": "P3 right page, wrong mode (this row only exists in layout text)",
+       "id": "MTX-AXIS",
+       "sources": [{"file": "risk-management-strategy-2024-27.pdf", "pdf_page": 18, "text_mode": "plain", "quote": "Rare Unlikely Likely Almost Certain Certain"}]}
+    ],
+    "plan_reference": [
+      {"_planted": "P13 quoted file missing from sources_read (the quote itself is correct)",
+       "id": "PLN-01",
+       "sources": [{"file": "internal-audit-plan-2025-28.pdf", "pdf_page": 6, "text_mode": "plain", "quote": "Appendix D - Internal Audit Plan 2025 to 2028;"}]}
+    ]
+  },
+  "discrepancies": [
+    {"_planted": "P8 discrepancy with a single source",
+     "id": "DIS-01", "description": "Para 4.3 lists Medium as (2); Table 1 rates Medium as 3.",
+     "sources": [{"file": "risk-management-strategy-2024-27.pdf", "pdf_page": 14, "text_mode": "plain", "quote": "whether a risk would have a Negligible (1), Minor (2), Medium (2), Major (4), or Critical impact(5):"}]}
+  ],
+  "gaps": [
+    {"_control": "a gap needs no sources: must PASS", "id": "GAP-01", "item": "Internal Audit Plan Appendix D", "reason": "covering report only"},
+    {"_planted": "P16 gap with no reason", "id": "GAP-02", "item": "Strategic Risk Register"}
+  ],
+  "notes": ["_planted P10: contact audit.team@example.gov.uk for details",
+            "_planted P17: phone 01632 960000 (Ofcom drama range)"]
+}

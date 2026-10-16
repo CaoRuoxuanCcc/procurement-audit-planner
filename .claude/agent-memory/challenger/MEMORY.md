@@ -1,0 +1,1 @@
+- [Analytics and pack inspection](analytics-and-pack-inspection.md) — where values live in analytics/history/rules, sample CSV layout, path-resolver tip

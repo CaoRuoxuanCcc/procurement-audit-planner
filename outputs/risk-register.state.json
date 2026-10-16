@@ -1,0 +1,474 @@
+{
+ "revisions": {
+  "0": {
+   "risks": {
+    "R-01": {
+     "risk_id": "R-01",
+     "title": "Requirements split across payments below a quotation or tender tier",
+     "theme": "Contracts & Partnerships",
+     "description": "Risk that a single requirement is met through several smaller payments to one supplier, so that the combined value crosses an App B tier that no single payment reaches, and the quotation, notice or tender steps for that tier are not run [rule:CPR-07] [rule:CPR-48] [rule:CPR-49] [rule:CPR-53].",
+     "likelihood": {
+      "rubric": "L3",
+      "justification": "In general procurement, {{$.tests.split_purchases.general_procurement.groups}} supplier groups [metric:$.tests.split_purchases.general_procurement.groups] have payments within a short window whose combined total crosses a tier that each payment stays under, including {{$.tests.split_purchases.general_procurement.per_threshold[\"25000\"].groups}} groups at the three-quotes and notice tier [metric:$.tests.split_purchases.general_procurement.per_threshold[\"25000\"].groups] and {{$.tests.split_purchases.general_procurement.per_threshold[\"500000\"].groups}} at the App B row C boundary [metric:$.tests.split_purchases.general_procurement.per_threshold[\"500000\"].groups]. The placement caveat does not explain general procurement groups. No test gives a flagged share of the scoped population, so L4 cannot be assessed; a share of general procurement suppliers in groups would settle it."
+     },
+     "impact": {
+      "score": 3,
+      "criterion": "compliance",
+      "justification": "Table 1 Medium [history:IMP-3]: a requirement disaggregated to avoid the Rules or the Procurement Legislation [rule:CPR-07] gives a reasonable possibility of challenge where the aggregated value reaches the notice or tender tiers [rule:CPR-50] [rule:CPR-53]."
+     },
+     "evidence": [
+      "General procurement groups crossing a tier: {{$.tests.split_purchases.general_procurement.groups}} [metric:$.tests.split_purchases.general_procurement.groups], combined value {{$.tests.split_purchases.general_procurement.total_gbp}} [metric:$.tests.split_purchases.general_procurement.total_gbp].",
+      "Premises groups: {{$.tests.split_purchases.by_tag.premises.count}} [metric:$.tests.split_purchases.by_tag.premises.count].",
+      "Anti-splitting rule, clause 6.16 [rule:CPR-07]."
+     ],
+     "proposed_focus": "Sample general procurement and premises groups from analytics-full/split_purchases.csv, prioritising groups at the three-quotes tier and the App B row C boundary; for each, establish whether the payments relate to one requirement and, if so, whether quotations, a notice or a tender were obtained at the aggregated value."
+    },
+    "R-02": {
+     "risk_id": "R-02",
+     "title": "Order values set just under a quotation tier",
+     "theme": "Contracts & Partnerships",
+     "description": "Risk that order values are set just under an App B tier so that the one-quote or three-quotes steps are not triggered [rule:CPR-48] [rule:CPR-49] [rule:CPR-07].",
+     "likelihood": {
+      "rubric": "L2",
+      "justification": "In the procurement-relevant tags the band just under each tier is no fuller than the comparison band below it: general procurement ratio {{$.tests.threshold_clustering.counts.per_threshold[\"1000\"].by_tag.general_procurement.ratio_band_to_comparison}} at the one-quote tier [metric:$.tests.threshold_clustering.counts.per_threshold[\"1000\"].by_tag.general_procurement.ratio_band_to_comparison] and {{$.tests.threshold_clustering.counts.per_threshold[\"25000\"].by_tag.general_procurement.ratio_band_to_comparison}} at the three-quotes tier [metric:$.tests.threshold_clustering.counts.per_threshold[\"25000\"].by_tag.general_procurement.ratio_band_to_comparison]; premises {{$.tests.threshold_clustering.counts.per_threshold[\"1000\"].by_tag.premises.ratio_band_to_comparison}} [metric:$.tests.threshold_clustering.counts.per_threshold[\"1000\"].by_tag.premises.ratio_band_to_comparison]. A ratio above one in a procurement tag would raise this to L3."
+     },
+     "impact": {
+      "score": 2,
+      "criterion": "compliance",
+      "justification": "Table 1 Minor [history:IMP-2]: values held under the one-quote or three-quotes tier mainly affect the internal quotation steps [rule:CPR-48] [rule:CPR-49], with a low possibility of legal challenge."
+     },
+     "evidence": [
+      "General procurement band-to-comparison ratio at the one-quote tier: {{$.tests.threshold_clustering.counts.per_threshold[\"1000\"].by_tag.general_procurement.ratio_band_to_comparison}} [metric:$.tests.threshold_clustering.counts.per_threshold[\"1000\"].by_tag.general_procurement.ratio_band_to_comparison].",
+      "General procurement band-to-comparison ratio at the three-quotes tier: {{$.tests.threshold_clustering.counts.per_threshold[\"25000\"].by_tag.general_procurement.ratio_band_to_comparison}} [metric:$.tests.threshold_clustering.counts.per_threshold[\"25000\"].by_tag.general_procurement.ratio_band_to_comparison].",
+      "Placements show a higher ratio at the one-quote tier, {{$.tests.threshold_clustering.counts.per_threshold[\"1000\"].by_tag.care_or_education_placement.ratio_band_to_comparison}} [metric:$.tests.threshold_clustering.counts.per_threshold[\"1000\"].by_tag.care_or_education_placement.ratio_band_to_comparison]; placements are considered under R-07."
+     ],
+     "proposed_focus": "Light-touch: in walkthroughs, confirm how order values near the App B tiers are set; sample a few general procurement payments from analytics-full/threshold_clustering.csv only if the walkthrough raises concerns."
+    },
+    "R-03": {
+     "risk_id": "R-03",
+     "title": "Spend above the notice tier with no published contract notice",
+     "theme": "Contracts & Partnerships",
+     "description": "Risk that suppliers whose annualised spend enters the App B notice-publication tier are engaged without a published contract notice, written contract or recorded award approval [rule:CPR-50] [rule:CPR-52] [rule:CPR-27] [rule:CPR-45].",
+     "likelihood": {
+      "rubric": "L3",
+      "justification": "In general procurement, {{$.tests.off_contract.by_tag.general_procurement.no_notice_found.count}} suppliers above the notice tier [metric:$.tests.off_contract.by_tag.general_procurement.no_notice_found.count] have no exact-matched notice, {{$.tests.off_contract.by_tag.general_procurement.no_notice_found.share_of_population_annualised_estimate|pct}} of that tag's annualised estimate [metric:$.tests.off_contract.by_tag.general_procurement.no_notice_found.share_of_population_annualised_estimate]; premises {{$.tests.off_contract.by_tag.premises.no_notice_found.count}} [metric:$.tests.off_contract.by_tag.premises.no_notice_found.count]. The placement caveat does not cover these tags. The share comes from a test whose notices may be incomplete, so it cannot carry L4."
+     },
+     "impact": {
+      "score": 3,
+      "criterion": "compliance",
+      "justification": "Table 1 Medium [history:IMP-3]: a contract in the notice tier let without a notice [rule:CPR-50] gives a reasonable possibility of successful legal challenge and of regulatory interest."
+     },
+     "evidence": [
+      "General procurement suppliers above the tier with no notice found: {{$.tests.off_contract.by_tag.general_procurement.no_notice_found.count}} of {{$.tests.off_contract.by_tag.general_procurement.population.count}} [metric:$.tests.off_contract.by_tag.general_procurement.population.count].",
+      "Agency staff suppliers above the tier with no notice found: {{$.tests.off_contract.by_tag.agency_staff.no_notice_found.count}} [metric:$.tests.off_contract.by_tag.agency_staff.no_notice_found.count].",
+      "Population for contract evidence requests: {{$.tests.high_value_suppliers.counts.suppliers}} suppliers enter the three-quotes tier [metric:$.tests.high_value_suppliers.counts.suppliers].",
+      "Contract Letting audit, Reasonable Assurance [history:AUD-01]."
+     ],
+     "proposed_focus": "Sample general procurement, premises and agency staff suppliers from analytics-full/off_contract.csv (no notice found), and resolve analytics-full/off_contract_candidates.csv first; for each, request the contract, the quotations or tender, the notice (Contracts Finder or the Central Digital Platform) and the award approval, using analytics-full/high_value_suppliers.csv as the request population. Check whether a framework, waiver or App C exclusion applies before treating any item as an exception."
+    },
+    "R-04": {
+     "risk_id": "R-04",
+     "title": "Spend continuing after a contract notice has ended",
+     "theme": "Contracts & Partnerships",
+     "description": "Risk that payments continue to suppliers after their contract has ended without an approved extension [rule:CPR-58].",
+     "likelihood": {
+      "rubric": "L3",
+      "justification": "Of {{$.tests.expired_notice_spend.counts.exact_matched_suppliers_paid}} exact-matched suppliers paid in the window [metric:$.tests.expired_notice_spend.counts.exact_matched_suppliers_paid], {{$.tests.expired_notice_spend.counts.flagged}} [metric:$.tests.expired_notice_spend.counts.flagged] have only notices that ended before the window, all in general procurement ({{$.tests.expired_notice_spend.by_tag.general_procurement.count}}) [metric:$.tests.expired_notice_spend.by_tag.general_procurement.count] and premises ({{$.tests.expired_notice_spend.by_tag.premises.count}}) [metric:$.tests.expired_notice_spend.by_tag.premises.count]. The missing-notices caveat keeps this at L3 at most."
+     },
+     "impact": {
+      "score": 2,
+      "criterion": "compliance",
+      "justification": "Table 1 Minor [history:IMP-2]: where the contract provides for extension, the control at issue is the internal S151 Officer approval [rule:CPR-58], giving a low possibility of legal challenge; the value involved is {{$.tests.expired_notice_spend.totals_gbp.flagged_window_total}} in the window [metric:$.tests.expired_notice_spend.totals_gbp.flagged_window_total]."
+     },
+     "evidence": [
+      "Suppliers flagged: {{$.tests.expired_notice_spend.counts.flagged}} [metric:$.tests.expired_notice_spend.counts.flagged].",
+      "Window spend with these suppliers: {{$.tests.expired_notice_spend.totals_gbp.flagged_window_total}} [metric:$.tests.expired_notice_spend.totals_gbp.flagged_window_total]."
+     ],
+     "proposed_focus": "Test every supplier in analytics-full/expired_notice_spend.csv: request the extension and its S151 Officer approval, or a newer contract and its notice."
+    },
+    "R-05": {
+     "risk_id": "R-05",
+     "title": "Spend beyond the awarded contract value",
+     "theme": "Contracts & Partnerships",
+     "description": "Risk that spend with a contracted supplier runs beyond the awarded value without an approved variation [rule:CPR-59] [rule:CPR-60].",
+     "likelihood": {
+      "rubric": "L3",
+      "justification": "Of {{$.tests.spend_vs_award.counts.population}} suppliers with one live single-supplier notice and an award value [metric:$.tests.spend_vs_award.counts.population], {{$.tests.spend_vs_award.counts.flagged}} [metric:$.tests.spend_vs_award.counts.flagged] have an annualised estimate at or above the flag ratio of the award per year, mainly in general procurement ({{$.tests.spend_vs_award.by_tag.general_procurement.count}}) [metric:$.tests.spend_vs_award.by_tag.general_procurement.count]. The flagged share is below the pervasive level, so L4 does not apply."
+     },
+     "impact": {
+      "score": 3,
+      "criterion": "compliance",
+      "justification": "Table 1 Medium [history:IMP-3]: a variation above the Threshold needs board approval [rule:CPR-60], and an unapproved increase in scope gives a reasonable possibility of successful legal challenge."
+     },
+     "evidence": [
+      "Flagged suppliers: {{$.tests.spend_vs_award.counts.flagged}} [metric:$.tests.spend_vs_award.counts.flagged], window spend {{$.tests.spend_vs_award.totals_gbp.flagged_window_total}} [metric:$.tests.spend_vs_award.totals_gbp.flagged_window_total].",
+      "Variation approvals, App C row E [rule:CPR-59] [rule:CPR-60]."
+     ],
+     "proposed_focus": "Test every supplier in analytics-full/spend_vs_award.csv: request the contract value, any variations and their approvals; note that award values may be estimates or maxima."
+    },
+    "R-06": {
+     "risk_id": "R-06",
+     "title": "Duplicate payments to the same supplier",
+     "theme": "Finance",
+     "description": "Risk that the same invoice or amount is paid more than once to a supplier, leading to overpayment that is not recovered [history:AUD-11].",
+     "likelihood": {
+      "rubric": "L3",
+      "justification": "{{$.tests.duplicates.counts.by_class.different_timestamp.pairs}} same-supplier, same-amount pairs within the duplicate window have different timestamps [metric:$.tests.duplicates.counts.by_class.different_timestamp.pairs], including {{$.tests.duplicates.by_tag.general_procurement.count}} in general procurement [metric:$.tests.duplicates.by_tag.general_procurement.count] and {{$.tests.duplicates.by_tag.premises.count}} in premises [metric:$.tests.duplicates.by_tag.premises.count]. Most pairs are placements, which the caveat explains as recurring fixed-rate payments; the procurement-tag pairs are not explained by it."
+     },
+     "impact": {
+      "score": 5,
+      "criterion": "financial_loss",
+      "exposure": "{{$.tests.duplicates.totals_gbp.repeat_value_beyond_first_clusters_with_different_timestamp}}",
+      "justification": "Table 1 Critical [history:IMP-5]: the repeat value beyond the first payment in clusters with different timestamps [metric:$.tests.duplicates.totals_gbp.repeat_value_beyond_first_clusters_with_different_timestamp] is the money that could be lost if those repeats were not valid. It is a ceiling across all tags, most of it in placements where repeats are often legitimate."
+     },
+     "evidence": [
+      "Different-timestamp pairs: {{$.tests.duplicates.counts.by_class.different_timestamp.pairs}} [metric:$.tests.duplicates.counts.by_class.different_timestamp.pairs].",
+      "Placement pairs: {{$.tests.duplicates.by_tag.care_or_education_placement.count}} [metric:$.tests.duplicates.by_tag.care_or_education_placement.count].",
+      "Accounts Payable audit, Reasonable Assurance [history:AUD-11]."
+     ],
+     "proposed_focus": "Sample different-timestamp clusters from analytics-full/duplicates_clusters.csv, all general procurement and premises clusters first, then the largest placement clusters; for each, match the payments to distinct invoices or to a recurring schedule, and confirm recovery of any repeat payment."
+    },
+    "R-07": {
+     "risk_id": "R-07",
+     "title": "Care and education placements arranged without the App C records and approvals",
+     "theme": "Contracts & Partnerships",
+     "description": "Risk that placements and care packages arranged outside competition under App C lack the recorded reasons for provider choice, the PSR process or the board approval that App C requires [rule:CPR-56] [rule:CPR-61] [rule:CPR-62].",
+     "likelihood": {
+      "rubric": "L2",
+      "justification": "Placements show many flagged items, {{$.tests.off_contract.by_tag.care_or_education_placement.no_notice_found.count}} suppliers above the notice tier with no notice [metric:$.tests.off_contract.by_tag.care_or_education_placement.no_notice_found.count] and {{$.tests.split_purchases.by_tag.care_or_education_placement.count}} split-purchase groups [metric:$.tests.split_purchases.by_tag.care_or_education_placement.count], but the analytics caveats explain these routinely: placements are often arranged under App C exclusions or frameworks and recur. No test measures whether the App C records exist; a case-file sample would."
+     },
+     "impact": {
+      "score": 2,
+      "criterion": "compliance",
+      "justification": "Table 1 Minor [history:IMP-2]: the requirement is to record reasons on case notes [rule:CPR-61] and obtain board approval above the Threshold [rule:CPR-62]; gaps give a low possibility of legal challenge. The Purchase of Residential and Nursing Care Provision audit gave Reasonable Assurance [history:AUD-14]."
+     },
+     "evidence": [
+      "Placement suppliers above the notice tier with no notice: {{$.tests.off_contract.by_tag.care_or_education_placement.no_notice_found.count}} [metric:$.tests.off_contract.by_tag.care_or_education_placement.no_notice_found.count].",
+      "Purchase of Residential and Nursing Care Provision, Reasonable Assurance [history:AUD-14].",
+      "App C row F, records of provider choice [rule:CPR-61]."
+     ],
+     "proposed_focus": "Sample placement suppliers from analytics-full/off_contract.csv (care_or_education_placement) and confirm the App C basis: case-note reasons for provider choice, the PSR record where applicable, framework call-off or board approval above the Threshold."
+    },
+    "R-08": {
+     "risk_id": "R-08",
+     "title": "Grants awarded without the procurement steps that apply to contracts",
+     "theme": "Contracts & Partnerships",
+     "description": "Risk that grants, which clause 1.6.2 treats as contracts, are awarded above the notice tier without a published notice, written agreement or recorded approval [rule:CPR-50] [rule:CPR-27].",
+     "likelihood": {
+      "rubric": "L3",
+      "justification": "{{$.tests.off_contract.by_tag.grant.no_notice_found.count}} grant recipients above the notice tier [metric:$.tests.off_contract.by_tag.grant.no_notice_found.count] have no exact-matched notice, with {{$.tests.off_contract.by_tag.grant.exact_match_any_notice.count}} matched [metric:$.tests.off_contract.by_tag.grant.exact_match_any_notice.count]. No analytics caveat gives a routine explanation for grants. The missing-notices caveat keeps this at L3 at most."
+     },
+     "impact": {
+      "score": 2,
+      "criterion": "compliance",
+      "justification": "Table 1 Minor [history:IMP-2]: the main exposure is to the written-contract and notice requirements [rule:CPR-27] [rule:CPR-50] for grant agreements, with a low possibility of legal challenge."
+     },
+     "evidence": [
+      "Grant recipients above the tier with no notice found: {{$.tests.off_contract.by_tag.grant.no_notice_found.count}} of {{$.tests.off_contract.by_tag.grant.population.count}} [metric:$.tests.off_contract.by_tag.grant.population.count].",
+      "Written contract requirement, clause 10.2 [rule:CPR-27]."
+     ],
+     "proposed_focus": "Sample grant recipients from analytics-full/off_contract.csv (grant tag) and request the grant agreement, the basis for award (competition, exclusion or exception) and its approval."
+    },
+    "R-09": {
+     "risk_id": "R-09",
+     "title": "Exceptions and waivers of competition not documented or approved",
+     "theme": "Contracts & Partnerships",
+     "description": "Risk that competition is waived above the three-quotes tier without a valid ground, a written exception report or the S151 Officer and Monitoring Officer approvals [rule:CPR-13] [rule:CPR-15] [rule:CPR-19] [rule:CPR-21].",
+     "likelihood": {
+      "rubric": "L2",
+      "justification": "No analytics test measures waivers; the risk rests on the rules [rule:CPR-13] [rule:CPR-19] and on the Contracts & Partnerships source of risk in the Risk Management Strategy [history:THM-21]. Unmatched suppliers under R-03 may rely on waivers, which the audit would test."
+     },
+     "impact": {
+      "score": 3,
+      "criterion": "compliance",
+      "justification": "Table 1 Medium [history:IMP-3]: a waiver above the tier without a valid ground [rule:CPR-13] gives a reasonable possibility of successful legal challenge."
+     },
+     "evidence": [
+      "Waiver grounds and approvals, clause 7.2 and clause 7.5 [rule:CPR-13] [rule:CPR-21].",
+      "Contracts & Partnerships source of risk [history:THM-21]."
+     ],
+     "proposed_focus": "Obtain the waiver and exception register for the period; test a sample for a valid ground, the written exception report and the approvals; cross-match waivers to the R-03 sample."
+    }
+   },
+   "rated": [
+    "R-01",
+    "R-02",
+    "R-03",
+    "R-04",
+    "R-05",
+    "R-06",
+    "R-07",
+    "R-08",
+    "R-09"
+   ],
+   "inputs": {
+    "outputs/analytics.json": "e3c5d87f4befd47b1507ec88675e5224f7cf2d03a4d81a36e0f628094f2cec4d",
+    "outputs/history.json": "60b5b7052c3c12520ae791e1c67ea1cc0223b3ca87de0d55521c2db0caa16cfd",
+    "outputs/rules.json": "d0e28d0aceab1ef744f5998575ab95555dbe07b9494c22d536a63b33cfe9d4e4",
+    "scoring_choices.json": "dafd1ddfe22b87347aa15d847370fd5b7081dca06b73e4fc25b0fd8eee7fdf60"
+   },
+   "built_on": "2026-10-16"
+  },
+  "1": {
+   "risks": {
+    "R-01": {
+     "risk_id": "R-01",
+     "title": "Requirements split across payments below a quotation or tender tier",
+     "theme": "Contracts & Partnerships",
+     "description": "Risk that a single requirement is met through several smaller payments to one supplier, so that the combined value crosses an App B tier that no single payment reaches, and the quotation, notice or tender steps for that tier are not run [rule:CPR-07] [rule:CPR-48] [rule:CPR-49] [rule:CPR-53].",
+     "likelihood": {
+      "rubric": "L3",
+      "justification": "In general procurement, {{$.tests.split_purchases.general_procurement.groups}} supplier groups [metric:$.tests.split_purchases.general_procurement.groups] have payments within a short window whose combined total crosses a tier that each payment stays under, including {{$.tests.split_purchases.general_procurement.per_threshold[\"25000\"].groups}} groups at the three-quotes and notice tier [metric:$.tests.split_purchases.general_procurement.per_threshold[\"25000\"].groups] and {{$.tests.split_purchases.general_procurement.per_threshold[\"500000\"].groups}} at the App B row C boundary [metric:$.tests.split_purchases.general_procurement.per_threshold[\"500000\"].groups]. The placement caveat does not explain general procurement groups. No test gives a flagged share of the scoped population, so L4 cannot be assessed; a share of general procurement suppliers in groups would settle it."
+     },
+     "impact": {
+      "score": 3,
+      "criterion": "compliance",
+      "justification": "Table 1 Medium [history:IMP-3]: a requirement disaggregated to avoid the Rules or the Procurement Legislation [rule:CPR-07] gives a reasonable possibility of challenge where the aggregated value reaches the notice or tender tiers [rule:CPR-50] [rule:CPR-53]."
+     },
+     "evidence": [
+      "General procurement groups crossing a tier: {{$.tests.split_purchases.general_procurement.groups}} [metric:$.tests.split_purchases.general_procurement.groups], combined value {{$.tests.split_purchases.general_procurement.total_gbp}} [metric:$.tests.split_purchases.general_procurement.total_gbp].",
+      "Premises groups: {{$.tests.split_purchases.by_tag.premises.count}} [metric:$.tests.split_purchases.by_tag.premises.count].",
+      "Anti-splitting rule, clause 6.16 [rule:CPR-07]."
+     ],
+     "proposed_focus": "Sample general procurement and premises groups from analytics-full/split_purchases.csv, prioritising groups at the three-quotes tier and the App B row C boundary; for each, establish whether the payments relate to one requirement and, if so, whether quotations, a notice or a tender were obtained at the aggregated value."
+    },
+    "R-02": {
+     "risk_id": "R-02",
+     "title": "Order values set just under a quotation tier",
+     "theme": "Contracts & Partnerships",
+     "description": "Risk that order values are set just under an App B tier so that the one-quote or three-quotes steps are not triggered [rule:CPR-48] [rule:CPR-49] [rule:CPR-07].",
+     "likelihood": {
+      "rubric": "L2",
+      "justification": "In the procurement-relevant tags the band just under each tier is no fuller than the comparison band below it: general procurement ratio {{$.tests.threshold_clustering.counts.per_threshold[\"1000\"].by_tag.general_procurement.ratio_band_to_comparison}} at the one-quote tier [metric:$.tests.threshold_clustering.counts.per_threshold[\"1000\"].by_tag.general_procurement.ratio_band_to_comparison] and {{$.tests.threshold_clustering.counts.per_threshold[\"25000\"].by_tag.general_procurement.ratio_band_to_comparison}} at the three-quotes tier [metric:$.tests.threshold_clustering.counts.per_threshold[\"25000\"].by_tag.general_procurement.ratio_band_to_comparison]; premises {{$.tests.threshold_clustering.counts.per_threshold[\"1000\"].by_tag.premises.ratio_band_to_comparison}} [metric:$.tests.threshold_clustering.counts.per_threshold[\"1000\"].by_tag.premises.ratio_band_to_comparison]. A ratio above one in a procurement tag would raise this to L3."
+     },
+     "impact": {
+      "score": 2,
+      "criterion": "compliance",
+      "justification": "Table 1 Minor [history:IMP-2]: values held under the one-quote or three-quotes tier mainly affect the internal quotation steps [rule:CPR-48] [rule:CPR-49], with a low possibility of legal challenge."
+     },
+     "evidence": [
+      "General procurement band-to-comparison ratio at the one-quote tier: {{$.tests.threshold_clustering.counts.per_threshold[\"1000\"].by_tag.general_procurement.ratio_band_to_comparison}} [metric:$.tests.threshold_clustering.counts.per_threshold[\"1000\"].by_tag.general_procurement.ratio_band_to_comparison].",
+      "General procurement band-to-comparison ratio at the three-quotes tier: {{$.tests.threshold_clustering.counts.per_threshold[\"25000\"].by_tag.general_procurement.ratio_band_to_comparison}} [metric:$.tests.threshold_clustering.counts.per_threshold[\"25000\"].by_tag.general_procurement.ratio_band_to_comparison].",
+      "Placements show a higher ratio at the one-quote tier, {{$.tests.threshold_clustering.counts.per_threshold[\"1000\"].by_tag.care_or_education_placement.ratio_band_to_comparison}} [metric:$.tests.threshold_clustering.counts.per_threshold[\"1000\"].by_tag.care_or_education_placement.ratio_band_to_comparison]; placements are considered under R-07."
+     ],
+     "proposed_focus": "Light-touch: in walkthroughs, confirm how order values near the App B tiers are set; sample a few general procurement payments from analytics-full/threshold_clustering.csv only if the walkthrough raises concerns."
+    },
+    "R-03": {
+     "risk_id": "R-03",
+     "title": "Spend above the notice tier with no published contract notice",
+     "theme": "Contracts & Partnerships",
+     "description": "Risk that suppliers whose annualised spend enters the App B notice-publication tier are engaged without a published contract notice, written contract or recorded award approval [rule:CPR-50] [rule:CPR-52] [rule:CPR-27] [rule:CPR-45].",
+     "likelihood": {
+      "rubric": "L3",
+      "justification": "In general procurement, {{$.tests.off_contract.by_tag.general_procurement.no_notice_found.count}} suppliers above the notice tier [metric:$.tests.off_contract.by_tag.general_procurement.no_notice_found.count] have no exact-matched notice, {{$.tests.off_contract.by_tag.general_procurement.no_notice_found.share_of_population_annualised_estimate|pct}} of that tag's annualised estimate [metric:$.tests.off_contract.by_tag.general_procurement.no_notice_found.share_of_population_annualised_estimate]; premises {{$.tests.off_contract.by_tag.premises.no_notice_found.count}} [metric:$.tests.off_contract.by_tag.premises.no_notice_found.count]. The placement caveat does not cover these tags. The share comes from a test whose notices may be incomplete, so it cannot carry L4."
+     },
+     "impact": {
+      "score": 3,
+      "criterion": "compliance",
+      "justification": "Table 1 Medium [history:IMP-3]: a contract in the notice tier let without a notice [rule:CPR-50] gives a reasonable possibility of successful legal challenge and of regulatory interest."
+     },
+     "evidence": [
+      "General procurement suppliers above the tier with no notice found: {{$.tests.off_contract.by_tag.general_procurement.no_notice_found.count}} of {{$.tests.off_contract.by_tag.general_procurement.population.count}} [metric:$.tests.off_contract.by_tag.general_procurement.population.count].",
+      "Agency staff suppliers above the tier with no notice found: {{$.tests.off_contract.by_tag.agency_staff.no_notice_found.count}} [metric:$.tests.off_contract.by_tag.agency_staff.no_notice_found.count].",
+      "Population for contract evidence requests: {{$.tests.high_value_suppliers.counts.suppliers}} suppliers enter the three-quotes tier [metric:$.tests.high_value_suppliers.counts.suppliers].",
+      "Contract Letting audit, Reasonable Assurance [history:AUD-01]."
+     ],
+     "proposed_focus": "Sample general procurement, premises and agency staff suppliers from analytics-full/off_contract.csv (no notice found), and resolve analytics-full/off_contract_candidates.csv first; for each, request the contract, the quotations or tender, the notice (Contracts Finder or the Central Digital Platform) and the award approval, using analytics-full/high_value_suppliers.csv as the request population. Check whether a framework, waiver or App C exclusion applies before treating any item as an exception."
+    },
+    "R-04": {
+     "risk_id": "R-04",
+     "title": "Spend continuing after a contract notice has ended",
+     "theme": "Contracts & Partnerships",
+     "description": "Risk that payments continue to suppliers after their contract has ended without an approved extension [rule:CPR-58].",
+     "likelihood": {
+      "rubric": "L3",
+      "justification": "Of {{$.tests.expired_notice_spend.counts.exact_matched_suppliers_paid}} exact-matched suppliers paid in the window [metric:$.tests.expired_notice_spend.counts.exact_matched_suppliers_paid], {{$.tests.expired_notice_spend.counts.flagged}} [metric:$.tests.expired_notice_spend.counts.flagged] have only notices that ended before the window, all in general procurement ({{$.tests.expired_notice_spend.by_tag.general_procurement.count}}) [metric:$.tests.expired_notice_spend.by_tag.general_procurement.count] and premises ({{$.tests.expired_notice_spend.by_tag.premises.count}}) [metric:$.tests.expired_notice_spend.by_tag.premises.count]. The missing-notices caveat keeps this at L3 at most."
+     },
+     "impact": {
+      "score": 2,
+      "criterion": "compliance",
+      "justification": "Table 1 Minor [history:IMP-2]: where the contract provides for extension, the control at issue is the internal S151 Officer approval [rule:CPR-58], giving a low possibility of legal challenge; the value involved is {{$.tests.expired_notice_spend.totals_gbp.flagged_window_total}} in the window [metric:$.tests.expired_notice_spend.totals_gbp.flagged_window_total]."
+     },
+     "evidence": [
+      "Suppliers flagged: {{$.tests.expired_notice_spend.counts.flagged}} [metric:$.tests.expired_notice_spend.counts.flagged].",
+      "Window spend with these suppliers: {{$.tests.expired_notice_spend.totals_gbp.flagged_window_total}} [metric:$.tests.expired_notice_spend.totals_gbp.flagged_window_total]."
+     ],
+     "proposed_focus": "Test every supplier in analytics-full/expired_notice_spend.csv: request the extension and its S151 Officer approval, or a newer contract and its notice."
+    },
+    "R-05": {
+     "risk_id": "R-05",
+     "title": "Spend beyond the awarded contract value",
+     "theme": "Contracts & Partnerships",
+     "description": "Risk that spend with a contracted supplier runs beyond the awarded value without an approved variation [rule:CPR-59] [rule:CPR-60].",
+     "likelihood": {
+      "rubric": "L3",
+      "justification": "Of {{$.tests.spend_vs_award.counts.population}} suppliers with one live single-supplier notice and an award value [metric:$.tests.spend_vs_award.counts.population], {{$.tests.spend_vs_award.counts.flagged}} [metric:$.tests.spend_vs_award.counts.flagged] have an annualised estimate at or above the flag ratio of the award per year, mainly in general procurement ({{$.tests.spend_vs_award.by_tag.general_procurement.count}}) [metric:$.tests.spend_vs_award.by_tag.general_procurement.count]. The flagged share is below the pervasive level, so L4 does not apply."
+     },
+     "impact": {
+      "score": 3,
+      "criterion": "compliance",
+      "justification": "Table 1 Medium [history:IMP-3]: a variation above the Threshold needs board approval [rule:CPR-60], and an unapproved increase in scope gives a reasonable possibility of successful legal challenge."
+     },
+     "evidence": [
+      "Flagged suppliers: {{$.tests.spend_vs_award.counts.flagged}} [metric:$.tests.spend_vs_award.counts.flagged], window spend {{$.tests.spend_vs_award.totals_gbp.flagged_window_total}} [metric:$.tests.spend_vs_award.totals_gbp.flagged_window_total].",
+      "Variation approvals, App C row E [rule:CPR-59] [rule:CPR-60]."
+     ],
+     "proposed_focus": "Test every supplier in analytics-full/spend_vs_award.csv: request the contract value, any variations and their approvals; note that award values may be estimates or maxima."
+    },
+    "R-06": {
+     "risk_id": "R-06",
+     "title": "Duplicate payments to the same supplier",
+     "theme": "Finance",
+     "description": "Risk that the same invoice or amount is paid more than once to a supplier, leading to overpayment that is not recovered [history:AUD-11].",
+     "likelihood": {
+      "rubric": "L3",
+      "justification": "{{$.tests.duplicates.counts.by_class.different_timestamp.pairs}} same-supplier, same-amount pairs within the duplicate window have different timestamps [metric:$.tests.duplicates.counts.by_class.different_timestamp.pairs], including {{$.tests.duplicates.by_tag.general_procurement.count}} in general procurement [metric:$.tests.duplicates.by_tag.general_procurement.count] and {{$.tests.duplicates.by_tag.premises.count}} in premises [metric:$.tests.duplicates.by_tag.premises.count]. Most pairs are placements, which the caveat explains as recurring fixed-rate payments; the procurement-tag pairs are not explained by it."
+     },
+     "impact": {
+      "score": 5,
+      "criterion": "financial_loss",
+      "exposure": "{{$.tests.duplicates.totals_gbp.repeat_value_beyond_first_clusters_with_different_timestamp}}",
+      "justification": "Table 1 Critical [history:IMP-5]: the repeat value beyond the first payment in clusters with different timestamps [metric:$.tests.duplicates.totals_gbp.repeat_value_beyond_first_clusters_with_different_timestamp] is the money that could be lost if those repeats were not valid. It is a ceiling across all tags, most of it in placements where repeats are often legitimate.",
+      "override": {
+       "score": 4,
+       "decision_ref": "R-06",
+       "note": "Auditor (Allen Cao, 2026-10-16) lowered impact: the loss figure is a ceiling and most repeated amounts are care and education placements, which often recur legitimately"
+      }
+     },
+     "evidence": [
+      "Different-timestamp pairs: {{$.tests.duplicates.counts.by_class.different_timestamp.pairs}} [metric:$.tests.duplicates.counts.by_class.different_timestamp.pairs].",
+      "Placement pairs: {{$.tests.duplicates.by_tag.care_or_education_placement.count}} [metric:$.tests.duplicates.by_tag.care_or_education_placement.count].",
+      "Accounts Payable audit, Reasonable Assurance [history:AUD-11]."
+     ],
+     "proposed_focus": "Sample different-timestamp clusters from analytics-full/duplicates_clusters.csv, all general procurement and premises clusters first, then the largest placement clusters; for each, match the payments to distinct invoices or to a recurring schedule, and confirm recovery of any repeat payment."
+    },
+    "R-07": {
+     "risk_id": "R-07",
+     "title": "Care and education placements arranged without the App C records and approvals",
+     "theme": "Contracts & Partnerships",
+     "description": "Risk that placements and care packages arranged outside competition under App C lack the recorded reasons for provider choice, the PSR process or the board approval that App C requires [rule:CPR-56] [rule:CPR-61] [rule:CPR-62].",
+     "likelihood": {
+      "rubric": "L2",
+      "justification": "Placements show many flagged items, {{$.tests.off_contract.by_tag.care_or_education_placement.no_notice_found.count}} suppliers above the notice tier with no notice [metric:$.tests.off_contract.by_tag.care_or_education_placement.no_notice_found.count] and {{$.tests.split_purchases.by_tag.care_or_education_placement.count}} split-purchase groups [metric:$.tests.split_purchases.by_tag.care_or_education_placement.count], but the analytics caveats explain these routinely: placements are often arranged under App C exclusions or frameworks and recur. No test measures whether the App C records exist; a case-file sample would."
+     },
+     "impact": {
+      "score": 2,
+      "criterion": "compliance",
+      "justification": "Table 1 Minor [history:IMP-2]: the requirement is to record reasons on case notes [rule:CPR-61] and obtain board approval above the Threshold [rule:CPR-62]; gaps give a low possibility of legal challenge. The Purchase of Residential and Nursing Care Provision audit gave Reasonable Assurance [history:AUD-14]."
+     },
+     "evidence": [
+      "Placement suppliers above the notice tier with no notice: {{$.tests.off_contract.by_tag.care_or_education_placement.no_notice_found.count}} [metric:$.tests.off_contract.by_tag.care_or_education_placement.no_notice_found.count].",
+      "Purchase of Residential and Nursing Care Provision, Reasonable Assurance [history:AUD-14].",
+      "App C row F, records of provider choice [rule:CPR-61]."
+     ],
+     "proposed_focus": "Sample placement suppliers from analytics-full/off_contract.csv (care_or_education_placement) and confirm the App C basis: case-note reasons for provider choice, the PSR record where applicable, framework call-off or board approval above the Threshold."
+    },
+    "R-08": {
+     "risk_id": "R-08",
+     "title": "Grants awarded without the procurement steps that apply to contracts",
+     "theme": "Contracts & Partnerships",
+     "description": "Risk that grants, which clause 1.6.2 treats as contracts, are awarded above the notice tier without a published notice, written agreement or recorded approval [rule:CPR-50] [rule:CPR-27].",
+     "likelihood": {
+      "rubric": "L3",
+      "justification": "{{$.tests.off_contract.by_tag.grant.no_notice_found.count}} grant recipients above the notice tier [metric:$.tests.off_contract.by_tag.grant.no_notice_found.count] have no exact-matched notice, with {{$.tests.off_contract.by_tag.grant.exact_match_any_notice.count}} matched [metric:$.tests.off_contract.by_tag.grant.exact_match_any_notice.count]. No analytics caveat gives a routine explanation for grants. The missing-notices caveat keeps this at L3 at most."
+     },
+     "impact": {
+      "score": 2,
+      "criterion": "compliance",
+      "justification": "Table 1 Minor [history:IMP-2]: the main exposure is to the written-contract and notice requirements [rule:CPR-27] [rule:CPR-50] for grant agreements, with a low possibility of legal challenge."
+     },
+     "evidence": [
+      "Grant recipients above the tier with no notice found: {{$.tests.off_contract.by_tag.grant.no_notice_found.count}} of {{$.tests.off_contract.by_tag.grant.population.count}} [metric:$.tests.off_contract.by_tag.grant.population.count].",
+      "Written contract requirement, clause 10.2 [rule:CPR-27]."
+     ],
+     "proposed_focus": "Sample grant recipients from analytics-full/off_contract.csv (grant tag) and request the grant agreement, the basis for award (competition, exclusion or exception) and its approval."
+    },
+    "R-09": {
+     "risk_id": "R-09",
+     "title": "Exceptions and waivers of competition not documented or approved",
+     "theme": "Contracts & Partnerships",
+     "description": "Risk that competition is waived above the three-quotes tier without a valid ground, a written exception report or the S151 Officer and Monitoring Officer approvals [rule:CPR-13] [rule:CPR-15] [rule:CPR-19] [rule:CPR-21].",
+     "likelihood": {
+      "rubric": "L2",
+      "justification": "No analytics test measures waivers; the risk rests on the rules [rule:CPR-13] [rule:CPR-19] and on the Contracts & Partnerships source of risk in the Risk Management Strategy [history:THM-21]. Unmatched suppliers under R-03 may rely on waivers, which the audit would test."
+     },
+     "impact": {
+      "score": 3,
+      "criterion": "compliance",
+      "justification": "Table 1 Medium [history:IMP-3]: a waiver above the tier without a valid ground [rule:CPR-13] gives a reasonable possibility of successful legal challenge."
+     },
+     "evidence": [
+      "Waiver grounds and approvals, clause 7.2 and clause 7.5 [rule:CPR-13] [rule:CPR-21].",
+      "Contracts & Partnerships source of risk [history:THM-21]."
+     ],
+     "proposed_focus": "Obtain the waiver and exception register for the period; test a sample for a valid ground, the written exception report and the approvals; cross-match waivers to the R-03 sample."
+    }
+   },
+   "rated": [
+    "R-01",
+    "R-02",
+    "R-03",
+    "R-04",
+    "R-05",
+    "R-06",
+    "R-07",
+    "R-08",
+    "R-09"
+   ],
+   "inputs": {
+    "outputs/analytics.json": "e3c5d87f4befd47b1507ec88675e5224f7cf2d03a4d81a36e0f628094f2cec4d",
+    "outputs/history.json": "60b5b7052c3c12520ae791e1c67ea1cc0223b3ca87de0d55521c2db0caa16cfd",
+    "outputs/rules.json": "d0e28d0aceab1ef744f5998575ab95555dbe07b9494c22d536a63b33cfe9d4e4",
+    "scoring_choices.json": "dafd1ddfe22b87347aa15d847370fd5b7081dca06b73e4fc25b0fd8eee7fdf60"
+   },
+   "built_on": "2026-10-16"
+  }
+ },
+ "applied": {
+  "R-01": {
+   "decision": "APPROVE",
+   "comment": "Allen Cao, 2026-10-16.",
+   "applied_in": 1
+  },
+  "R-02": {
+   "decision": "APPROVE",
+   "comment": "Allen Cao, 2026-10-16.",
+   "applied_in": 1
+  },
+  "R-03": {
+   "decision": "APPROVE",
+   "comment": "Allen Cao, 2026-10-16.",
+   "applied_in": 1
+  },
+  "R-04": {
+   "decision": "APPROVE",
+   "comment": "Allen Cao, 2026-10-16.",
+   "applied_in": 1
+  },
+  "R-05": {
+   "decision": "APPROVE",
+   "comment": "Allen Cao, 2026-10-16.",
+   "applied_in": 1
+  },
+  "R-06": {
+   "decision": "AMEND",
+   "comment": "Allen Cao, 2026-10-16: Lower impact to 4: the loss figure is a ceiling and most repeated amounts are care and education placements, which often recur legitimately.",
+   "applied_in": 1
+  },
+  "R-07": {
+   "decision": "APPROVE",
+   "comment": "Allen Cao, 2026-10-16.",
+   "applied_in": 1
+  },
+  "R-08": {
+   "decision": "REJECT",
+   "comment": "Allen Cao, 2026-10-16: Grants will be covered by a separate review.",
+   "applied_in": 1
+  },
+  "R-09": {
+   "decision": "APPROVE",
+   "comment": "Allen Cao, 2026-10-16.",
+   "applied_in": 1
+  }
+ }
+}

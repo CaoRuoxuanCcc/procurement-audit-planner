@@ -1,0 +1,200 @@
+service,category,narrative,tag,rows,total_gbp
+Adult Social Care,Employees,Agency & Temporary Staff,agency_staff,3,2813.16
+Adult Social Care,Employees,Lease car costs re employees,general_procurement,1,6220.42
+Adult Social Care,Employees,Training,general_procurement,12,81948.22
+Adult Social Care,Premises,Cleaning,premises,15,18238.86
+Adult Social Care,Premises,Corporate R&M,premises,33,40278.67
+Adult Social Care,Premises,Premises Insurance,premises,1,3696.84
+Adult Social Care,Premises,Rents,premises,16,155675.84
+Adult Social Care,Premises,Waste,premises,1,10967.77
+Adult Social Care,Premises,Water Rates,premises,4,25813.29
+Adult Social Care,Supplies & Services,Animal welfare,general_procurement,2,1674.00
+Adult Social Care,Supplies & Services,Catering,general_procurement,15,165167.08
+Adult Social Care,Supplies & Services,Clothing,general_procurement,3,2226.70
+Adult Social Care,Supplies & Services,Equipment Rentals,general_procurement,4,2770.40
+Adult Social Care,Supplies & Services,IT,general_procurement,5,25429.67
+Adult Social Care,Supplies & Services,IT Equipment,general_procurement,2,13063.04
+Adult Social Care,Supplies & Services,Licences,general_procurement,7,8487.61
+Adult Social Care,Supplies & Services,Professional Fees,general_procurement,22,42460.08
+Adult Social Care,Supplies & Services,Purchase - Equipment,general_procurement,13,12828.87
+Adult Social Care,Supplies & Services,Repairs - Equipment,general_procurement,2,1261.64
+Adult Social Care,Supplies & Services,Training Third Parties,general_procurement,2,1400.00
+Adult Social Care,Third Party Payments,Payment to contractor,general_procurement,10,337815.83
+Adult Social Care,Third Party Payments,Private Contractors,care_or_education_placement,4742,17568947.93
+Adult Social Care,Third Party Payments,Private Contractors Additional Cost,care_or_education_placement,6,35382.99
+Adult Social Care,Third Party Payments,Voluntary Associations,care_or_education_placement,291,1944567.23
+Adult Social Care,Transfer Payment,Direct Payment,care_or_education_placement,12,38184.36
+Adult Social Care,Transport,Transport Hire,general_procurement,26,86387.42
+Adult Social Care - Transformation Projects,Supplies & Services,IT,general_procurement,8,133691.79
+Adult Social Care - Transformation Projects,Supplies & Services,Licences,general_procurement,1,6998.30
+Adult Social Care - Transformation Projects,Supplies & Services,Professional Fees,general_procurement,1,950.00
+Adult Social Care - Transformation Projects,Supplies & Services,Purchase - Equipment,general_procurement,1,48825.00
+Capital Financing and Income Investment,Premises,Cleaning,premises,2,1789.18
+Capital Financing and Income Investment,Premises,Corporate R&M,premises,2,1232.37
+Chief Executive,Supplies & Services,General Expenses,general_procurement,5,68028.00
+Chief Executive,Supplies & Services,Professional Fees,general_procurement,1,800.00
+Children's Social Care,Employees,Agency & Temporary Staff,agency_staff,7,7175.93
+Children's Social Care,Employees,Training,general_procurement,5,62429.82
+Children's Social Care,Premises,Cleaning,premises,15,13743.26
+Children's Social Care,Premises,Corporate R&M,premises,13,14511.50
+Children's Social Care,Premises,Rents,premises,4,3247.50
+Children's Social Care,Supplies & Services,Advertising,general_procurement,1,580.00
+Children's Social Care,Supplies & Services,IT,general_procurement,2,38628.00
+Children's Social Care,Supplies & Services,Print & Stationery,general_procurement,1,539.00
+Children's Social Care,Supplies & Services,Professional Fees,general_procurement,26,32590.38
+Children's Social Care,Supplies & Services,Project,general_procurement,10,68507.71
+Children's Social Care,Supplies & Services,Public Transport,general_procurement,10,19466.75
+Children's Social Care,Supplies & Services,Purchase - Equipment,general_procurement,2,5269.00
+Children's Social Care,Supplies & Services,Subscriptions,general_procurement,2,6265.38
+Children's Social Care,Third Party Payments,Private Contractors,care_or_education_placement,477,6536164.75
+Children's Social Care,Third Party Payments,Voluntary Associations,care_or_education_placement,27,46159.20
+Children's Social Care,Transfer Payment,Allowances for provision care,care_or_education_placement,34,95816.92
+Children's Social Care,Transport,Transport Hire,general_procurement,24,26658.27
+Community Services,Employees,Lease car costs re employees,general_procurement,1,3583.90
+Community Services,Employees,Recruitment Advertising,general_procurement,1,850.00
+Community Services,Employees,Training,general_procurement,3,8932.00
+Community Services,Premises,Cleaning,premises,22,25770.85
+Community Services,Premises,Corporate R&M,premises,16,25142.20
+Community Services,Premises,Fixtures & Fittings,premises,1,1640.00
+Community Services,Premises,Rents,premises,3,16011.49
+Community Services,Supplies & Services,Catering,general_procurement,12,11158.49
+Community Services,Supplies & Services,Consultants,general_procurement,3,13500.00
+Community Services,Supplies & Services,Ex-Gratia payment,general_procurement,1,5000.00
+Community Services,Supplies & Services,Exhibition Expenses,general_procurement,2,3447.50
+Community Services,Supplies & Services,IT,general_procurement,3,82326.56
+Community Services,Supplies & Services,Licences,general_procurement,2,2705.06
+Community Services,Supplies & Services,Print & Stationery,general_procurement,1,914.93
+Community Services,Supplies & Services,Professional Fees,general_procurement,24,50100.44
+Community Services,Supplies & Services,Purchase - Equipment,general_procurement,3,7260.50
+Community Services,Supplies & Services,Purchase of Equipment,general_procurement,1,815.79
+Community Services,Supplies & Services,Purchases Books & Publications,general_procurement,1,592.92
+Community Services,Supplies & Services,Repairs - Equipment,general_procurement,1,951.00
+Community Services,Supplies & Services,Storage,general_procurement,1,504.84
+Community Services,Supplies & Services,Subscriptions,general_procurement,8,43923.05
+Community Services,Third Party Payments,Payment to contractor,general_procurement,25,153865.34
+Community Services,Third Party Payments,Private Contractors,general_procurement,10,71114.27
+Development & Housing,Premises,Cleaning,premises,6,5789.64
+Development & Housing,Premises,Corporate R&M,premises,59,83983.27
+Development & Housing,Premises,Energy costs,premises,3,2571.38
+Development & Housing,Premises,Fixtures & Fittings,premises,1,3777.00
+Development & Housing,Premises,Rents,premises,165,338314.81
+Development & Housing,Premises,Water Rates,premises,4,5478.57
+Development & Housing,Supplies & Services,Advertising,general_procurement,7,4353.63
+Development & Housing,Supplies & Services,Consultants,general_procurement,5,30805.32
+Development & Housing,Supplies & Services,Contributions,general_procurement,2,3887.02
+Development & Housing,Supplies & Services,Grants,grant,33,196941.18
+Development & Housing,Supplies & Services,IT,general_procurement,5,44180.06
+Development & Housing,Supplies & Services,Licences,general_procurement,1,2478.69
+Development & Housing,Supplies & Services,Minor Works,general_procurement,63,455062.35
+Development & Housing,Supplies & Services,Professional Fees,general_procurement,17,96953.79
+Development & Housing,Supplies & Services,Purchase - Equipment,general_procurement,4,3250.00
+Development & Housing,Supplies & Services,Purchase of Equipment,general_procurement,1,17588.10
+Development & Housing,Supplies & Services,Purchases Books & Publications,general_procurement,1,1500.00
+Development & Housing,Supplies & Services,Repairs - Furniture,general_procurement,2,1700.00
+Development & Housing,Supplies & Services,Subscriptions,general_procurement,1,14995.00
+Development & Housing,Third Party Payments,Payment to contractor,general_procurement,7,21038.15
+Development & Housing,Third Party Payments,Private Contractors,general_procurement,20,228467.56
+Education & SEND,Employees,Lease car costs re employees,general_procurement,1,6282.83
+Education & SEND,Employees,Training,general_procurement,3,7718.02
+Education & SEND,Premises,Corporate R&M,premises,1,890.60
+Education & SEND,Premises,Survey,premises,7,15155.00
+Education & SEND,Supplies & Services,Consultants,general_procurement,27,76675.82
+Education & SEND,Supplies & Services,Grants,grant,21,140006.63
+Education & SEND,Supplies & Services,IT,general_procurement,2,12027.23
+Education & SEND,Supplies & Services,Legal Fees,general_procurement,2,2822.00
+Education & SEND,Supplies & Services,Professional Fees,general_procurement,5,39144.30
+Education & SEND,Supplies & Services,Public Transport,general_procurement,1,936.00
+Education & SEND,Supplies & Services,Reimbursements,general_procurement,1,590.52
+Education & SEND,Supplies & Services,Subscriptions,general_procurement,5,133271.14
+Education & SEND,Supplies & Services,Training Third Parties,general_procurement,4,15550.50
+Education & SEND,Third Party Payments,Other agencies,care_or_education_placement,1,28250.00
+Education & SEND,Third Party Payments,Payment to contractor,general_procurement,26,969284.13
+Education & SEND,Transport,Transport Hire,general_procurement,541,1457982.06
+Education (DSG Funded) & Other Education Grants,Employees,Training,general_procurement,1,2195.00
+Education (DSG Funded) & Other Education Grants,Premises,Cleaning,premises,4,2447.64
+Education (DSG Funded) & Other Education Grants,Supplies & Services,Curriculum Activities,general_procurement,1,1500.00
+Education (DSG Funded) & Other Education Grants,Supplies & Services,Grants,grant,285,5696652.01
+Education (DSG Funded) & Other Education Grants,Supplies & Services,IT,general_procurement,2,5160.00
+Education (DSG Funded) & Other Education Grants,Supplies & Services,Purchases Books & Publications,general_procurement,3,16609.33
+Education (DSG Funded) & Other Education Grants,Supplies & Services,Training Third Parties,general_procurement,1,820.00
+Education (DSG Funded) & Other Education Grants,Third Party Payments,Other agencies,care_or_education_placement,299,4436701.28
+Education (DSG Funded) & Other Education Grants,Transport,Transport Hire,general_procurement,5,3364.50
+Environment,Employees,Training,general_procurement,5,4647.84
+Environment,Fees & Charges,Projects or Minor Works,general_procurement,3,9666.73
+Environment,Premises,Cleaning,premises,7,8015.94
+Environment,Premises,Corporate R&M,premises,20,39405.85
+Environment,Premises,Energy costs,premises,12,10848.12
+Environment,Premises,Grounds Maintenance,premises,49,184014.61
+Environment,Premises,Rents,premises,2,1349.21
+Environment,Supplies & Services,Advertising,general_procurement,2,2006.66
+Environment,Supplies & Services,Clothing,general_procurement,1,1397.47
+Environment,Supplies & Services,Consultants,general_procurement,14,49258.90
+Environment,Supplies & Services,Contributions,general_procurement,2,119317.43
+Environment,Supplies & Services,Highways Drainage,general_procurement,1,3950.00
+Environment,Supplies & Services,ICT Software Licences,general_procurement,1,4237.00
+Environment,Supplies & Services,IT,general_procurement,8,35336.54
+Environment,Supplies & Services,Legal Fees,general_procurement,2,3522.30
+Environment,Supplies & Services,Licences,general_procurement,1,533.00
+Environment,Supplies & Services,Print & Stationery,general_procurement,1,1941.00
+Environment,Supplies & Services,Professional Fees,general_procurement,13,34236.14
+Environment,Supplies & Services,Public Transport,general_procurement,28,384397.08
+Environment,Supplies & Services,Purchase - Equipment,general_procurement,4,4956.42
+Environment,Supplies & Services,Repairs - Equipment,general_procurement,7,20561.04
+Environment,Supplies & Services,Subscriptions,general_procurement,1,1500.00
+Environment,Supplies & Services,Training Third Parties,general_procurement,17,15883.65
+Environment,Third Party Payments,Payment to contractor,general_procurement,132,7040838.97
+Environment,Third Party Payments,Private Contractors,general_procurement,89,7255911.71
+Environment,Third Party Payments,Voluntary Associations,general_procurement,11,48554.71
+Environment,Transport,Direct Transport Costs,general_procurement,29,43567.08
+Executive Director - Resources,Supplies & Services,External audit costs,general_procurement,2,84905.00
+Executive Director - Resources,Supplies & Services,Professional Fees,general_procurement,1,7150.00
+Executive Director People - Adult Social Care & Public Health,Supplies & Services,Subscriptions,general_procurement,1,3006.00
+Executive Director People - Children's Services,Supplies & Services,Conference provision,general_procurement,1,976.00
+Executive Director People - Children's Services,Supplies & Services,Professional Fees,general_procurement,2,11925.00
+Executive Director People - Children's Services,Supplies & Services,Subscriptions,general_procurement,1,9084.60
+"Finance, Property & Procurement",Premises,Cleaning,premises,12,28380.29
+"Finance, Property & Procurement",Premises,Corporate R&M,premises,22,28872.55
+"Finance, Property & Procurement",Premises,Energy costs,premises,2,4486.38
+"Finance, Property & Procurement",Premises,Rents,premises,1,4136.40
+"Finance, Property & Procurement",Premises,Survey,premises,1,850.00
+"Finance, Property & Procurement",Supplies & Services,Advertising,general_procurement,1,1101.92
+"Finance, Property & Procurement",Supplies & Services,Charges,general_procurement,38,42469.49
+"Finance, Property & Procurement",Supplies & Services,Consultants,general_procurement,3,3640.00
+"Finance, Property & Procurement",Supplies & Services,General Expenses,general_procurement,2,34771.30
+"Finance, Property & Procurement",Supplies & Services,IT,general_procurement,15,327108.13
+"Finance, Property & Procurement",Supplies & Services,Insurance Premiums,general_procurement,7,29866.92
+"Finance, Property & Procurement",Supplies & Services,Legal Fees,general_procurement,2,10911.76
+"Finance, Property & Procurement",Supplies & Services,Licences,general_procurement,1,899.00
+"Finance, Property & Procurement",Supplies & Services,Professional Fees,general_procurement,8,117481.66
+"Finance, Property & Procurement",Supplies & Services,Purchases Books & Publications,general_procurement,1,2020.00
+"Finance, Property & Procurement",Supplies & Services,Repairs - Equipment,general_procurement,1,980.00
+"Finance, Property & Procurement",Supplies & Services,Subscriptions,general_procurement,1,5155.56
+"Finance, Property & Procurement",Supplies & Services,Telephones,general_procurement,1,1052.80
+"Finance, Property & Procurement",Third Party Payments,Payment to contractor,general_procurement,9,169317.00
+"Finance, Property & Procurement",Third Party Payments,Private Contractors,general_procurement,16,4162610.64
+Public Health & Wellbeing,Supplies & Services,Professional Fees,general_procurement,4,16315.25
+Public Health & Wellbeing,Third Party Payments,Private Contractors,general_procurement,4,45277.62
+Public Health & Wellbeing,Third Party Payments,Voluntary Associations,general_procurement,6,84560.93
+Strategy & Governance,Employees,Agency & Temporary Staff,agency_staff,14,1275552.15
+Strategy & Governance,Employees,Employee Expenses,general_procurement,1,8794.50
+Strategy & Governance,Employees,Training,general_procurement,1,1110.00
+Strategy & Governance,Supplies & Services,General Expenses,general_procurement,1,813.00
+Strategy & Governance,Supplies & Services,IT,general_procurement,4,35873.00
+Strategy & Governance,Supplies & Services,Legal Fees,general_procurement,11,33907.87
+Strategy & Governance,Supplies & Services,Postage,general_procurement,2,2627.69
+Strategy & Governance,Supplies & Services,Print & Stationery,general_procurement,2,3628.09
+Strategy & Governance,Supplies & Services,Professional Fees,general_procurement,9,68821.00
+Strategy & Governance,Supplies & Services,Purchases Books & Publications,general_procurement,1,28258.20
+Strategy & Governance,Supplies & Services,Storage,general_procurement,3,2298.45
+Strategy & Governance,Supplies & Services,Subscriptions,general_procurement,3,13301.45
+Strategy & Governance,Third Party Payments,Private Contractors,general_procurement,12,86881.76
+"Transformation, Customer & ICT",Supplies & Services,Archiving internal documents,general_procurement,3,9350.80
+"Transformation, Customer & ICT",Supplies & Services,IT,general_procurement,39,721940.32
+"Transformation, Customer & ICT",Supplies & Services,IT Equipment,general_procurement,6,45058.76
+"Transformation, Customer & ICT",Supplies & Services,Licences,general_procurement,4,23692.60
+"Transformation, Customer & ICT",Supplies & Services,Postage,general_procurement,21,65848.27
+"Transformation, Customer & ICT",Supplies & Services,Print & Stationery,general_procurement,11,15633.38
+"Transformation, Customer & ICT",Supplies & Services,Subscriptions,general_procurement,3,61998.90
+"Transformation, Customer & ICT",Supplies & Services,Supplies & Services Expenses,general_procurement,1,800.00
+"Transformation, Customer & ICT",Supplies & Services,Telephones,general_procurement,9,28211.38
+"Transformation, Customer & ICT",Third Party Payments,Private Contractors,general_procurement,2,109683.69

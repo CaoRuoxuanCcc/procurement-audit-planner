@@ -1,0 +1,75 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "check": "reconcile:Over500_2026_P02_-_published.xlsx",
+      "result": "PASS",
+      "detail": "raw rows=2892 kept=2280 excluded=612; raw GBP=21785916.06 kept=17391219.16 excluded=4394696.90"
+    },
+    {
+      "check": "reconcile:Over500_2026_P03_-_published.xlsx",
+      "result": "PASS",
+      "detail": "raw rows=3547 kept=2711 excluded=836; raw GBP=31295535.61 kept=25517512.49 excluded=5778023.12"
+    },
+    {
+      "check": "reconcile:Over500_2026_P04_-_published.xlsx",
+      "result": "PASS",
+      "detail": "raw rows=4168 kept=3532 excluded=636; raw GBP=27345802.59 kept=23343560.33 excluded=4002242.26"
+    },
+    {
+      "check": "reconcile:analytics_total",
+      "result": "PASS",
+      "detail": "spend_clean total 66252291.98 vs analytics.json 66252291.98"
+    },
+    {
+      "check": "rederive:threshold_clustering",
+      "result": "PASS",
+      "detail": "Over500_2026_P04_-_published.xlsx|Data to publish|R2239 amount in band below T=25000"
+    },
+    {
+      "check": "rederive:split_purchases",
+      "result": "PASS",
+      "detail": "VOLKERHIGHWAYS T=500000: 124 rows, one supplier, all under T, sum 5523184.32 = group_total and enters tier; group span 91 days; every row lies in a window of at most 29 days whose sum enters the tier"
+    },
+    {
+      "check": "rederive:off_contract",
+      "result": "PASS",
+      "detail": "VOLKERHIGHWAYS: raw total x 4 = 29511688.84; no council notice supplier normalises to the same string"
+    },
+    {
+      "check": "rederive:duplicates",
+      "result": "PASS",
+      "detail": "Over500_2026_P04_-_published.xlsx|Data to publish|R3308 / Over500_2026_P04_-_published.xlsx|Data to publish|R618"
+    },
+    {
+      "check": "rederive:expired_notice_spend",
+      "result": "PASS",
+      "detail": "HOPE AND CLAY CONSTRUCTION: 2 notice block(s), all ended before 2026-05-01"
+    },
+    {
+      "check": "rederive:spend_vs_award",
+      "result": "PASS",
+      "detail": "NEC SOFTWARE SOLUTIONS UK notice RM6259/CL766: ratio 6.12 vs 6.12"
+    },
+    {
+      "check": "rederive:high_value_suppliers",
+      "result": "PASS",
+      "detail": "VOLKERHIGHWAYS: workbook total 7377922.21 vs 7377922.21"
+    },
+    {
+      "check": "row_ids_resolve",
+      "result": "PASS",
+      "detail": "54917 row_id references checked; unresolved: []"
+    },
+    {
+      "check": "no_threshold_literals",
+      "result": "PASS",
+      "detail": "T values [1000, 25000, 500000]; hits: []; exempted by name: ['common.py:39']"
+    },
+    {
+      "check": "banned_words",
+      "result": "PASS",
+      "detail": "found: []"
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+- [Builder typed-figure pitfalls](builder_typed_figure_pitfalls.md) — "S.151", clause ranges, bracket paths, override-note punctuation

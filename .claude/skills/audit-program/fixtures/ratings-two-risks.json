@@ -1,0 +1,46 @@
+{
+  "about": "Test fixture for build_pack.py: two risks copied from the risk register (R-01 split purchases, R-04 spend after a notice ended). test_build_pack.py builds them into a register revision 1 with build_register.py, then records both as APPROVE.",
+  "risks": [
+    {
+      "risk_id": "R-01",
+      "title": "Requirements split across payments below a quotation or tender tier",
+      "theme": "Contracts & Partnerships",
+      "description": "Risk that a single requirement is met through several smaller payments to one supplier, so that the combined value crosses an App B tier that no single payment reaches, and the quotation, notice or tender steps for that tier are not run [rule:CPR-07] [rule:CPR-48] [rule:CPR-49] [rule:CPR-53].",
+      "likelihood": {
+        "rubric": "L3",
+        "justification": "In general procurement, {{$.tests.split_purchases.general_procurement.groups}} supplier groups [metric:$.tests.split_purchases.general_procurement.groups] have payments within a short window whose combined total crosses a tier that each payment stays under, including {{$.tests.split_purchases.general_procurement.per_threshold[\"25000\"].groups}} groups at the three-quotes and notice tier [metric:$.tests.split_purchases.general_procurement.per_threshold[\"25000\"].groups] and {{$.tests.split_purchases.general_procurement.per_threshold[\"500000\"].groups}} at the App B row C boundary [metric:$.tests.split_purchases.general_procurement.per_threshold[\"500000\"].groups]. The placement caveat does not explain general procurement groups. No test gives a flagged share of the scoped population, so L4 cannot be assessed; a share of general procurement suppliers in groups would settle it."
+      },
+      "impact": {
+        "score": 3,
+        "criterion": "compliance",
+        "justification": "Table 1 Medium [history:IMP-3]: a requirement disaggregated to avoid the Rules or the Procurement Legislation [rule:CPR-07] gives a reasonable possibility of challenge where the aggregated value reaches the notice or tender tiers [rule:CPR-50] [rule:CPR-53]."
+      },
+      "evidence": [
+        "General procurement groups crossing a tier: {{$.tests.split_purchases.general_procurement.groups}} [metric:$.tests.split_purchases.general_procurement.groups], combined value {{$.tests.split_purchases.general_procurement.total_gbp}} [metric:$.tests.split_purchases.general_procurement.total_gbp].",
+        "Premises groups: {{$.tests.split_purchases.by_tag.premises.count}} [metric:$.tests.split_purchases.by_tag.premises.count].",
+        "Anti-splitting rule, clause 6.16 [rule:CPR-07]."
+      ],
+      "proposed_focus": "Sample general procurement and premises groups from analytics-full/split_purchases.csv, prioritising groups at the three-quotes tier and the App B row C boundary; for each, establish whether the payments relate to one requirement and, if so, whether quotations, a notice or a tender were obtained at the aggregated value."
+    },
+    {
+      "risk_id": "R-04",
+      "title": "Spend continuing after a contract notice has ended",
+      "theme": "Contracts & Partnerships",
+      "description": "Risk that payments continue to suppliers after their contract has ended without an approved extension [rule:CPR-58].",
+      "likelihood": {
+        "rubric": "L3",
+        "justification": "Of {{$.tests.expired_notice_spend.counts.exact_matched_suppliers_paid}} exact-matched suppliers paid in the window [metric:$.tests.expired_notice_spend.counts.exact_matched_suppliers_paid], {{$.tests.expired_notice_spend.counts.flagged}} [metric:$.tests.expired_notice_spend.counts.flagged] have only notices that ended before the window, all in general procurement ({{$.tests.expired_notice_spend.by_tag.general_procurement.count}}) [metric:$.tests.expired_notice_spend.by_tag.general_procurement.count] and premises ({{$.tests.expired_notice_spend.by_tag.premises.count}}) [metric:$.tests.expired_notice_spend.by_tag.premises.count]. The missing-notices caveat keeps this at L3 at most."
+      },
+      "impact": {
+        "score": 2,
+        "criterion": "compliance",
+        "justification": "Table 1 Minor [history:IMP-2]: where the contract provides for extension, the control at issue is the internal S151 Officer approval [rule:CPR-58], giving a low possibility of legal challenge; the value involved is {{$.tests.expired_notice_spend.totals_gbp.flagged_window_total}} in the window [metric:$.tests.expired_notice_spend.totals_gbp.flagged_window_total]."
+      },
+      "evidence": [
+        "Suppliers flagged: {{$.tests.expired_notice_spend.counts.flagged}} [metric:$.tests.expired_notice_spend.counts.flagged].",
+        "Window spend with these suppliers: {{$.tests.expired_notice_spend.totals_gbp.flagged_window_total}} [metric:$.tests.expired_notice_spend.totals_gbp.flagged_window_total]."
+      ],
+      "proposed_focus": "Test every supplier in analytics-full/expired_notice_spend.csv: request the extension and its S151 Officer approval, or a newer contract and its notice."
+    }
+  ]
+}

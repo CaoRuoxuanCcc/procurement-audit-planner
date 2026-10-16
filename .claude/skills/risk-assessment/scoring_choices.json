@@ -1,0 +1,81 @@
+{
+  "about": "How build_register.py reads the council's scoring method where the Risk Management Strategy contradicts itself. Every discrepancy in history.json must appear here, either under choices or under not_scoring; the builder fails otherwise. The auditor may change a 'use' value; the risk-assessor agent must not edit this file.",
+  "rated_level": {
+    "id": "EVL-2",
+    "why": "Ratings use the Actual (current) level: the spend indicators show how controls operate now, with mitigation already in place."
+  },
+  "choices": [
+    {
+      "id": "CH-1",
+      "discrepancy": "DIS-04",
+      "detect": "crr_threshold",
+      "topic": "Score at which a risk goes on the Corporate Risk Register",
+      "use": "table4",
+      "options": {
+        "table4": "Table 4: the Extreme band (15-25) is added to the Corporate Risk Register",
+        "figure4": "Figure 4: risks that score 9 or above go on the Corporate Risk Register"
+      },
+      "marker": "‡",
+      "rationale": "Table 4 and para 6.3 both tie corporate escalation to Extreme (Red) risks; Figure 4 is the only source of the lower figure."
+    },
+    {
+      "id": "CH-2",
+      "discrepancy": "DIS-03",
+      "detect": "band_label",
+      "topic": "Name of the band for scores 8-12",
+      "use": "table4",
+      "options": {
+        "table4": "Table 4 band name (Medium - High), which carries the RAG colour, escalation and response",
+        "figure1": "Figure 1 cell name (High)"
+      },
+      "marker": "†",
+      "rationale": "The register reports the RAG colour, escalation and response, which only Table 4 gives; the Figure 1 name is shown next to it."
+    },
+    {
+      "id": "CH-3",
+      "discrepancy": "DIS-01",
+      "detect": null,
+      "topic": "Number of the Medium impact level",
+      "use": "table1",
+      "options": {
+        "table1": "Table 1 and Figure 1: Medium = 3",
+        "para4.3": "Para 4.3: Medium (2)"
+      },
+      "marker": null,
+      "rationale": "Table 1 and the Figure 1 matrix both number Medium 3; para 4.3 would leave no level 3."
+    },
+    {
+      "id": "CH-4",
+      "discrepancy": "DIS-02",
+      "detect": null,
+      "topic": "Overlapping financial-loss bands in Table 1",
+      "use": "gbp",
+      "options": {
+        "gbp": "The £ figures, which do not overlap (Medium £175k-£500k, Major £500k-£2M)",
+        "percent": "The % of budget figures, where Medium 0.1%-0.3% and Major 0.25%-1% overlap"
+      },
+      "marker": null,
+      "rationale": "Only the £ figures give a single band for every amount; a financial exposure is checked against them."
+    },
+    {
+      "id": "CH-5",
+      "discrepancy": "DIS-08",
+      "detect": null,
+      "topic": "Where an Extreme risk is escalated",
+      "use": "table4",
+      "options": {
+        "table4": "Table 4: add to the Corporate Risk Register",
+        "para6.3": "Para 6.3: escalate to the Executive Director, to consider the Directorate or the Corporate register"
+      },
+      "marker": null,
+      "rationale": "Follows CH-1, which reads escalation from Table 4."
+    }
+  ],
+  "not_scoring": {
+    "DIS-05": "Version of the appetite guidance cited; does not change a score, band or appetite level.",
+    "DIS-06": "Name of the committee; does not change scoring.",
+    "DIS-07": "Names of the evaluation levels only; the register rates the Actual/Current level (rated_level).",
+    "DIS-09": "Cross-reference to the policy appendix; does not change scoring.",
+    "DIS-10": "Cross-reference to the definitions appendix; does not change scoring."
+  }
+}

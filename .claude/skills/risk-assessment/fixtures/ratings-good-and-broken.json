@@ -1,0 +1,41 @@
+{
+  "about": "Test fixture for build_register.py. R-01 is well formed and must be rated. R-02 is broken (unresolvable rule, metric, history id and placeholder; impact cites only the scale; a typed figure) and must be dropped.",
+  "risks": [
+    {
+      "risk_id": "R-01",
+      "title": "Requirements split across payments below a quotation tier",
+      "theme": "Contracts & Partnerships",
+      "description": "Risk that one requirement is bought through several smaller payments so that each stays under a quotation or advertising tier, and the procedure for the combined value is not followed [rule:CPR-07].",
+      "likelihood": {
+        "rubric": "L3",
+        "justification": "In general procurement, {{$.tests.split_purchases.general_procurement.groups}} supplier groups [metric:$.tests.split_purchases.general_procurement.groups] worth {{$.tests.split_purchases.general_procurement.total_gbp}} combine to cross a tier that each payment stays under, within the split window [metric:$.tests.split_purchases.parameters.split_window_days]. The signal sits in a procurement-relevant tag; the test has no comparison band."
+      },
+      "impact": {
+        "score": 3,
+        "criterion": "compliance",
+        "justification": "Table 1 Medium [history:IMP-3]: where a tier is avoided, the quotes or advertising required for the combined value [rule:CPR-49] are not on file, giving a reasonable possibility of challenge. The largest general-procurement group totals {{$.tests.split_purchases.general_procurement.top_20[0].group_total}}."
+      },
+      "evidence": [
+        "{{$.tests.split_purchases.general_procurement.per_threshold[\"25000\"].groups}} of the groups cross the three-quotes tier, worth {{$.tests.split_purchases.general_procurement.per_threshold['25000'].total_gbp}} [metric:$.tests.split_purchases.general_procurement.per_threshold[\"25000\"]].",
+        "The last Contract Letting audit gave Reasonable Assurance [history:AUD-01]; the papers give no finding detail."
+      ],
+      "proposed_focus": "Sample general-procurement groups from analytics-full/split_purchases.csv crossing the three-quotes tier; for each, establish whether the payments meet one requirement and, if so, whether quotes were sought at the combined value."
+    },
+    {
+      "risk_id": "R-02",
+      "title": "Payments clustered just under the three-quotes tier",
+      "description": "Risk that order values are set just under £25,000 to avoid obtaining three quotations.",
+      "likelihood": {
+        "rubric": "L3",
+        "justification": "Many payments sit just under the tier [metric:$.tests.threshold_clustering.counts.flagged_total] contrary to [rule:CPR-99]."
+      },
+      "impact": {
+        "score": 2,
+        "criterion": "compliance",
+        "justification": "Minor [history:IMP-2], as in the earlier audit [history:AUD-99]; {{$.tests.threshold_clustering.counts.no_such_metric}} payments affected."
+      },
+      "evidence": [],
+      "proposed_focus": "Review the clustered payments."
+    }
+  ]
+}

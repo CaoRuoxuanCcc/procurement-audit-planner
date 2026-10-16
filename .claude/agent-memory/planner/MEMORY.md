@@ -1,0 +1,1 @@
+- [Sample recipe lessons](sample-recipe-lessons.md) — split groups are large, candidates need one_per, typed-figure rules, filter grants
