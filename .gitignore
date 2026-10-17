@@ -1,3 +1,23 @@
 .venv/
 __pycache__/
 .DS_Store
+.runs/
+.pytest_cache/
+
+# Secrets and local settings: never commit
+.env
+.env.*
+*.pem
+*.key
+.claude/settings.local.json
+
+# Caches and tooling
+*.pyc
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.log
+
+# Local notes, kept untracked
+handoff.md

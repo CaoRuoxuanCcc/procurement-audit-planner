@@ -1,0 +1,8 @@
+# Part B web harness. The Part A pipeline's own dependencies are in ../requirements.txt.
+-r ../requirements.txt
+litellm==1.105.1
+fastapi==0.143.3
+uvicorn[standard]==0.54.0
+httpx==0.28.1
+pydantic==2.14.1
+pytest==9.1.1

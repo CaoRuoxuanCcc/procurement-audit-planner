@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Procurement Audit Planner</title>
+<link rel="stylesheet" href="/static/style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+</head>
+<body>
+<div class="shell">
+  <aside class="side" aria-label="Main navigation">
+    <a class="brand" href="#/">
+      <span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M5 4h10l4 4v12H5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.5 13.5l2.2 2.2 4.8-4.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span><b>Audit Intelligence</b><small>Procurement Audit Planner</small></span>
+    </a>
+    <nav class="nav">
+      <a href="#/" data-nav="overview"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 3h6v8H3zM11 3h6v5h-6zM11 10h6v7h-6zM3 13h6v4H3z"/></svg>Overview</a>
+      <a href="#/runs" data-nav="runs"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5h12M4 10h12M4 15h12"/></svg>Audit runs</a>
+      <a href="#/review" data-nav="review"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3l6 3v4c0 4-2.7 6.3-6 7-3.3-.7-6-3-6-7V6z"/></svg>Risk review<span class="count" id="navReview" hidden></span></a>
+      <a href="#/reports" data-nav="reports"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 2.5h7l3 3v12H5zM8 9h5M8 12h5M8 15h3"/></svg>Reports<span class="count" id="navSignoff" hidden></span></a>
+    </nav>
+    <div class="side-foot">
+      <button class="conn" id="connBtn" type="button" aria-haspopup="dialog">
+        <span class="conn-dot" id="connDot"></span>
+        <span class="conn-text"><b id="connLabel">No model connected</b><small id="connSub">Connect to start a run</small></span>
+      </button>
+      <a class="btn primary block" href="#/new">New audit</a>
+    </div>
+  </aside>
+  <main id="app" tabindex="-1"></main>
+</div>
+<div class="tip" id="tip" role="tooltip" hidden></div>
+
+<dialog id="connDlg" aria-labelledby="connTitle">
+  <form method="dialog" id="connForm">
+    <div class="dlg-h">
+      <h2 id="connTitle">Connect a model</h2>
+      <p>Bring your own key; usage is billed to you by the provider.</p>
+      <details class="sec"><summary>How your key is handled</summary><p>It stays in this browser tab (sessionStorage), is sent over HTTPS only when a stage starts, is held in server memory for that stage, and is never written to disk or logs.</p></details>
+    </div>
+    <div class="dlg-b">
+      <fieldset class="providers" id="provSeg"><legend class="lbl">Provider</legend></fieldset>
+      <label class="field">Model<select id="modelSel"></select></label>
+      <label class="field" id="customWrap" hidden>Model id<input type="text" id="customModel" placeholder="Exact model id" autocomplete="off"></label>
+      <label class="field">API key<input type="password" id="keyIn" autocomplete="off" spellcheck="false" aria-describedby="connMsg"></label>
+      <div id="connMsg" class="inline-msg" role="status">Test checks the key and model against the provider's model list. It uses no tokens.</div>
+    </div>
+    <div class="dlg-f">
+      <button class="btn ghost sm" type="button" id="connForget">Forget key</button>
+      <span class="grow"></span>
+      <button class="btn ghost" type="button" id="connCancel">Cancel</button>
+      <button class="btn" type="button" id="connTest">Test key</button>
+      <button class="btn primary" type="button" id="connSave">Save</button>
+    </div>
+  </form>
+</dialog>
+<script src="/static/app.js"></script>
+</body>
+</html>

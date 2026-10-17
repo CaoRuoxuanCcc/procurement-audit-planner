@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "scripts/serve.py": {
+      "excludeFiles": "{data/**,.claude/**,.venv/**}"
+    }
+  }
+}
