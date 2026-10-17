@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Procurement Audit Planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+</head>
+<body>
+<header class="bar">
+  <a class="brand" href="#/"><b>Procurement Audit Planner</b><span>West Berkshire Council · public data</span></a>
+  <nav><a href="#/" data-nav="home">Overview</a><a href="#/runs" data-nav="runs">Runs</a></nav>
+  <div class="spacer"></div>
+  <button class="conn" id="connBtn" type="button"><span class="dot" id="connDot"></span><span id="connLabel">Connect a model</span></button>
+</header>
+<main id="app"></main>
+
+<dialog id="connDlg">
+  <form method="dialog" id="connForm">
+    <div class="dlg-h"><h2>Connect a model</h2>
+      <p class="hint" style="margin-top:6px">Bring your own key. It stays in this browser tab (sessionStorage), is sent over HTTPS only when a stage starts, is held in server memory for that stage, and is never written to disk or logs. You pay the provider for usage.</p></div>
+    <div class="dlg-b">
+      <div class="seg" id="provSeg"></div>
+      <label class="field">Model
+        <select id="modelSel"></select></label>
+      <label class="field" id="customWrap" hidden>Model id
+        <input type="text" id="customModel" placeholder="exact model id" autocomplete="off"></label>
+      <label class="field">API key
+        <input type="password" id="keyIn" autocomplete="off" spellcheck="false"></label>
+      <div id="connMsg" class="hint">Test key checks the key and model against the provider's model list; it uses no tokens.</div>
+    </div>
+    <div class="dlg-f">
+      <button class="btn ghost" value="cancel" type="button" id="connForget">Forget key</button>
+      <button class="btn" type="button" id="connTest">Test key</button>
+      <button class="btn primary" type="button" id="connSave">Save</button>
+    </div>
+  </form>
+</dialog>
+<script src="/static/app.js"></script>
+</body>
+</html>

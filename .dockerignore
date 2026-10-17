@@ -1,0 +1,8 @@
+.git
+.venv
+.runs
+**/__pycache__
+**/*.pyc
+.DS_Store
+handoff.md
+.claude/settings.local.json
