@@ -1,7 +1,7 @@
 {
   "functions": {
     "scripts/serve.py": {
-      "excludeFiles": "{data/**,.claude/**,.venv/**,outputs/analytics-full/**}"
+      "excludeFiles": "{data/**,.claude/**,.venv/**}"
     }
   }
 }
