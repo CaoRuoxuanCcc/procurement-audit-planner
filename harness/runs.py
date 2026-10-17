@@ -16,7 +16,7 @@ from .workspace import REPO, RUNS_DIR, create_workspace
 # created → stage1 → stage2 → awaiting_review → stage4 → awaiting_signoff → complete
 # plus failed / interrupted (resumable) at any running stage, and ready
 # (between two automatic stages: next_stage says which runs next).
-RUNNING = {"stage1", "stage2", "stage4"}
+RUNNING = {"stage1", "stage2", "stage4", "qa"}
 STAGE_AFTER_SEED = {"full": "stage1", "stage2": "stage2", "risk": "stage2"}
 
 SAMPLE_ID = "sample"

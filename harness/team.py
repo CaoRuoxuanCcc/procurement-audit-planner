@@ -40,9 +40,11 @@ def spawn_message(name):
 
 
 class Team:
-    def __init__(self, mailbox_path, emit):
-        self.inbox = {m: asyncio.Queue() for m in MEMBERS}
-        self.idle = {m: False for m in MEMBERS}
+    def __init__(self, mailbox_path, emit, members=MEMBERS):
+        # A QA-only rerun runs the qa-reviewer alone; messages to the others are recorded, not delivered.
+        self.members = list(members)
+        self.inbox = {m: asyncio.Queue() for m in self.members}
+        self.idle = {m: False for m in self.members}
         self.done = {}
         self.stopped = asyncio.Event()
         self.stop_reason = ""
@@ -63,8 +65,12 @@ class Team:
         for to in names:
             if to == LEAD:
                 self._to_lead(frm, body)
-            elif to != frm:
+            elif to != frm and to in self.inbox:
                 self.inbox[to].put_nowait((frm, body))
+        absent = [n for n in names if n != LEAD and n not in self.members]
+        if absent:
+            return (f"Recorded in the mailbox but not delivered: {', '.join(absent)} not running in this "
+                    "QA-only rerun.")
         return f"Sent to {', '.join(names)}."
 
     def _to_lead(self, frm, body):
@@ -72,12 +78,12 @@ class Team:
         key = DONE_KEYS.get(frm)
         if key and first.startswith(key):
             self.done[frm] = first
-            if frm == "challenger":
+            if frm == "challenger" and "qa-reviewer" in self.inbox:
                 relayed = f"Relayed word for word by the lead from challenger:\n\n{body}"
                 self._log(LEAD, "qa-reviewer", relayed, relay=True)
                 self.inbox["qa-reviewer"].put_nowait((LEAD, relayed))
-            if len(self.done) == len(MEMBERS):
-                self.stop("all three DONE messages received")
+            if len(self.done) == len(self.members):
+                self.stop("all three DONE messages received" if len(self.members) == 3 else "QA DONE received")
             return
         if re.match(r"^(PACK READY|RESPONSE|CHALLENGE|QA v)", first):
             return  # a copy for the lead's record

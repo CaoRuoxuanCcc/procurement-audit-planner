@@ -4,9 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Procurement Audit Planner</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/static/style.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
@@ -16,7 +13,7 @@
   <aside class="side" aria-label="Main navigation">
     <a class="brand" href="#/">
       <span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M5 4h10l4 4v12H5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.5 13.5l2.2 2.2 4.8-4.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span><b>Audit Planner</b><small>Procurement · West Berkshire</small></span>
+      <span><b>Audit Intelligence</b><small>Procurement Audit Planner</small></span>
     </a>
     <nav class="nav">
       <a href="#/" data-nav="overview"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 3h6v8H3zM11 3h6v5h-6zM11 10h6v7h-6zM3 13h6v4H3z"/></svg>Overview</a>
@@ -29,7 +26,7 @@
         <span class="conn-dot" id="connDot"></span>
         <span class="conn-text"><b id="connLabel">No model connected</b><small id="connSub">Connect to start a run</small></span>
       </button>
-      <a class="btn primary block" href="#/new">New audit run</a>
+      <a class="btn primary block" href="#/new">New audit</a>
     </div>
   </aside>
   <main id="app" tabindex="-1"></main>
@@ -40,7 +37,8 @@
   <form method="dialog" id="connForm">
     <div class="dlg-h">
       <h2 id="connTitle">Connect a model</h2>
-      <p>Your key stays in this browser tab, is held in server memory only while a stage runs, and is never stored or logged. Usage is billed to you by the provider.</p>
+      <p>Bring your own key; usage is billed to you by the provider.</p>
+      <details class="sec"><summary>How your key is handled</summary><p>It stays in this browser tab (sessionStorage), is sent over HTTPS only when a stage starts, is held in server memory for that stage, and is never written to disk or logs.</p></details>
     </div>
     <div class="dlg-b">
       <fieldset class="providers" id="provSeg"><legend class="lbl">Provider</legend></fieldset>

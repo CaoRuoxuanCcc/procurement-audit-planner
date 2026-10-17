@@ -138,6 +138,26 @@ async def start_run(run_id: str, body: Start, x_llm_key: str = Header(default=""
     return {"started": stage}
 
 
+@app.post("/api/runs/{run_id}/qa-rerun")
+async def qa_rerun(run_id: str, body: Start, x_llm_key: str = Header(default="")):
+    """Rerun only the qa-reviewer on the final pack, when sign-off is BLOCKED."""
+    run = _writable(run_id)
+    retry = run["status"] in ("failed", "interrupted") and run["next_stage"] == "qa"
+    if not retry and (run["status"] != "awaiting_signoff" or run.get("signoff")):
+        raise HTTPException(409, f"the run is {run['status']}; a QA-only rerun needs a run awaiting sign-off")
+    if not retry and (run.get("qa") or {}).get("verdict") == "READY FOR SIGN-OFF":
+        raise HTTPException(409, "the QA verdict is already READY FOR SIGN-OFF")
+    try:
+        cfg = providers.LLMConfig(body.provider, body.model.strip(), x_llm_key.strip())
+    except ValueError as e:
+        raise HTTPException(400, str(e)) from None
+    try:
+        jobs.start(run_id, cfg, "qa", chain=False)
+    except RuntimeError as e:
+        raise HTTPException(409, str(e)) from None
+    return {"started": "qa"}
+
+
 @app.post("/api/runs/{run_id}/stop")
 def stop_run(run_id: str):
     _writable(run_id)

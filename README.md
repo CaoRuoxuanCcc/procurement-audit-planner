@@ -153,6 +153,77 @@ the R-07 rating) went to the auditor.
 READY FOR SIGN-OFF. The pack was signed off by the auditor on 2026-10-16.
 Challenge #8 was not accepted as a repeat finding, so R-07 stays at L2.
 
+## Part B: the web harness (`harness/`)
+
+A FastAPI app with a no-build JavaScript frontend that runs the same pipeline
+in the browser, with a model of the user's choice (Anthropic, OpenAI or
+Gemini, bring your own key). It reuses the Part A files unchanged: the agent
+definitions in `.claude/agents/`, the skills in `.claude/skills/` and the
+checking scripts. A deterministic Python harness replaces Claude Code as the
+main session and team lead.
+
+| Stage in the UI | What runs | Checked by |
+| --- | --- | --- |
+| Rules extraction | `extract-rules` skill as the main session | `verify_quotes.py` |
+| Spend analysis | `spend-analyst` ‖ `findings-analyst`, then `risk-assessor` (first build) | `self_check.py`, `verify_history.py`, the `scoring_choices.json` coverage check, `build_register.py --strict` |
+| **Human risk review** | The auditor records APPROVE / AMEND / REJECT per risk in the UI (written to `auditor-comments.md`) | All risks decided before the next stage can start |
+| Audit planning | `risk-assessor` (revision), then the team: `planner`, `challenger`, `qa-reviewer` as concurrent loops with inboxes | `build_register.py --strict`, `build_pack.py --gate`, then `run_checks.py` re-run by the harness |
+| **QA & sign-off** | The auditor signs off or returns the pack (written to the sign-off block in `review.md`) | SIGNED OFF is accepted only when the verdict is READY FOR SIGN-OFF; that requires `run_checks.py` to print it **and** `review.md` to state the same verdict |
+
+Safeguards:
+
+- **One workspace per run.** Each run works on a copy of the project under
+  `$RUNS_DIR/<id>/workspace`.
+- **Protected files.** `CLAUDE.md`, the agent and skill files, `scripts/` and
+  `data/` are hashed before each stage and restored if an agent changes them;
+  the stage then fails.
+- **API keys.** The key stays in the browser tab, is sent as a header only when
+  a stage starts, is held in memory for that stage, and is scrubbed from logs
+  and errors.
+- **Resume.** A failed stage resumes from its start, keeping sub-agent outputs
+  that still pass their checks. Earlier outputs are archived to
+  `attempts/<stage>-<n>/` first.
+- **QA-only rerun.** When the sign-off gate is BLOCKED, the **Re-run QA only**
+  button in the QA & sign-off tab runs the `qa-reviewer` alone on the final
+  pack. It first brings `scripts/checks/` up to the committed version and runs
+  `test_checks.py` before any model call. If the pack changes, the stage fails
+  and the pack is restored.
+
+### Local setup
+
+```bash
+python3.13 -m venv .venv
+.venv/bin/pip install -r harness/requirements.txt   # includes requirements.txt
+brew install poppler                                 # pdftotext/pdfinfo (apt: poppler-utils)
+.venv/bin/python -m uvicorn harness.app:app --port 8000
+# open http://localhost:8000, click "No model connected", paste a key, Test key, Save, New audit
+```
+
+Run records go to `.runs/` (git-ignored); set `RUNS_DIR` to put them
+elsewhere. The start points are:
+
+- **Full pipeline:** every stage.
+- **Reuse rules · start at spend analysis:** reuses Part A's `rules.json`.
+- **Reuse rules, analytics and history · start at risk rating:** also reuses the analytics and history.
+
+The last is the cheapest way to try the gates.
+
+### Testing (no API key, no cost)
+
+```bash
+.venv/bin/python -m pytest -q harness/tests                     # harness end to end with a scripted mock model
+.venv/bin/python -I scripts/checks/test_checks.py               # the QA checks, on planted faults
+.venv/bin/python -I scripts/test_verify_history.py              # history verifier, good and bad fixtures
+.venv/bin/python -I .claude/skills/risk-assessment/test_build_register.py
+.venv/bin/python -I .claude/skills/audit-program/test_build_pack.py
+```
+
+The mock suite exercises every check, both gates through the HTTP API, the
+team mailbox, protected-file restoration, key redaction, targeted resume and
+the QA-only rerun.
+
+Deployment instructions for the container are in `DEPLOYMENT_HANDOFF.md`.
+
 ## Confirmation
 
 I completed all 27 steps of the guide at

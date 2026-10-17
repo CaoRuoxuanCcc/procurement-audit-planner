@@ -34,8 +34,11 @@ def redact(text) -> str:
 
 class RedactFilter(logging.Filter):
     def filter(self, record):
-        record.msg = redact(record.getMessage())
-        record.args = ()
+        # Keep args: uvicorn's access formatter unpacks them by position.
+        if record.args:
+            record.args = tuple(redact(a) if isinstance(a, str) else a for a in record.args)
+        else:
+            record.msg = redact(record.msg)
         return True
 
 

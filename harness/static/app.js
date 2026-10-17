@@ -66,7 +66,7 @@ const empty = (icon, title, body, action = "") => `<div class="empty">${I[icon] 
 const STATUS = {
   created: ["Ready to start", "", false], ready: ["Continuing", "teal", true], stage1: ["Extracting rules", "teal", true],
   stage2: ["Analysing spend", "teal", true], awaiting_review: ["Awaiting risk review", "critical", false],
-  stage4: ["Agent team planning", "teal", true], awaiting_signoff: ["Awaiting sign-off", "critical", false],
+  stage4: ["Agent team planning", "teal", true], qa: ["Re-running QA", "teal", true], awaiting_signoff: ["Awaiting sign-off", "critical", false],
   complete: ["Complete", "good", false], failed: ["Failed", "critical", false], interrupted: ["Interrupted", "warn", false],
 };
 function statusPill(run) {
@@ -86,6 +86,7 @@ const ORDER = ["stage1", "stage2", "awaiting_review", "stage4", "awaiting_signof
 
 function position(run) {
   if (run.id === "sample" || run.status === "complete") return ORDER.length - 1;
+  if (run.status === "qa" || run.next_stage === "qa") return ORDER.indexOf("awaiting_signoff");
   if (["failed", "interrupted", "ready", "created"].includes(run.status)) return ORDER.indexOf(run.next_stage);
   return ORDER.indexOf(run.status);
 }
@@ -96,6 +97,7 @@ function nodeState(run, i) {
   if (mine > pos) return ["", "Pending"];
   if (run.status === "failed") return ["failed", "Failed"];
   if (run.status === "interrupted") return ["interrupted", "Interrupted"];
+  if (run.status === "qa") return ["running", "Re-running QA"];
   if (STAGES[i].human) return ["awaiting", "Awaiting approval"];
   if (run.active) return ["running", "Running"];
   return ["", run.status === "created" ? "Ready to start" : "Pending"];
@@ -121,7 +123,7 @@ function flowHtml(run, { interactive = false, events = [] } = {}) {
     const [cls, label] = nodeState(run, i);
     const bub = cls === "done" ? I.check : cls === "failed" ? I.x : cls === "awaiting" ? I.pen : cls === "interrupted" ? I.pause : String(i + 1);
     const clickable = interactive && (cls || s.human);
-    return `<button class="node ${cls}" role="listitem" data-node="${i}" ${clickable ? "" : "disabled"} aria-label="${esc(s.name)}: ${esc(label)}">
+    return `<button class="node ${cls}" role="listitem" data-node="${i}" ${clickable ? "" : "disabled"} title="${esc(s.by)}" aria-label="${esc(s.name)}: ${esc(label)}. ${esc(s.by)}">
       <span class="rail"><span class="bub">${bub}</span><span class="line"></span></span>
       <span class="nm">${esc(s.name)}</span>
       <span class="st">${esc(label)}</span>
@@ -233,6 +235,22 @@ function openConn(onSaved) {
   dlg.showModal();
 }
 const withKey = (fn) => (connected() ? fn() : openConn(fn));
+const qaRerunBox = (r) => (r.status === "awaiting_signoff" && !r.active && !r.read_only && !r.signoff
+  ? `<div class="card-b" style="border-top:1px solid var(--line)"><div class="row"><button class="btn primary sm" id="qaRerun">${I.play}Re-run QA only</button></div>
+     <p class="small muted" style="margin-top:8px">Runs only the qa-reviewer on the final pack with the current QA scripts; the planner, the challenger and earlier stages do not run, and the pack is kept unchanged. It uses your connected model and is billed to your key. Sign-off opens only if every check passes.</p>
+     <div id="qaMsg" class="inline-msg" role="status"></div></div>` : "");
+function bindQaRerun(r) {
+  const b = $("#qaRerun");
+  if (!b) return;
+  b.onclick = () => withKey(async () => {
+    b.disabled = true;
+    try {
+      const c = conn();
+      await api(`/api/runs/${r.id}/qa-rerun`, { method: "POST", headers: { "X-LLM-Key": c.key }, body: JSON.stringify({ provider: c.provider, model: c.model }) });
+      R.tab = "log"; await refreshRun();
+    } catch (e) { $("#qaMsg").className = "inline-msg err"; $("#qaMsg").textContent = e.message; b.disabled = false; }
+  });
+}
 const startStage = (id) => {
   const c = conn();
   return api(`/api/runs/${id}/start`, { method: "POST", headers: { "X-LLM-Key": c.key }, body: JSON.stringify({ provider: c.provider, model: c.model }) });
@@ -275,9 +293,9 @@ const INDICATORS = [
 async function viewOverview(token) {
   setNav("overview");
   app.innerHTML = `
-    <div class="hero"><div><h1>Procurement audit overview</h1>
-      <p>Agents extract the council's procurement rules, test every payment over £500 against them and propose a rated risk register. You approve the scope; an agent team then plans, challenges and QA-checks the audit pack for your sign-off.</p></div>
-      <div class="row"><a class="btn" href="#/run/sample">Explore sample run</a><a class="btn primary" href="#/new">${I.play}Start new audit</a></div></div>
+    <div class="hero"><div><h1>Audit Intelligence</h1>
+      <p>West Berkshire Council | Procurement Risk &amp; Compliance</p></div>
+      <div class="row"><a class="btn" href="#/run/sample">Explore sample run</a><a class="btn primary" href="#/new">${I.play}New audit</a></div></div>
     <div class="source" id="src">${skel("260px", 16)}</div>
     <div class="kpis">${[1, 2, 3, 4].map(() => `<div class="card kpi">${skel("50%", 11)}${skel("70%", 28)}${skel("80%", 12)}</div>`).join("")}</div>
     <div class="grid g-main">
@@ -333,7 +351,7 @@ async function viewOverview(token) {
       ? `<div class="v">${nf.format(cl.rows_tested)}</div><div class="s">of ${nf.format(cl.rows_read)} rows read; the rest excluded with reasons</div>`
       : na("Calculated by the spend-analyst scripts")],
     ["High-rated risks", risks.length
-      ? `<div class="v">${high.length} <span class="of">of ${risks.length}</span></div><div class="s">rated Medium-High or above in the register</div>`
+      ? `<div class="v">${high.length} <span class="of">of ${risks.length}</span></div><div class="s">rated Medium-High or above</div>${riskDist(risks)}`
       : na("Rated by the risk-assessor at the end of spend analysis")],
     ["Audit progress", `<div class="v">${doneCount(src)} <span class="of">of 5 stages</span></div><div class="s">${esc((STATUS[src.status] || [src.status])[0])}</div>${meterHtml(src)}`],
   ];
@@ -367,11 +385,26 @@ async function viewOverview(token) {
     : empty("shield", "Not yet calculated", "Indicators appear once the spend analysis has run."));
 }
 
+// Tally of the register's own band labels, worst first; no scores are recalculated.
+function riskDist(risks) {
+  const order = { critical: 0, serious: 1, warn: 2, good: 3, "": 4 };
+  const groups = new Map();
+  for (const r of risks) {
+    const k = r.p.short || "Not rated";
+    if (!groups.has(k)) groups.set(k, { n: 0, sev: r.p.sev || "none", rank: order[r.p.sev || ""] });
+    groups.get(k).n += 1;
+  }
+  const g = [...groups.entries()].sort((a, b) => a[1].rank - b[1].rank);
+  const col = { critical: "var(--critical)", serious: "var(--serious)", warn: "var(--warn)", good: "var(--teal)", none: "var(--line-3)" };
+  return `<div class="dist" role="img" aria-label="${esc(g.map(([k, v]) => `${k}: ${v.n}`).join(", "))}">${g.map(([k, v]) => `<i class="${v.sev}" style="flex:${v.n}" data-tip="${esc(esc(k) + ": " + v.n)}"></i>`).join("")}</div>
+    <div class="legend">${g.map(([k, v]) => `<span style="--c:${col[v.sev]}">${esc(k)} ${v.n}</span>`).join("")}</div>`;
+}
+
 // ================================================================ RUNS
 async function viewRuns(token) {
   setNav("runs");
   app.innerHTML = `<div class="page-head"><div><h1>Audit runs</h1><p>Each run is a fresh copy of the project: the rules, skills, agents, scripts and public data. Stages A–B run back to back, then wait for your risk review.</p></div>
-    <a class="btn primary" href="#/new">${I.play}New audit run</a></div>
+    <a class="btn primary" href="#/new">${I.play}New audit</a></div>
     <div class="card" id="list">${skel("100%", 180)}</div>`;
   const { runs, sample } = await loadRuns();
   if (token !== routeToken) return;
@@ -580,7 +613,7 @@ function paneLog() {
     return;
   }
   tagStages(R.events);
-  const chips = [["all", "All"], ["stage1", "Rules extraction"], ["stage2", "Spend analysis"], ["stage4", "Audit planning"], ["gate", "Auditor"]];
+  const chips = [["all", "All"], ["stage1", "Rules extraction"], ["stage2", "Spend analysis"], ["stage4", "Audit planning"], ["qa", "QA rerun"], ["gate", "Auditor"]];
   $("#pane").innerHTML = `<div class="toolbar"><div class="chips" role="group" aria-label="Filter by stage">${chips.map(([k, l]) => `<button class="chip ${R.filter === k ? "on" : ""}" data-f="${k}" aria-pressed="${R.filter === k}">${l}</button>`).join("")}</div>
     <div class="row"><label><input type="checkbox" id="verbose" ${R.verbose ? "checked" : ""}> Show tool results</label><span id="evcount" class="num"></span></div></div>
     <div class="card log" id="log" aria-live="polite"></div>`;
@@ -597,7 +630,7 @@ function evHtml(e) {
   const t = `<time>${clock(e.ts)}</time><span class="ag" title="${esc(e.agent)}">${esc(e.agent === "main" ? "extract-rules" : e.agent)}</span>`;
   switch (e.kind) {
     case "stage": {
-      const s = { stage1: "Rules extraction", stage2: "Spend analysis", stage4: "Audit planning" }[e.stage] || e.stage;
+      const s = { stage1: "Rules extraction", stage2: "Spend analysis", stage4: "Audit planning", qa: "QA-only rerun" }[e.stage] || e.stage;
       const txt = e.state === "started" ? `${s} started · ${e.provider} · ${e.model}` : e.state === "done" ? `${s} completed · $${(e.cost_usd || 0).toFixed(2)}` : `${s} ${e.state}: ${e.error || ""}`;
       return `<div class="ev stage ${e.state === "failed" ? "fail" : ""}">${t}<div class="body">${esc(txt)}</div></div>`;
     }
@@ -612,6 +645,7 @@ function evHtml(e) {
     case "team_stop": return `<div class="ev stage">${t}<div class="body">Team stopped: ${esc(e.reason)}</div></div>`;
     case "gate": return `<div class="ev stage">${t}<div class="body">Auditor · ${esc(e.gate)}${e.decisions ? ": " + esc(Object.entries(e.decisions).map(([k, v]) => `${k} ${v}`).join(", ")) : e["Decision (SIGNED OFF / RETURNED)"] ? ": " + esc(e["Decision (SIGNED OFF / RETURNED)"]) : ""}</div></div>`;
     case "warning": return `<div class="ev fail">${t}<div class="body">${esc(e.text)}</div></div>`;
+    case "note": return `<div class="ev">${t}<div class="body">${esc(e.text)}</div></div>`;
     case "run": return `<div class="ev">${t}<div class="body">Run ${esc(e.status)} (start point: ${esc(e.seed)})</div></div>`;
     default: return "";
   }
@@ -805,7 +839,12 @@ async function paneSignoff() {
   const files = (await api(`/api/runs/${r.id}/files`)).files.map((f) => f.path);
   if (R.tab !== "signoff") return;
   if (!files.includes("review.md")) {
-    $("#pane").innerHTML = `<div class="card">${empty("shield", "QA has not run yet", "The qa-reviewer writes review.md at the end of audit planning, and the harness re-runs the QA scripts. Sign-off opens then.")}</div>`;
+    $("#pane").innerHTML = r.qa
+      ? `<div class="card"><div class="card-h"><div><h3>QA verdict</h3><p>The qa-reviewer did not write outputs/review.md, so the pack cannot be signed off or returned here.</p></div>${verdictStamp("BLOCKED")}</div>
+          <div class="card-b"><p class="small muted">Team: ${esc(Object.values(r.qa.team_done || {}).join(" · "))}${r.qa.team_stop ? " — " + esc(r.qa.team_stop) : ""}</p>
+          <details><summary>run_checks.py output, re-run by the harness</summary><pre class="raw" style="margin-top:8px;white-space:pre;overflow-x:auto">${esc((r.qa.output || "").trim())}</pre></details></div>${qaRerunBox(r)}</div>`
+      : `<div class="card">${empty("shield", "QA has not run yet", "The qa-reviewer writes review.md at the end of audit planning, and the harness re-runs the QA scripts. Sign-off opens then.")}</div>`;
+    bindQaRerun(r);
     return;
   }
   const review = await fileText(r.id, "review.md");
@@ -822,7 +861,7 @@ async function paneSignoff() {
         <div class="card"><div class="card-h"><div><h3>QA verdict</h3><p>scripts/checks/run_checks.py, re-run by the harness after the team finished</p></div>${verdictStamp(verdict)}</div>
           ${checks.length ? `<div>${checks.map((m) => `<div class="check"><span class="${m[2] === "PASS" ? "ok-ic" : "bad-ic"}">${m[2] === "PASS" ? "✓" : "✕"}</span><b>${esc(m[1])}</b><span class="note">${esc(m[5].trim())}</span><span class="small muted num">${esc(m[3].trim())} checked · ${esc(m[4].trim())} failed</span></div>`).join("")}</div>` : ""}
           <div class="card-b" style="border-top:1px solid var(--line)"><details><summary>Full check output</summary><pre class="raw" style="margin-top:8px;white-space:pre;overflow-x:auto">${esc(qaText.trim())}</pre></details>
-          ${r.qa?.team_done ? `<p class="small muted" style="margin-top:10px">Team: ${esc(Object.values(r.qa.team_done).join(" · "))}${r.qa.team_stop ? " — " + esc(r.qa.team_stop) : ""}</p>` : ""}</div></div>
+          ${r.qa?.team_done ? `<p class="small muted" style="margin-top:10px">Team: ${esc(Object.values(r.qa.team_done).join(" · "))}${r.qa.team_stop ? " — " + esc(r.qa.team_stop) : ""}</p>` : ""}</div>${verdict !== "READY FOR SIGN-OFF" ? qaRerunBox(r) : ""}</div>
         <div class="card"><div class="card-h"><div><h3>Audit pack</h3><p>Challenges marked “for the auditor” are listed at the end of the challenge record.</p></div><a class="btn sm" href="/api/runs/${r.id}/download">${I.down}Download .zip</a></div>
           <div>${pack.map(([f, n, d]) => `<button class="doc" data-p="${f}"><span class="ic">${I.doc}</span><span><b>${n}</b><small>${d}</small></span></button>`).join("")}</div></div>
       </div>
@@ -841,6 +880,7 @@ async function paneSignoff() {
       </div></div>
     </div>`;
   $$(".doc[data-p]").forEach((b) => (b.onclick = () => { R.file = b.dataset.p; setTab("files"); }));
+  bindQaRerun(r);
   if (!open) return;
   $("#sgGo").onclick = async () => {
     const auditor = $("#sgName").value.trim();

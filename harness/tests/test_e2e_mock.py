@@ -226,3 +226,137 @@ def test_key_never_stored():
         for p in run_dir.glob("*.json*"):
             assert key not in p.read_text(), p
         assert "[redacted]" in (run_dir / "run.json").read_text()
+
+
+def test_history_gap_fails_fast_and_resume_reruns_only_findings():
+    """Run 20261016200350b592cb: history.json lacked DIS-07..DIS-10 that scoring_choices.json uses."""
+    gold = json.loads((GOLD / "history.json").read_text())
+    short = dict(gold, discrepancies=[d for d in gold["discrepancies"] if d["id"] <= "DIS-06"])
+    calls = {"findings": []}
+
+    def first(agent, messages, tools):
+        if agent == "findings-analyst":
+            n = sum(1 for m in messages if m["role"] == "assistant")
+            if n == 0:
+                calls["findings"].append(messages[1]["content"])
+                content = json.dumps(short if len(calls["findings"]) == 1 else gold)
+                return reply(calls=[call("Write", file_path="outputs/history.json", content=content)])
+            return reply("findings-analyst report: done.")
+        if agent == "risk-assessor":
+            calls.setdefault("risk", 0)
+            calls["risk"] += 1
+        return script(agent, messages, tools)
+
+    providers.MOCK["fn"] = first
+    with TestClient(app) as client:
+        rid = client.post("/api/runs", json={"seed": "stage2"}).json()["id"]
+        client.post(f"/api/runs/{rid}/start", json={"provider": "mock", "model": "x"})
+        run = wait_for(client, rid, {"failed", "awaiting_review"})
+        assert run["status"] == "failed"
+        assert "DIS-08" in run["error"] and "scoring_choices.json" in run["error"]
+        assert "risk" not in calls  # failed before paying for the risk-assessor
+
+        client.post(f"/api/runs/{rid}/start", json={"provider": "mock", "model": "x"})
+        run = wait_for(client, rid, {"failed", "awaiting_review"})
+        assert run["status"] == "awaiting_review", run["error"]
+        assert len(calls["findings"]) == 2 and "Targeted rerun" in calls["findings"][1]
+        assert "DIS-08" in calls["findings"][1]
+        rd = Path(os.environ["RUNS_DIR"]) / rid
+        events = (rd / "events.jsonl").read_text()
+        assert events.count('"agent": "spend-analyst", "task"') == 1  # spend analysis kept on resume
+        kept = json.loads((rd / "attempts/stage2-1/outputs/history.json").read_text())
+        assert len(kept["discrepancies"]) == 6  # the failed attempt's output is preserved
+
+
+def _to_signoff(client):
+    """A mock run (risk seed) taken through both stages to the sign-off gate."""
+    providers.MOCK["fn"] = script
+    TEAM_STATE.update({m: {} for m in ("planner", "challenger", "qa-reviewer")})
+    rid = client.post("/api/runs", json={"seed": "risk"}).json()["id"]
+    client.post(f"/api/runs/{rid}/start", json={"provider": "mock", "model": "x"})
+    run = wait_for(client, rid, {"awaiting_review", "failed"})
+    assert run["status"] == "awaiting_review", run["error"]
+    gold = {"R-06": ("AMEND", "Lower impact to 4: the loss figure is a ceiling and most repeated amounts are care "
+                     "and education placements, which often recur legitimately."),
+            "R-08": ("REJECT", "Grants will be covered by a separate review.")}
+    risks = client.get(f"/api/runs/{rid}/risks").json()["risks"]
+    client.post(f"/api/runs/{rid}/decisions", json={"auditor": "T", "decisions": [
+        {"risk_id": r["risk_id"], "decision": gold.get(r["risk_id"], ("APPROVE", ""))[0],
+         "comment": gold.get(r["risk_id"], ("", ""))[1]} for r in risks]})
+    client.post(f"/api/runs/{rid}/start", json={"provider": "mock", "model": "x"})
+    run = wait_for(client, rid, {"awaiting_signoff", "failed"})
+    assert run["status"] == "awaiting_signoff", run["error"]
+    return rid, run
+
+
+def test_qa_only_rerun_after_blocked_signoff():
+    """Run 20261016200350b592cb: the qa-reviewer stopped on a test_checks.py fault and wrote no review.md."""
+    from harness import runs
+    calls = []
+
+    def qa_only(agent, messages, tools):
+        calls.append(agent)
+        n = sum(1 for m in messages if m["role"] == "assistant")
+        assert agent == "qa-reviewer" and "QA-only rerun" in messages[1]["content"]
+        assert "PACK READY v1" in messages[1]["content"] and "CHALLENGER DONE" in messages[1]["content"]
+        steps = [[bash(".venv/bin/python -I scripts/checks/run_checks.py --label v1 | tail -1")],
+                 [call("Write", file_path="outputs/review.md", content=blank_signoff((GOLD / "review.md").read_text()))],
+                 [call("SendMessage", to="lead,planner", message="QA DONE v1: READY FOR SIGN-OFF")]]
+        return reply(calls=steps[n]) if n < len(steps) else reply("qa-reviewer: done")
+
+    with TestClient(app) as client:
+        rid, run = _to_signoff(client)
+        # Already READY: refused.
+        assert client.post(f"/api/runs/{rid}/qa-rerun", json={"provider": "mock", "model": "x"}).status_code == 409
+        rd = Path(os.environ["RUNS_DIR"]) / rid
+        ws = rd / "workspace"
+        (ws / "outputs/review.md").unlink()
+        runs.update(rid, qa=dict(run["qa"], verdict="BLOCKED", team_done=dict(run["qa"]["team_done"], **{
+            "qa-reviewer": "QA DONE v1: BLOCKED"})))
+        tc = ws / "scripts/checks/test_checks.py"
+        tc.write_text(tc.read_text() + "\n# stale copy\n")
+        pack = {p: (ws / p).read_bytes() for p in ("outputs/planning-memo.md", "outputs/risk-register.md",
+                                                     "outputs/auditor-comments.md", "outputs/challenges.md")}
+        assert client.post(f"/api/runs/{rid}/signoff", json={"auditor": "T", "decision": "SIGNED OFF",
+                                                             "comments": ""}).status_code in (400, 409)
+
+        providers.MOCK["fn"] = qa_only
+        r = client.post(f"/api/runs/{rid}/qa-rerun", json={"provider": "mock", "model": "x"})
+        assert r.status_code == 200, r.text
+        run = wait_for(client, rid, {"awaiting_signoff", "failed"})
+        assert run["status"] == "awaiting_signoff", run["error"]
+        assert run["qa"]["verdict"] == "READY FOR SIGN-OFF" and run["qa"]["rerun"] == "qa-only"
+        assert run["qa"]["team_done"]["qa-reviewer"] == "QA DONE v1: READY FOR SIGN-OFF"
+        assert run["qa"]["team_done"]["planner"].startswith("PLANNER DONE")
+        assert set(calls) == {"qa-reviewer"}
+        assert tc.read_bytes() == (REPO / "scripts/checks/test_checks.py").read_bytes()
+        assert "# stale copy" in (rd / "attempts/qa-1/checks-before/test_checks.py").read_text()
+        assert all((ws / p).read_bytes() == b for p, b in pack.items())
+        assert (rd / "attempts/qa-1/outputs/planning-memo.md").exists()
+        events = (rd / "events.jsonl").read_text()
+        assert '"check": "test_checks.py"' in events
+        r = client.post(f"/api/runs/{rid}/signoff", json={"auditor": "T", "decision": "SIGNED OFF", "comments": ""})
+        assert r.status_code == 200, r.text
+
+
+def test_qa_only_rerun_cannot_change_the_pack():
+    from harness import runs
+
+    def tamper(agent, messages, tools):
+        n = sum(1 for m in messages if m["role"] == "assistant")
+        steps = [[call("Write", file_path="outputs/planning-memo.md", content="softened")],
+                 [call("Write", file_path="outputs/review.md", content=blank_signoff((GOLD / "review.md").read_text()))],
+                 [call("SendMessage", to="lead", message="QA DONE v1: READY FOR SIGN-OFF")]]
+        return reply(calls=steps[n]) if n < len(steps) else reply("done")
+
+    with TestClient(app) as client:
+        rid, run = _to_signoff(client)
+        ws = Path(os.environ["RUNS_DIR"]) / rid / "workspace"
+        memo = (ws / "outputs/planning-memo.md").read_bytes()
+        runs.update(rid, qa=dict(run["qa"], verdict="BLOCKED"))
+        providers.MOCK["fn"] = tamper
+        assert client.post(f"/api/runs/{rid}/qa-rerun", json={"provider": "mock", "model": "x"}).status_code == 200
+        run = wait_for(client, rid, {"awaiting_signoff", "failed"})
+        assert run["status"] == "failed" and "planning-memo.md" in run["error"]
+        assert run["next_stage"] == "qa"
+        assert (ws / "outputs/planning-memo.md").read_bytes() == memo

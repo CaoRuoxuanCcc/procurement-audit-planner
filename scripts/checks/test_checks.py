@@ -242,8 +242,10 @@ check("missing challenges.md: check_trace stops", res["check_trace"]["status"] =
 
 
 def bad_quote(d):
-    edit(d, "risk-register.md", lambda t: t.replace("There shall be no artificial splitting",
-                                                    "There shall be no splitting", 1))
+    # Rule ids follow each extraction's numbering, so plant on CPR-07's own quote.
+    with open(os.path.join(d, "rules.json")) as f:
+        words = next(r["verbatim_quote"] for r in json.load(f)["rules"] if r["rule_id"] == "CPR-07").split()
+    edit(d, "risk-register.md", lambda t: t.replace(" ".join(words[:6]), " ".join(words[:4] + words[5:6]), 1))
 
 
 ok, info = only_fails(planted(bad_quote), "check_quotes", "CPR-07: quote is not")
