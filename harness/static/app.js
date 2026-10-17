@@ -121,11 +121,10 @@ function flowHtml(run, { interactive = false, events = [] } = {}) {
     const [cls, label] = nodeState(run, i);
     const bub = cls === "done" ? I.check : cls === "failed" ? I.x : cls === "awaiting" ? I.pen : cls === "interrupted" ? I.pause : String(i + 1);
     const clickable = interactive && (cls || s.human);
-    const pillCls = { done: "good", running: "teal run", awaiting: "critical", failed: "critical", interrupted: "warn" }[cls] || "";
     return `<button class="node ${cls}" role="listitem" data-node="${i}" ${clickable ? "" : "disabled"} aria-label="${esc(s.name)}: ${esc(label)}">
       <span class="rail"><span class="bub">${bub}</span><span class="line"></span></span>
       <span class="nm">${esc(s.name)}</span>
-      <span><span class="pill ${pillCls}"><span class="d"></span>${esc(label)}</span></span>
+      <span class="st">${esc(label)}</span>
       <span class="by">${esc(i === 1 && run.seed === "risk" ? "Part A analytics and history reused · risk-assessor live" : s.by)}</span>
       ${cls === "running" && live.length ? `<span class="live">Working: ${esc(live.join(", "))}</span>` : ""}
     </button>`;
@@ -334,9 +333,9 @@ async function viewOverview(token) {
       ? `<div class="v">${nf.format(cl.rows_tested)}</div><div class="s">of ${nf.format(cl.rows_read)} rows read; the rest excluded with reasons</div>`
       : na("Calculated by the spend-analyst scripts")],
     ["High-rated risks", risks.length
-      ? `<div class="v">${high.length} <span class="muted" style="font-size:15px;font-weight:500">of ${risks.length}</span></div><div class="s">rated Medium-High or above in the register</div>`
+      ? `<div class="v">${high.length} <span class="of">of ${risks.length}</span></div><div class="s">rated Medium-High or above in the register</div>`
       : na("Rated by the risk-assessor at the end of spend analysis")],
-    ["Audit progress", `<div class="v">${doneCount(src)} <span class="muted" style="font-size:15px;font-weight:500">of 5 stages</span></div><div class="s">${esc((STATUS[src.status] || [src.status])[0])}</div>${meterHtml(src)}`],
+    ["Audit progress", `<div class="v">${doneCount(src)} <span class="of">of 5 stages</span></div><div class="s">${esc((STATUS[src.status] || [src.status])[0])}</div>${meterHtml(src)}`],
   ];
   $(".kpis").innerHTML = kpis.map(([l, body]) => `<div class="card kpi"><span class="lbl">${l}</span>${body}</div>`).join("");
 
@@ -769,7 +768,7 @@ async function paneReview() {
       <button class="btn primary" id="submitDec">${I.check}Record decisions & start planning</button></div></div>` : ""}`;
   const counter = () => {
     const n = open ? $$(".risk[data-id]").filter((el) => el.querySelector("input:checked")).length : list.filter((x) => x.decision).length;
-    $("#decCount").innerHTML = `${n} <span class="muted" style="font-size:14px;font-weight:500">of ${list.length}</span>`;
+    $("#decCount").innerHTML = `${n} <span class="of">of ${list.length}</span>`;
     $("#decBar").style.width = `${(n / list.length) * 100}%`;
   };
   counter();

@@ -40,17 +40,17 @@
   <form method="dialog" id="connForm">
     <div class="dlg-h">
       <h2 id="connTitle">Connect a model</h2>
-      <p>Runs use your own API key. It stays in this browser tab (sessionStorage), is sent over HTTPS only when a stage starts, is held in server memory for that stage, and is never written to disk or logs. Usage is billed by the provider to you.</p>
+      <p>Your key stays in this browser tab, is held in server memory only while a stage runs, and is never stored or logged. Usage is billed to you by the provider.</p>
     </div>
     <div class="dlg-b">
       <fieldset class="providers" id="provSeg"><legend class="lbl">Provider</legend></fieldset>
       <label class="field">Model<select id="modelSel"></select></label>
       <label class="field" id="customWrap" hidden>Model id<input type="text" id="customModel" placeholder="Exact model id" autocomplete="off"></label>
-      <label class="field">API key<input type="password" id="keyIn" autocomplete="off" spellcheck="false"></label>
+      <label class="field">API key<input type="password" id="keyIn" autocomplete="off" spellcheck="false" aria-describedby="connMsg"></label>
       <div id="connMsg" class="inline-msg" role="status">Test checks the key and model against the provider's model list. It uses no tokens.</div>
     </div>
     <div class="dlg-f">
-      <button class="btn ghost" type="button" id="connForget">Forget key</button>
+      <button class="btn ghost sm" type="button" id="connForget">Forget key</button>
       <span class="grow"></span>
       <button class="btn ghost" type="button" id="connCancel">Cancel</button>
       <button class="btn" type="button" id="connTest">Test key</button>
