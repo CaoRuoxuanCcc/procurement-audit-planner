@@ -1,0 +1,11 @@
+[project]
+name = "procurement-audit-planner"
+version = "0.1.0"
+requires-python = ">=3.11"
+# The pack viewer uses only the standard library. The pipeline's own
+# dependencies (openpyxl, pandas) stay in requirements.txt and are not
+# needed to serve outputs/.
+dependencies = []
+
+[tool.vercel]
+entrypoint = "scripts.serve:Handler"
