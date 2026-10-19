@@ -1,0 +1,63 @@
+{
+  "present": true,
+  "status": "ran",
+  "sha256": "9d0a53c092a5274f44490b428f9ff400ac8cb889df962165720f8a1d0ed42648",
+  "rows_in_file": 150,
+  "kept": 141,
+  "dropped": 9,
+  "organisation_names_kept": {
+    "West Berkshire": 20,
+    "West Berkshire Council": 115,
+    "WEST BERKSHIRE COUNCIL": 6
+  },
+  "organisation_names_dropped": {
+    "Westworks Procurement Ltd": 1,
+    "SOUTHAMPTON CITY COUNCIL": 1,
+    "CITY OF BRADFORD METROPOLITAN DISTRICT COUNCIL": 1,
+    "Ministry of Defence": 5,
+    "Health Education England": 1
+  },
+  "notice_types": {
+    "Contract": 141
+  },
+  "statuses": {
+    "Awarded": 141
+  },
+  "per_publication_year": {
+    "2021": 7,
+    "2022": 10,
+    "2023": 39,
+    "2024": 52,
+    "2025": 28,
+    "2026": 5
+  },
+  "live_in_window": 62,
+  "window_start": "2026-05-01",
+  "supplier_blocks": 210,
+  "notices_with_multiple_suppliers": 9,
+  "blocks_not_6_fields_notice_ids": [],
+  "distinct_supplier_norm": 144,
+  "distinct_supplier_norm_live": 94,
+  "companies_house_join": "not available: spend data has no Companies House number",
+  "data_quality": {
+    "awarded_date_after_today": 1,
+    "contract_end_more_than_20_years_ahead": 1,
+    "date_parse_failures": {
+      "Published Date": 0,
+      "Start Date": 0,
+      "End Date": 0,
+      "Awarded Date": 0,
+      "Contract start date": 0,
+      "Contract end date": 0
+    },
+    "awarded_value_parse_failures": 0,
+    "awarded_value_zero": 7,
+    "note": "Counted and recorded; not corrected."
+  },
+  "warnings": [
+    "coverage_warning: 5 council notices published in 2026 against 28 in 2025 (under 25% of the previous full year)"
+  ],
+  "caveats": [
+    "Notices may be missing for recent contracts: late publication, a partial current year, or publication on the Central Digital Platform / Find a Tender rather than Contracts Finder after the Procurement Act 2023 went live (24 Feb 2025). Auditor to confirm. Results that rely on notices must not be read as evidence that no contract exists."
+  ]
+}

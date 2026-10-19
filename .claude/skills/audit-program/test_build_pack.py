@@ -30,8 +30,18 @@ with open(os.path.join(HERE, "fixtures", "ratings-two-risks.json")) as f:
     RATINGS = json.load(f)
 with open(os.path.join(HERE, "fixtures", "plan-two-risks.json")) as f:
     PLAN = json.load(f)
-SPEND = {r["row_id"]: r for r in csv.DictReader(open(os.path.join(ROOT, "outputs", "analytics-full", "spend_clean.csv"),
+BASELINE = os.path.join(ROOT, "scripts", "checks", "fixtures", "baseline")
+
+SPEND = {r["row_id"]: r for r in csv.DictReader(open(os.path.join(BASELINE, "analytics-full", "spend_clean.csv"),
                                                     newline="", encoding="utf-8"))}
+
+
+BASE_ARGS = [
+    "--analytics", os.path.join(BASELINE, "analytics.json"),
+    "--history", os.path.join(BASELINE, "history.json"),
+    "--rules", os.path.join(BASELINE, "rules.json"),
+    "--choices", os.path.join(BASELINE, "scoring_choices.json"),
+]
 
 failures, dirs = [], []
 
@@ -70,7 +80,7 @@ def register(revision=True, decisions=None):
     rp = os.path.join(d, "ratings.json")
     with open(rp, "w") as f:
         json.dump(RATINGS, f)
-    code, out = sh([REGISTER, "--ratings", rp, "--out-dir", d])
+    code, out = sh([REGISTER, "--ratings", rp, "--out-dir", d] + BASE_ARGS)
     assert code == 0, out
     if not revision:
         return d
@@ -79,7 +89,7 @@ def register(revision=True, decisions=None):
     r["revision"] = {"number": 1, "summary": "Applies the fixture decisions.", "changes": []}
     with open(rp, "w") as f:
         json.dump(r, f)
-    code, out = sh([REGISTER, "--ratings", rp, "--out-dir", d])
+    code, out = sh([REGISTER, "--ratings", rp, "--out-dir", d] + BASE_ARGS)
     assert code == 0, out
     return d
 
@@ -90,7 +100,7 @@ def pack(d, plan=None, extra=(), gate=False):
         json.dump(PLAN if plan is None else plan, f)
     args = [BUILD, "--ratings", os.path.join(d, "ratings.json"), "--comments", os.path.join(d, "auditor-comments.md"),
             "--state", os.path.join(d, "risk-register.state.json"), "--plan", pp, "--out-dir", d, *extra]
-    return sh(args + (["--gate"] if gate else []))
+    return sh(args + BASE_ARGS + ["--analytics-full", os.path.join(BASELINE, "analytics-full")] + list(extra) + (["--gate"] if gate else []))
 
 
 def read(d, name):
@@ -221,9 +231,9 @@ check("fails on a placeholder that does not resolve", code == 1 and "does not re
 # 8. A sampled transaction missing from spend_clean.csv.
 af = tempfile.mkdtemp(prefix="pack-test-af-")
 dirs.append(af)
-for name in os.listdir(os.path.join(ROOT, "outputs", "analytics-full")):
+for name in os.listdir(os.path.join(BASELINE, "analytics-full")):
     if name.endswith(".csv"):
-        shutil.copy(os.path.join(ROOT, "outputs", "analytics-full", name), af)
+        shutil.copy(os.path.join(BASELINE, "analytics-full", name), af)
 gone = samples["T-04.1"][0]["row_id"] if samples["T-04.1"] else ""
 with open(os.path.join(af, "spend_clean.csv"), newline="", encoding="utf-8") as f:
     rows = list(csv.reader(f))

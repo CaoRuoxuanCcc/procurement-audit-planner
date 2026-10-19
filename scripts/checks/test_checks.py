@@ -25,6 +25,7 @@ import tempfile
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
 OUT = os.path.join(ROOT, "outputs")
+FIXTURE_SOURCE = os.path.join(HERE, "fixtures", "baseline")
 SKILLS = os.path.join(ROOT, ".claude", "skills")
 AP = os.path.join(SKILLS, "audit-program")
 REGISTER = os.path.join(SKILLS, "risk-assessment", "build_register.py")
@@ -75,9 +76,9 @@ def build_fixture():
     d = tempfile.mkdtemp(prefix="qa-test-")
     dirs.append(d)
     for f in ("rules.json", "analytics.json", "history.json"):
-        shutil.copy(os.path.join(OUT, f), d)
+        shutil.copy(os.path.join(FIXTURE_SOURCE, f), d)
     os.makedirs(os.path.join(d, "analytics-full"))
-    shutil.copy(os.path.join(OUT, "analytics-full", "spend_clean.csv"), os.path.join(d, "analytics-full"))
+    shutil.copy(os.path.join(FIXTURE_SOURCE, "analytics-full", "spend_clean.csv"), os.path.join(d, "analytics-full"))
     with open(os.path.join(AP, "fixtures", "ratings-two-risks.json")) as f:
         ratings = json.load(f)
     rp = os.path.join(d, "risk-ratings.json")
@@ -104,7 +105,7 @@ def build_fixture():
     shutil.copy(os.path.join(AP, "fixtures", "plan-two-risks.json"), os.path.join(d, "audit-plan.json"))
     code, out = py([os.path.join(AP, "build_pack.py"), "--ratings", rp, "--comments", cp,
                     "--state", os.path.join(d, "risk-register.state.json"), "--plan", os.path.join(d, "audit-plan.json"),
-                    "--analytics-full", os.path.join(OUT, "analytics-full"), "--out-dir", d] + inputs)
+                    "--analytics-full", os.path.join(FIXTURE_SOURCE, "analytics-full"), "--out-dir", d] + inputs)
     assert code == 0, out
     shutil.copy(os.path.join(HERE, "fixtures", "challenges-good.md"), os.path.join(d, "challenges.md"))
     return d

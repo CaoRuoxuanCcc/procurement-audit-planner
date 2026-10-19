@@ -1,0 +1,116 @@
+{
+  "spend_files": [
+    {
+      "file": "Over500_2026_P02_-_published.xlsx",
+      "sha256": "f611346f258825b84924310c2d42edce4a4aec3d3832054b340f4ac2125301a6",
+      "header_excel_row": 1,
+      "rows": 2892,
+      "date_min": "2026-05-01",
+      "date_max": "2026-06-04",
+      "kept_rows": 2280,
+      "excluded_rows": 612,
+      "kept_gbp": 17391219.16,
+      "excluded_gbp": 4394696.9,
+      "raw_gbp": 21785916.06,
+      "excluded_by_reason": {
+        "pension_or_statutory": 7,
+        "redacted_supplier": 597,
+        "public_body": 8
+      }
+    },
+    {
+      "file": "Over500_2026_P03_-_published.xlsx",
+      "sha256": "b7359a8e5cb9ea55bf3d47112f185167038b5ee64af8db9be02a7f5ea869ec76",
+      "header_excel_row": 2,
+      "rows": 3547,
+      "date_min": "2026-06-01",
+      "date_max": "2026-06-30",
+      "kept_rows": 2711,
+      "excluded_rows": 836,
+      "kept_gbp": 25517512.49,
+      "excluded_gbp": 5778023.12,
+      "raw_gbp": 31295535.61,
+      "excluded_by_reason": {
+        "pension_or_statutory": 7,
+        "redacted_supplier": 809,
+        "public_body": 20
+      }
+    },
+    {
+      "file": "Over500_2026_P04_-_published.xlsx",
+      "sha256": "e465900d00a8e20ac767d6218827a48c01ab6ad911e5051a34c18979b7da0612",
+      "header_excel_row": 2,
+      "rows": 4168,
+      "date_min": "2026-07-01",
+      "date_max": "2026-07-31",
+      "kept_rows": 3532,
+      "excluded_rows": 636,
+      "kept_gbp": 23343560.33,
+      "excluded_gbp": 4002242.26,
+      "raw_gbp": 27345802.59,
+      "excluded_by_reason": {
+        "pension_or_statutory": 9,
+        "redacted_supplier": 609,
+        "public_body": 18
+      }
+    }
+  ],
+  "window": {
+    "start": "2026-05-01",
+    "end": "2026-07-31",
+    "months": 3,
+    "annualisation_factor": 4.0
+  },
+  "rows_read": 10607,
+  "distinct_supplier_strings": 1104,
+  "excluded": {
+    "pension_or_statutory": {
+      "count": 23,
+      "total_gbp": 9257789.94
+    },
+    "public_body": {
+      "count": 46,
+      "total_gbp": 2170425.63
+    },
+    "redacted_supplier": {
+      "count": 2015,
+      "total_gbp": 2746746.71
+    }
+  },
+  "blank_category_rows_read": 87,
+  "blank_category_rows_kept": 0,
+  "rows_tested": 8523,
+  "total_tested_gbp": 66252291.98,
+  "by_tag": {
+    "agency_staff": {
+      "count": 24,
+      "total_gbp": 1285541.24
+    },
+    "care_or_education_placement": {
+      "count": 5889,
+      "total_gbp": 30730174.66
+    },
+    "general_procurement": {
+      "count": 1745,
+      "total_gbp": 27076449.38
+    },
+    "grant": {
+      "count": 339,
+      "total_gbp": 6033599.82
+    },
+    "premises": {
+      "count": 526,
+      "total_gbp": 1126526.88
+    }
+  },
+  "cross_file_duplicate_rows": 0,
+  "same_timestamp_dup_rows_within_file": 2710,
+  "public_body_distinct_names_caught": 17,
+  "unseen_values": {
+    "service": [],
+    "narrative": []
+  },
+  "unseen_values_baseline": "scripts/baseline_values.json (2026 P02-P04 extract)",
+  "negative_or_zero_rows": 0,
+  "min_kept_amount": 500.5
+}
